@@ -36,20 +36,20 @@ A symbol is a named entity in an executable file that is associated with a speci
 "A symbol has 0 or more references"
 * `Symbol hasPrimaryReference min 0 max 1 Reference` <br />
 "A symbol has up to one primary reference"
-* `Symbol superClassOf Class` <br />
-"A class is a type of symbol"
-* `Symbol superClassOf Function` <br />
-"A function is a type of symbol"
-* `Symbol superClassOf Variable` <br />
-"A variable is a type of symbol"
-* `Symbol superClassOf Namespace` <br />
-"A namespace is a type of symbol"
-* `Symbol superClassOf Label` <br />
-"A label is a type of symbol"
-* `Symbol superClassOf Import` <br />
-"An import is a type of symbol"
-* `Symbol superClassOf Export` <br />
-"An export is a type of symbol"
+* `Symbol associatedWith Address exactly 1 Address` <br />
+"A symbol is associated with exactly 1 address"
+* `Data Symbol subClassOf Symbol` <br />
+"Every Data Symbol is a Symbol"
+* `Lexical Scope Symbol subClassOf Symbol` <br />
+"Every Lexical Scope Symbol is a Symbol"
+* `Namespace subClassOf Symbol` <br />
+"Every Namespace is a Symbol"
+* `Data Symbol definedIn Lexical Scope Symbol min 0 Symbol` <br />
+"Every data symbol is defined in 0 or more Lexical Scope Symbols" <br />
+* `Data Symbol definedIn namespace exactly 1 namespace` <br />
+"Every data symbol is defined in exactly 1 namespace"
+* `Lexical Scope Symbol definedIn namespace exactly 1 namespace` <br />
+"Every lexical scope symbol is defined in exactly 1 namespace"
 
 ## Reference
 ### Description
@@ -77,6 +77,8 @@ An object that holds the Memory address of a given symbol. It's an object itself
 "An address points to exactly one symbol"
 * `Address addressOf xsd:string` <br />
 "An address refers to a memory address represented by a string"
+* `Address performsRole Operand min 0 Operand` <br />
+"An address can perform the role of an operand in an instruction"
 
 ## Import/Export
 ### Description
@@ -84,10 +86,10 @@ Imports allow files to use outside functions within the current file through dyn
 
 ![Import/Export](../Schema/schema_diagram_images/import_export_schema.png)
 ### Axioms
-* `Import subClassOf Symbol` <br />
-"Every import is a symbol"
-* `Export subClassOf Symbol` <br />
-"Every export is a symbol"
+* `Import subClassOf Lexical Scope Symbol` <br />
+"Every import is a lexical scope symbol"
+* `Export subClassOf Lexical Scope Symbol` <br />
+"Every export is a lexical scope symbol"
 * `Import declares min 0 DLL` <br />
 "Every import declares 0 or more DLLs"
 * `Export declares min 0 DLL` <br />
@@ -104,16 +106,14 @@ Keeps track of all the aspects of a function, including the variables passed in 
 ![Function](../Schema/schema_diagram_images/function_schema.png)
 
 ### Axioms
-* `Function subClassOf Symbol` <br />
-"Every function is a symbol"
+* `Function subClassOf Lexical Scope Symbol` <br />
+"Every function is a lexical scope symbol"
 * `Function hasLabel Label exactly 1 label` <br />
 "Every function has exactly one label"
 * `Function hasReturnType DataType min 0 max 1 datatype` <br />
 "Every function has either no return type (void) or one return type"
 * `Function returns min 0 max 1 variable` <br />
 "Every function returns either no variables or one variable"
-* `Function declaresLocalVariable min 0 Variable` <br />
-"A function can declare 0 or more local variables"
 * `Function hasParameter min 0 variable` <br />
 "A function can pass in 0 or more parameters"
 * `Function calls min 0 Function` <br />
@@ -122,8 +122,6 @@ Keeps track of all the aspects of a function, including the variables passed in 
 "A function can be called by 0 or more other functions"
 * `Function definedIn class min 0 max 1 Class` <br />
 "A function is defined in either 0 or 1 class"
-* `Function definedIn namespace min 1 Namespace` <br />
-"A function is defined in one or more namespaces"
 * `Function containsInstruction min 1 instruction` <br />
 "A function contains one or more instructions"
 
@@ -133,18 +131,14 @@ Keeps track of all the informtion about a variable, including what kind of varia
 
 ![Variable](../Schema/schema_diagram_images/variable_schema.png)
 ### Axioms
-* `Variable subClassOf Symbol` <br />
-"Every variable is a symbol"
-* `Variable definedIn Namespace min 1 Namespace` <br />
-"Every variable is defined in at least one namespace"
-* `Variable definedInGlobalNamespace extactly 1 Namespace` <br />
-"Every variable is defined in the global namespace"
-* `Variable localaVariableDefinedIn Class exactly 1 Class` <br />
-"Every local variable is defined in a class"
+* `Variable subClassOf Data Symbol` <br />
+"Every variable is a data symbol"
 * `Variable hasLabel Label exactly 1 Label` <br />
 "Every variable has exactly one label"
 * `Variable hasDataType DataType exactly 1 Datatype` <br />
 "Every variable has exactly one data type"
+* `Variable passesInParameter function min 0 parameter` <br />
+"A variable can be passed in as a parameter in 0 or more functions"
 
 ## Data Type
 ### Description
@@ -168,10 +162,6 @@ An object that signifies the data type of a variable, or the return type of a fu
 "Every class defines 0 or more functions"
 * `Class hasLabel Label exactly 1 Label` <br />
 "Every class has exactly one label"
-* `Class definesLocalVariable variable min 0 variable` <br />
-"Every class defines 0 or more local variables"
-* `Class definedIn Namespace min 1 Namespace` <br />
-"Every class is defined in at least one namespace"
 
 
 ## Label
@@ -180,12 +170,15 @@ Contains a human readable label for a symbol (function, variable, etc.). Contain
 
 ![Label](../Schema/schema_diagram_images/label_schema.png)
 ### Axioms
-* `Label subClassOf Symbol` <br />
-"Every label is a symbol"
+* `Label subClassOf Data Symbol` <br />
+"Every label is a data symbol"
 * `Label hasName xsd:string exactly 1 name` <br />
 "Every label has exactly one name indicated as xsd:string"
 * `Label hasAddress Address exactly 1 address` <br />
 "Every label has exactly one memory address"
+* `Label modified xsd:boolean` <br />
+"A label has a value modified that is either true or false" <br />
+(If the user modifies the name of a label, this will be set to true.)
 
 ## Namespace
 ### Description
@@ -195,10 +188,6 @@ Namespaces group together symbols like functions and classes to make sure there 
 ### Axioms
 * `Namespace subClassOf Symbol` <br />
 "Every namespace is a symbol"
-* `Namespace declares min 0 Symbol` <br />
-"Every name space declares 0 or more symbols"
-* `Symbol declaredBy Namespace min 1 Namespace` <br />
-"Every symbol is declared by at least 1 namespace"
 * `Namespace hasName xsd:string exactly 1 name` <br />
 "Every namespace has exactly one name indicated by xsd:string"
 
