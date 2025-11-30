@@ -59,21 +59,21 @@
 
 ## Axiom Selection
 
-### Symbol, Address, and Reference
+### Symbol, Reference, and Address
 
 |                                           | 1  | 2  | 3  | 4  | 5  | 6  | 7  | 8  | 9  | 10 | 11 | 12 | 13 | 14 | 15 | 16 |
 | ---------                                 |----|----|----|----|----|----|----|----|----|----|----|----|----|----|----|----|
-| Subclass                                  |    |    |    |    |    |    |    |    |    |    |    |    |    |    |    |    |
+| Subclass                                  |    |    |    | x  | x  | x  |    |    |    |    |    |    |    |    |    |    |
 | Class disjointness                        |    |    |    |    |    |    |    |    |    |    |    |    |    |    |    |    |
 | Domain                                    |    |    |    |    |    |    |    |    |    |    |    |    |    |    |    |    |
 | Scoped domain                             |    |    |    |    |    |    |    |    |    |    |    |    |    |    |    |    |
-| Range                                     |    |    |    |    |    |    |    |    |    |    |    |    |    |    |    |    |
+| Range                                     | x  | x  |    |    |    |    |    |    |    | x  | x  |    |    |    |    |    |
 | Scoped range                              |    |    |    |    |    |    |    |    |    |    |    |    |    |    |    |    |
-| Existential                               |    |    |    |    |    |    |    |    |    |    |    |    |    |    |    |    |
-| Inverse existential                       |    |    |    |    |    |    |    |    |    |    |    |    |    |    |    |    |
-| Functionality                             |    |    |    |    |    |    |    |    |    |    |    |    |    |    |    |    |
+| Existential                               |    |    |    |    |    |    |    |    |    | x  | x  | x  | x  | x  | x  |    |
+| Inverse existential                       |    |    |    |    |    |    |    |    |    |    |    |    |    | x  |    |    |
+| Functionality                             |    | x  |    |    |    |    |    |    |    |    |    |    |    |    |    |    |
 | Qualified functionality                   |    |    |    |    |    |    |    |    |    |    |    |    |    |    |    |    |
-| Scoped functionality                      |    |    |    |    |    |    |    |    |    |    |    |    |    |    |    |    |
+| Scoped functionality                      |    |    |    |    |    |    |    |    |    | ?  | ?  | x  | x  | x  | x  |    |
 | Qualified scoped functionality            |    |    |    |    |    |    |    |    |    |    |    |    |    |    |    |    |
 | Inverse functionality                     |    |    |    |    |    |    |    |    |    |    |    |    |    |    |    |    |
 | Inverse qualified functionality           |    |    |    |    |    |    |    |    |    |    |    |    |    |    |    |    |
@@ -81,18 +81,17 @@
 | Inverse qualified scoped functionality    |    |    |    |    |    |    |    |    |    |    |    |    |    |    |    |    |
 | Structural tautology                      |    |    |    |    |    |    |    |    |    |    |    |    |    |    |    |    |
 |                                           |    |    |    |    |    |    |    |    |    |    |    |    |    |    |    |    |
-| For the Property                          |    |    |    |    |    |    |    |    |    |    |    |    |    |    |    |    |
 | Symmetry                                  |    |    |    |    |    |    |    |    |    |    |    |    |    |    |    |    |
-| Asymmetry                                 |    |    |    |    |    |    |    |    |    |    |    |    |    |    |    |    |
+| Asymmetry                                 | x  | x  | x  | x  | x  | x  | x  | x  | x  | x  | x  | x  | x  | x  | x  | x  |
 | Transitivity                              |    |    |    |    |    |    |    |    |    |    |    |    |    |    |    |    |
 | Reflexivity                               |    |    |    |    |    |    |    |    |    |    |    |    |    |    |    |    |
-| Irreflexivity                             |    |    |    |    |    |    |    |    |    |    |    |    |    |    |    |    |
+| Irreflexivity                             | x  | x  | x  | x  | x  | x  | x  | x  | x  | x  | x  | x  | x  | x  | x  | x  |
 
 ### Import, Export, Function, and Class
 
 |                                           | 17 | 18 | 19 | 20 | 21 | 22 | 23 | 24 | 25 | 26 | 27 | 28 | 29 | 30 | 31 | 32 | 33 | 34 |
 | ---------                                 |----|----|----|----|----|----|----|----|----|----|----|----|----|----|----|----|----|----|
-| Subclass                                  |    |    |    |    |    |    |    |    |    |    |    |    |    |    |    |    |    |    |
+| Subclass                                  | x  | x  |    |    |    |    | x  |    |    |    |    |    |    |    |    | x  |    |    |
 | Class disjointness                        |    |    |    |    |    |    |    |    |    |    |    |    |    |    |    |    |    |    |
 | Domain                                    |    |    |    |    |    |    |    |    |    |    |    |    |    |    |    |    |    |    |
 | Scoped domain                             |    |    |    |    |    |    |    |    |    |    |    |    |    |    |    |    |    |    |
@@ -111,16 +110,16 @@
 | Structural tautology                      |    |    |    |    |    |    |    |    |    |    |    |    |    |    |    |    |    |    |
 |                                           |    |    |    |    |    |    |    |    |    |    |    |    |    |    |    |    |    |    |
 | Symmetry                                  |    |    |    |    |    |    |    |    |    |    |    |    |    |    |    |    |    |    |
-| Asymmetry                                 |    |    |    |    |    |    |    |    |    |    |    |    |    |    |    |    |    |    |
+| Asymmetry                                 | x  | x  | x  | x  | x  | x  | x  | x  | x  | x  | x  | x  | x  | x  | x  | x  | x  | x  |
 | Transitivity                              |    |    |    |    |    |    |    |    |    |    |    |    |    |    |    |    |    |    |
-| Reflexivity                               |    |    |    |    |    |    |    |    |    |    |    |    |    |    |    |    |    |    |
-| Irreflexivity                             |    |    |    |    |    |    |    |    |    |    |    |    |    |    |    |    |    |    |
+| Reflexivity                               |    |    |    |    |    |    |    |    |    |    |    | x  | x  |    |    |    |    |    |
+| Irreflexivity                             | x  | x  | x  | x  | x  | x  | x  | x  | x  | x  | x  |    |    | x  | x  | x  | x  | x  |
 
 ### Variable, Label, and Data Type
 
 |                                           | 35 | 36 | 37 | 38 | 39 | 40 | 41 | 42 | 43 | 
 | ---------                                 |----|----|----|----|----|----|----|----|----|
-| Subclass                                  |    |    |    |    |    |    |    |    |    |
+| Subclass                                  | x  |    |    |    | x  |    |    |    |    |
 | Class disjointness                        |    |    |    |    |    |    |    |    |    |
 | Domain                                    |    |    |    |    |    |    |    |    |    |
 | Scoped domain                             |    |    |    |    |    |    |    |    |    |
@@ -138,19 +137,18 @@
 | Inverse qualified scoped functionality    |    |    |    |    |    |    |    |    |    |
 | Structural tautology                      |    |    |    |    |    |    |    |    |    |
 |                                           |    |    |    |    |    |    |    |    |    |
-| For the Property                          |    |    |    |    |    |    |    |    |    |
 | Symmetry                                  |    |    |    |    |    |    |    |    |    |
-| Asymmetry                                 |    |    |    |    |    |    |    |    |    |
+| Asymmetry                                 | x  | x  | x  | x  | x  | x  | x  | x  | x  |
 | Transitivity                              |    |    |    |    |    |    |    |    |    |
 | Reflexivity                               |    |    |    |    |    |    |    |    |    |
-| irreflexivity                             |    |    |    |    |    |    |    |    |    |
+| irreflexivity                             | x  | x  | x  | x  | x  | x  | x  | x  | x  |
 
 
 ### Namespace and Instruction
 
 |                                           | 44 | 45 | 46 | 47 | 48 | 49 | 50 | 51 | 52 | 
 | ---------                                 |----|----|----|----|----|----|----|----|----|
-| Subclass                                  |    |    |    |    |    |    |    |    |    |
+| Subclass                                  | x  |    |    |    |    |    |    |    |    |
 | Class disjointness                        |    |    |    |    |    |    |    |    |    |
 | Domain                                    |    |    |    |    |    |    |    |    |    |
 | Scoped domain                             |    |    |    |    |    |    |    |    |    |
@@ -168,9 +166,8 @@
 | Inverse qualified scoped functionality    |    |    |    |    |    |    |    |    |    |
 | Structural tautology                      |    |    |    |    |    |    |    |    |    |
 |                                           |    |    |    |    |    |    |    |    |    |
-| For the Property                          |    |    |    |    |    |    |    |    |    |
 | Symmetry                                  |    |    |    |    |    |    |    |    |    |
-| Asymmetry                                 |    |    |    |    |    |    |    |    |    |
+| Asymmetry                                 | x  | x  | x  | x  | x  | x  | x  | x  | x  |
 | Transitivity                              |    |    |    |    |    |    |    |    |    |
 | Reflexivity                               |    |    |    |    |    |    |    |    |    |
-| irreflexivity                             |    |    |    |    |    |    |    |    |    |
+| irreflexivity                             | x  | x  | x  | x  | x  | x  | x  | x  | x  |

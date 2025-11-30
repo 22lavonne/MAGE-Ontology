@@ -90,7 +90,7 @@ For all the relations assigned as functionality, determine if they are
 | Inverse qualified functionality           |    |    |    |    |    |    |    |    |
 | Inverse scoped functionality              |    |    |    |    |    |    |    |    |
 | Inverse qualified scoped functionality    |    |    |    |    |    |    |    |    |
-| Structural tautology                      | x  | x  | ?  | ?  |    |    | x  | x  |
+| Structural tautology                      | x  | x  |    |    |    |    | x  | x  |
 |                                           |    |    |    |    |    |    |    |    |
 | For the Property                          |    |    |    |    |    |    |    |    |
 | Symmetry                                  |    |    |    |    |    |    |    |    |
