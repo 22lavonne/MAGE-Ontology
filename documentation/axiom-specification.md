@@ -33,251 +33,144 @@
 | 29    | Function      | calledBy              | Function      |
 | 30    | Function      | definedIn             | Class         |
 | 31    | Function      | containsInstruction   | Instruction   |
-| 32    | Variable      | subClassOf            | Data Symbol   |
-| 33    | Variable      | hasLabel              | Label         |
-| 34    | Variable      | passesInParameter     | Function      |
-| 35    | Variable      | hasDataType           | Datatype      |
-| 36    | Data Type     | hasDataTypeName       | xsd:string    |
-| 33    | Class         | subClassOf            | Lexical Scope Symbol  |
-| 34    | Class         | definesFunction       | Function      |
-| 35    | Class         | hasLabel              | Label         |
-| 36    | Label         | subClassOf            | Data Symbol   |
-| 37    | Label         | hasName               | xsd:string    |
-| 38    | Label         | hasAddress            | Address       |
-| 39    | Label         | modified              | xsd:boolean   |
-| 40    | Namespace     | subClassOf            | Symbol        |
-| 41    | Namespace     | hasName               | xsd:string    |
-| 42    | Instruction   | hasOpcode             | Opcode        |
-| 43    | Instruction   | hasSourceOperand      | Operand       |
-| 44    | Instruction   | hasDestinationOperand | Operand       |
-| 45    | Address       | performsRole          | Operand       |
-| 46    | Register      | performsRole          | Operand       |
-| 47    | ImmediateOperand  | performsRole      | Operand       |
-| 48    | Symbol        | performsRole          | Operand       |
+| 32    | Class         | subClassOf            | Lexical Scope Symbol  |
+| 33    | Class         | definesFunction       | Function      |
+| 34    | Class         | hasLabel              | Label         |
+| 35    | Variable      | subClassOf            | Data Symbol   |
+| 36    | Variable      | hasLabel              | Label         |
+| 37    | Variable      | passesInParameter     | Function      |
+| 38    | Variable      | hasDataType           | Datatype      |
+| 39    | Label         | subClassOf            | Data Symbol   |
+| 40    | Label         | hasName               | xsd:string    |
+| 41    | Label         | hasAddress            | Address       |
+| 42    | Label         | modified              | xsd:boolean   |
+| 43    | Data Type     | hasDataTypeName       | xsd:string    |
+| 44    | Namespace     | subClassOf            | Symbol        |
+| 45    | Namespace     | hasName               | xsd:string    |
+| 46    | Instruction   | hasOpcode             | Opcode        |
+| 47    | Instruction   | hasSourceOperand      | Operand       |
+| 48    | Instruction   | hasDestinationOperand | Operand       |
+| 49    | Address       | performsRole          | Operand       |
+| 50    | Register      | performsRole          | Operand       |
+| 51    | ImmediateOperand  | performsRole      | Operand       |
+| 52    | Symbol        | performsRole          | Operand       |
 
 
 
 ## Axiom Selection
 
-### Symbol, Reference, and Address
+### Symbol, Address, and Reference
 
-|                                           | 1  | 2  | 3  | 4  | 5  | 6  | 7  | 8  | 
-| ---------                                 |----|----|----|----|----|----|----|----|
-| Subclass                                  |    |    |    |    |    |    |    |    |
-| Class disjointness                        |    |    |    |    |    |    |    |    |
-| Domain                                    |    |    |    |    | ?  | ?  |    | x  |
-| Scoped domain                             |    |    |    |    |    |    | ?  |    |
-| Range                                     | x  | x  | x  | x  |    |    |    |    |
-| Scoped range                              | ?  | ?  | ?  | ?  |    |    | ?  |    |
-| Existential                               |    |    | x  | x  | ?  | ?  |    |    |
-| Inverse existential                       | x  | x  |    |    |    |    |    |    |
-| Functionality                             |    | x  | x  | x  | x  | x  | x  | x  |
-| Qualified functionality                   |    |    |    |    |    |    |    |    |
-| Scoped functionality                      |    |    |    |    | x  | x  |    | x  |
-| Qualified scoped functionality            |    | x  | x  | x  |    |    | x  |    |
-| Inverse functionality                     |    |    |    |    |    |    |    |    |
-| Inverse qualified functionality           |    |    |    |    |    |    |    |    |
-| Inverse scoped functionality              |    |    |    |    |    |    |    |    |
-| Inverse qualified scoped functionality    |    |    |    |    |    |    |    |    |
-| Structural tautology                      | x  | x  | ?  | ?  |    |    | x  | x  |
-|                                           |    |    |    |    |    |    |    |    |
-| For the Property                          |    |    |    |    |    |    |    |    |
-| Symmetry                                  |    |    |    |    |    |    |    |    |
-| Asymmetry                                 | x  | x  | x  | x  | x  | x  | x  | x  |
-| Transitivity                              |    |    |    |    |    |    |    |    |
-| Reflexivity                               |    |    |    |    |    |    |    |    |
-| irreflexivity                             | x  | x  | x  | x  | x  | x  | x  | x  |
+|                                           | 1  | 2  | 3  | 4  | 5  | 6  | 7  | 8  | 9  | 10 | 11 | 12 | 13 | 14 | 15 | 16 |
+| ---------                                 |----|----|----|----|----|----|----|----|----|----|----|----|----|----|----|----|
+| Subclass                                  |    |    |    |    |    |    |    |    |    |    |    |    |    |    |    |    |
+| Class disjointness                        |    |    |    |    |    |    |    |    |    |    |    |    |    |    |    |    |
+| Domain                                    |    |    |    |    |    |    |    |    |    |    |    |    |    |    |    |    |
+| Scoped domain                             |    |    |    |    |    |    |    |    |    |    |    |    |    |    |    |    |
+| Range                                     |    |    |    |    |    |    |    |    |    |    |    |    |    |    |    |    |
+| Scoped range                              |    |    |    |    |    |    |    |    |    |    |    |    |    |    |    |    |
+| Existential                               |    |    |    |    |    |    |    |    |    |    |    |    |    |    |    |    |
+| Inverse existential                       |    |    |    |    |    |    |    |    |    |    |    |    |    |    |    |    |
+| Functionality                             |    |    |    |    |    |    |    |    |    |    |    |    |    |    |    |    |
+| Qualified functionality                   |    |    |    |    |    |    |    |    |    |    |    |    |    |    |    |    |
+| Scoped functionality                      |    |    |    |    |    |    |    |    |    |    |    |    |    |    |    |    |
+| Qualified scoped functionality            |    |    |    |    |    |    |    |    |    |    |    |    |    |    |    |    |
+| Inverse functionality                     |    |    |    |    |    |    |    |    |    |    |    |    |    |    |    |    |
+| Inverse qualified functionality           |    |    |    |    |    |    |    |    |    |    |    |    |    |    |    |    |
+| Inverse scoped functionality              |    |    |    |    |    |    |    |    |    |    |    |    |    |    |    |    |
+| Inverse qualified scoped functionality    |    |    |    |    |    |    |    |    |    |    |    |    |    |    |    |    |
+| Structural tautology                      |    |    |    |    |    |    |    |    |    |    |    |    |    |    |    |    |
+|                                           |    |    |    |    |    |    |    |    |    |    |    |    |    |    |    |    |
+| For the Property                          |    |    |    |    |    |    |    |    |    |    |    |    |    |    |    |    |
+| Symmetry                                  |    |    |    |    |    |    |    |    |    |    |    |    |    |    |    |    |
+| Asymmetry                                 |    |    |    |    |    |    |    |    |    |    |    |    |    |    |    |    |
+| Transitivity                              |    |    |    |    |    |    |    |    |    |    |    |    |    |    |    |    |
+| Reflexivity                               |    |    |    |    |    |    |    |    |    |    |    |    |    |    |    |    |
+| Irreflexivity                             |    |    |    |    |    |    |    |    |    |    |    |    |    |    |    |    |
 
-### Import and Export
+### Import, Export, Function, and Class
 
-|                                           | 9  | 10 | 11 | 12 | 13 | 14 | 
-| ---------                                 |----|----|----|----|----|----|
-| Subclass                                  | x  | x  |    |    |    |    |
-| Class disjointness                        |    |    |    |    |    |    |
-| Domain                                    |    |    |    |    |    |    |
-| Scoped domain                             |    |    |    |    |    |    |
-| Range                                     |    |    |    |    | x  | x  |
-| Scoped range                              |    |    | x  | x  | ?  | ?  |
-| Existential                               |    |    |    |    | x  | x  |
-| Inverse existential                       |    |    |    |    |    |    |
-| Functionality                             |    |    |    |    | x  | x  |
-| Qualified functionality                   |    |    |    |    | x  | x  |
-| Scoped functionality                      |    |    |    |    |    |    |
-| Qualified scoped functionality            |    |    |    |    | ?  | ?  |
-| Inverse functionality                     |    |    |    |    |    |    |
-| Inverse qualified functionality           |    |    |    |    |    |    |
-| Inverse scoped functionality              |    |    |    |    |    |    |
-| Inverse qualified scoped functionality    |    |    |    |    |    |    |
-| Structural tautology                      |    |    | x  | x  | x  | x  |
-|                                           |    |    |    |    |    |    |
-| Symmetry                                  |    |    |    |    |    |    |
-| Asymmetry                                 | x  | x  | x  | x  | x  | x  |
-| Transitivity                              |    |    |    |    |    |    |
-| Reflexivity                               |    |    |    |    |    |    |
-| irreflexivity                             | x  | x  | x  | x  | x  | x  |
+|                                           | 17 | 18 | 19 | 20 | 21 | 22 | 23 | 24 | 25 | 26 | 27 | 28 | 29 | 30 | 31 | 32 | 33 | 34 |
+| ---------                                 |----|----|----|----|----|----|----|----|----|----|----|----|----|----|----|----|----|----|
+| Subclass                                  |    |    |    |    |    |    |    |    |    |    |    |    |    |    |    |    |    |    |
+| Class disjointness                        |    |    |    |    |    |    |    |    |    |    |    |    |    |    |    |    |    |    |
+| Domain                                    |    |    |    |    |    |    |    |    |    |    |    |    |    |    |    |    |    |    |
+| Scoped domain                             |    |    |    |    |    |    |    |    |    |    |    |    |    |    |    |    |    |    |
+| Range                                     |    |    |    |    |    |    |    |    |    |    |    |    |    |    |    |    |    |    |
+| Scoped range                              |    |    |    |    |    |    |    |    |    |    |    |    |    |    |    |    |    |    |
+| Existential                               |    |    |    |    |    |    |    |    |    |    |    |    |    |    |    |    |    |    |
+| Inverse existential                       |    |    |    |    |    |    |    |    |    |    |    |    |    |    |    |    |    |    |
+| Functionality                             |    |    |    |    |    |    |    |    |    |    |    |    |    |    |    |    |    |    |
+| Qualified functionality                   |    |    |    |    |    |    |    |    |    |    |    |    |    |    |    |    |    |    |
+| Scoped functionality                      |    |    |    |    |    |    |    |    |    |    |    |    |    |    |    |    |    |    |
+| Qualified scoped functionality            |    |    |    |    |    |    |    |    |    |    |    |    |    |    |    |    |    |    |
+| Inverse functionality                     |    |    |    |    |    |    |    |    |    |    |    |    |    |    |    |    |    |    |
+| Inverse qualified functionality           |    |    |    |    |    |    |    |    |    |    |    |    |    |    |    |    |    |    |
+| Inverse scoped functionality              |    |    |    |    |    |    |    |    |    |    |    |    |    |    |    |    |    |    |
+| Inverse qualified scoped functionality    |    |    |    |    |    |    |    |    |    |    |    |    |    |    |    |    |    |    |
+| Structural tautology                      |    |    |    |    |    |    |    |    |    |    |    |    |    |    |    |    |    |    |
+|                                           |    |    |    |    |    |    |    |    |    |    |    |    |    |    |    |    |    |    |
+| Symmetry                                  |    |    |    |    |    |    |    |    |    |    |    |    |    |    |    |    |    |    |
+| Asymmetry                                 |    |    |    |    |    |    |    |    |    |    |    |    |    |    |    |    |    |    |
+| Transitivity                              |    |    |    |    |    |    |    |    |    |    |    |    |    |    |    |    |    |    |
+| Reflexivity                               |    |    |    |    |    |    |    |    |    |    |    |    |    |    |    |    |    |    |
+| Irreflexivity                             |    |    |    |    |    |    |    |    |    |    |    |    |    |    |    |    |    |    |
+
+### Variable, Label, and Data Type
+
+|                                           | 35 | 36 | 37 | 38 | 39 | 40 | 41 | 42 | 43 | 
+| ---------                                 |----|----|----|----|----|----|----|----|----|
+| Subclass                                  |    |    |    |    |    |    |    |    |    |
+| Class disjointness                        |    |    |    |    |    |    |    |    |    |
+| Domain                                    |    |    |    |    |    |    |    |    |    |
+| Scoped domain                             |    |    |    |    |    |    |    |    |    |
+| Range                                     |    |    |    |    |    |    |    |    |    |
+| Scoped range                              |    |    |    |    |    |    |    |    |    |
+| Existential                               |    |    |    |    |    |    |    |    |    |
+| Inverse existential                       |    |    |    |    |    |    |    |    |    |
+| Functionality                             |    |    |    |    |    |    |    |    |    |
+| Qualified functionality                   |    |    |    |    |    |    |    |    |    |
+| Scoped functionality                      |    |    |    |    |    |    |    |    |    |
+| Qualified scoped functionality            |    |    |    |    |    |    |    |    |    |
+| Inverse functionality                     |    |    |    |    |    |    |    |    |    |
+| Inverse qualified functionality           |    |    |    |    |    |    |    |    |    |
+| Inverse scoped functionality              |    |    |    |    |    |    |    |    |    |
+| Inverse qualified scoped functionality    |    |    |    |    |    |    |    |    |    |
+| Structural tautology                      |    |    |    |    |    |    |    |    |    |
+|                                           |    |    |    |    |    |    |    |    |    |
+| For the Property                          |    |    |    |    |    |    |    |    |    |
+| Symmetry                                  |    |    |    |    |    |    |    |    |    |
+| Asymmetry                                 |    |    |    |    |    |    |    |    |    |
+| Transitivity                              |    |    |    |    |    |    |    |    |    |
+| Reflexivity                               |    |    |    |    |    |    |    |    |    |
+| irreflexivity                             |    |    |    |    |    |    |    |    |    |
 
 
-### Function
+### Namespace and Instruction
 
-|                                           | 15 | 16 | 17 | 18 | 19 | 20 | 21 | 22 | 23 | 24 | 25 |
-| ---------                                 |----|----|----|----|----|----|----|----|----|----|----|
-| Subclass                                  | x  |    |    |    |    |    |    |    |    |    |    |
-| Class disjointness                        |    |    |    |    |    |    |    |    |    |    |    |  
-| Domain                                    |    |    | ?  | ?  | ?  | ?  | ?  | ?  |    |    |    |
-| Scoped domain                             |    |    | ?  | ?  | ?  | ?  | ?  | ?  |    |    |    |
-| Range                                     |    | x  | x  | x  | x  | x  | ?  | ?  |    |    | x  |
-| Scoped range                              |    | ?  |    |    | ?  | ?  | ?  | ?  |    |    | ?  |
-| Existential                               |    | x  |    |    |    |    |    |    |    |    | x  |
-| Inverse existential                       |    |    |    |    |    |    |    |    |    |    |    |
-| Functionality                             |    | x  | x  | x  |    |    |    |    | x  |    |    |
-| Qualified functionality                   |    | x  | x  | x  |    |    |    |    |    |    |    |
-| Scoped functionality                      |    |    |    |    |    |    |    |    |    |    |    |
-| Qualified scoped functionality            |    | ?  | ?  | ?  |    |    |    |    |    |    |    |
-| Inverse functionality                     |    |    |    |    |    |    |    |    |    |    |    |
-| Inverse qualified functionality           |    |    |    |    |    |    |    |    |    |    |    |
-| Inverse scoped functionality              |    |    |    |    |    |    |    |    |    |    |    |
-| Inverse qualified scoped functionality    |    |    |    |    |    |    |    |    | ?  |    |    |
-| Structural tautology                      |    | x  | x  | x  |    |    | x  | x  | x  | x  | x  |
-|                                           |    |    |    |    |    |    |    |    |    |    |    |
-| Symmetry                                  |    |    |    |    |    |    |    |    |    |    |    |
-| Asymmetry                                 | x  | x  | x  | x  | x  | x  | x  | x  | x  | x  | x  |
-| Transitivity                              |    |    |    |    |    |    |    |    |    |    |    |
-| Reflexivity                               |    |    |    |    |    |    | x  | x  |    |    |    |
-| irreflexivity                             | x  | x  | x  | x  | x  | x  |    |    | x  | x  | x  |
-
-### Variable and Data Type
-
-|                                           | 26 | 27 | 28 | 29 | 30 | 31 | 32 |
-| ---------                                 |----|----|----|----|----|----|----|
-| Subclass                                  | x  |    |    |    |    |    |    |
-| Class disjointness                        |    |    |    |    |    |    |    |
-| Domain                                    |    |    |    | x  |    | ?  | x  |
-| Scoped domain                             |    |    |    | ?  |    | ?  |    |
-| Range                                     |    |    | x  |    | x  | x  |    |
-| Scoped range                              |    | x  | ?  |    | ?  |    |    |
-| Existential                               |    |    |    |    | x  |    | ?  |
-| Inverse existential                       |    |    |    |    |    |    |    |
-| Functionality                             |    |    | x  |    | x  | x  | x  |
-| Qualified functionality                   |    |    | x  |    | x  | x  |    |
-| Scoped functionality                      |    |    |    |    |    |    | x  |
-| Qualified scoped functionality            |    |    | ?  |    | ?  | ?  |    |
-| Inverse functionality                     |    |    |    |    |    |    |    |
-| Inverse qualified functionality           |    |    |    |    |    |    |    |
-| Inverse scoped functionality              |    |    |    |    |    |    |    |
-| Inverse qualified scoped functionality    |    |    |    |    |    |    |    |
-| Structural tautology                      |    | x  | x  | x  | x  | x  |    |
-|                                           |    |    |    |    |    |    |    |
-| Symmetry                                  |    |    |    |    |    |    |    |
-| Asymmetry                                 | x  | x  | x  | x  | x  | x  | x  |
-| Transitivity                              |    |    |    |    |    |    |    |
-| Reflexivity                               |    |    |    |    |    |    |    |
-| irreflexivity                             | x  | x  | x  | x  | x  | x  | x  |
-
-### Class
-|                                           | 33 | 34 | 35 | 36 | 37 |
-| ---------                                 |----|----|----|----|----|
-| Subclass                                  | x  |    |    |    |    |
-| Class disjointness                        |    |    |    |    |    |
-| Domain                                    |    |    |    |    |    |
-| Scoped domain                             |    |    |    |    |    |
-| Range                                     |    | x  | x  | x  |    |
-| Scoped range                              |    | ?  | ?  | ?  | x  |
-| Existential                               |    |    | x  |    |    |
-| Inverse existential                       |    |    |    |    |    |
-| Functionality                             |    |    | x  |    |    |
-| Qualified functionality                   |    |    | x  |    |    |
-| Scoped functionality                      |    |    |    |    |    |
-| Qualified scoped functionality            |    |    | ?  |    |    |
-| Inverse functionality                     |    |    |    |    |    |
-| Inverse qualified functionality           |    |    |    |    |    |
-| Inverse scoped functionality              |    |    |    |    |    |
-| Inverse qualified scoped functionality    |    |    |    |    |    |
-| Structural tautology                      |    | x  | x  | x  | x  |
-|                                           |    |    |    |    |    |
-| Symmetry                                  |    |    |    |    |    |
-| Asymmetry                                 | x  | x  | x  | x  | x  |
-| Transitivity                              |    |    |    |    |    |
-| Reflexivity                               |    |    |    |    |    |
-| irreflexivity                             | x  | x  | x  | x  | x  |
-
-### Label
-|                                           | 38 | 39 | 40 |
-| ---------                                 |----|----|----|
-| Subclass                                  | x  |    |    |
-| Class disjointness                        |    |    |    |
-| Domain                                    |    |    |    |
-| Scoped domain                             |    |    |    |
-| Range                                     |    |    | x  |
-| Scoped range                              |    |    |    |
-| Existential                               |    | ?  | x  |
-| Inverse existential                       |    |    |    |
-| Functionality                             |    |    | x  |
-| Qualified functionality                   |    |    | x  |
-| Scoped functionality                      |    |    |    |
-| Qualified scoped functionality            |    |    | ?  |
-| Inverse functionality                     |    |    |    |
-| Inverse qualified functionality           |    |    |    |
-| Inverse scoped functionality              |    |    |    |
-| Inverse qualified scoped functionality    |    |    |    |
-| Structural tautology                      |    |    | x  |
-|                                           |    |    |    |
-| Symmetry                                  |    |    |    |
-| Asymmetry                                 | x  | x  | x  |
-| Transitivity                              |    |    |    |
-| Reflexivity                               |    |    |    |
-| irreflexivity                             | x  | x  | x  |
-
-### Namespace
-|                                           | 41 | 42 | 43 | 44 |
-| ---------                                 |----|----|----|----|
-| Subclass                                  | x  |    |    |    |
-| Class disjointness                        |    |    |    |    |
-| Domain                                    |    |    | ?  |    |
-| Scoped domain                             |    |    | x  |    |
-| Range                                     |    |    | ?  |    |
-| Scoped range                              |    | x  | x  |    |
-| Existential                               |    |    |    | ?  |
-| Inverse existential                       |    |    |    |    |
-| Functionality                             |    |    |    | x  |
-| Qualified functionality                   |    |    |    |    |
-| Scoped functionality                      |    |    |    | x  |
-| Qualified scoped functionality            |    |    |    |    |
-| Inverse functionality                     |    |    |    |    |
-| Inverse qualified functionality           |    |    |    |    |
-| Inverse scoped functionality              |    |    |    |    |
-| Inverse qualified scoped functionality    |    |    |    |    |
-| Structural tautology                      |    | x  | x  |    |
-|                                           |    |    |    |    |
-| Symmetry                                  |    |    |    |    |
-| Asymmetry                                 | x  | x  | x  | x  |
-| Transitivity                              |    |    |    |    |
-| Reflexivity                               |    |    |    |    |
-| irreflexivity                             | x  | x  | x  | x  |
-
-### Instruction
-
-|                                           | 45 | 46 | 47 | 48 | 49 | 50 | 51 |
-| ---------                                 |----|----|----|----|----|----|----|
-| Subclass                                  |    |    |    |    |    |    |    |
-| Class disjointness                        |    |    |    |    |    |    |    |
-| Domain                                    | x  | x  | x  |    |    |    |    |
-| Scoped domain                             | ?  | ?  | ?  |    |    |    |    |
-| Range                                     | x  | x  | x  | x  | x  | x  | x  |
-| Scoped range                              | ?  | ?  | ?  | ?  | ?  | ?  | ?  |
-| Existential                               | x  |    |    |    |    |    |    |
-| Inverse existential                       | ?  |    |    |    |    |    |    |
-| Functionality                             | x  |    | x  |    |    |    |    |
-| Qualified functionality                   | x  |    | x  |    |    |    |    |
-| Scoped functionality                      |    |    |    |    |    |    |    |
-| Qualified scoped functionality            | ?  |    | ?  |    |    |    |    |
-| Inverse functionality                     |    |    |    |    |    |    |    |
-| Inverse qualified functionality           |    |    |    |    |    |    |    |
-| Inverse scoped functionality              |    |    |    |    |    |    |    |
-| Inverse qualified scoped functionality    |    |    |    |    |    |    |    |
-| Structural tautology                      | x  | x  | x  | x  | x  | x  | x  |
-|                                           |    |    |    |    |    |    |    |
-| Symmetry                                  |    |    |    |    |    |    |    |
-| Asymmetry                                 | x  | x  | x  | x  | x  | x  | x  |
-| Transitivity                              |    |    |    |    |    |    |    |
-| Reflexivity                               |    |    |    |    |    |    |    |
-| irreflexivity                             | x  | x  | x  | x  | x  | x  | x  |
+|                                           | 44 | 45 | 46 | 47 | 48 | 49 | 50 | 51 | 52 | 
+| ---------                                 |----|----|----|----|----|----|----|----|----|
+| Subclass                                  |    |    |    |    |    |    |    |    |    |
+| Class disjointness                        |    |    |    |    |    |    |    |    |    |
+| Domain                                    |    |    |    |    |    |    |    |    |    |
+| Scoped domain                             |    |    |    |    |    |    |    |    |    |
+| Range                                     |    |    |    |    |    |    |    |    |    |
+| Scoped range                              |    |    |    |    |    |    |    |    |    |
+| Existential                               |    |    |    |    |    |    |    |    |    |
+| Inverse existential                       |    |    |    |    |    |    |    |    |    |
+| Functionality                             |    |    |    |    |    |    |    |    |    |
+| Qualified functionality                   |    |    |    |    |    |    |    |    |    |
+| Scoped functionality                      |    |    |    |    |    |    |    |    |    |
+| Qualified scoped functionality            |    |    |    |    |    |    |    |    |    |
+| Inverse functionality                     |    |    |    |    |    |    |    |    |    |
+| Inverse qualified functionality           |    |    |    |    |    |    |    |    |    |
+| Inverse scoped functionality              |    |    |    |    |    |    |    |    |    |
+| Inverse qualified scoped functionality    |    |    |    |    |    |    |    |    |    |
+| Structural tautology                      |    |    |    |    |    |    |    |    |    |
+|                                           |    |    |    |    |    |    |    |    |    |
+| For the Property                          |    |    |    |    |    |    |    |    |    |
+| Symmetry                                  |    |    |    |    |    |    |    |    |    |
+| Asymmetry                                 |    |    |    |    |    |    |    |    |    |
+| Transitivity                              |    |    |    |    |    |    |    |    |    |
+| Reflexivity                               |    |    |    |    |    |    |    |    |    |
+| irreflexivity                             |    |    |    |    |    |    |    |    |    |
