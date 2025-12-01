@@ -95,12 +95,12 @@
 | Class disjointness                        |    |    |    |    |    |    |    |    |    |    |    |    |    |    |    |    |    |    |
 | Domain                                    |    |    |    |    |    |    |    |    |    |    |    |    |    |    |    |    |    |    |
 | Scoped domain                             |    |    |    |    |    |    |    |    |    |    |    |    |    |    |    |    |    |    |
-| Range                                     |    |    |    |    |    |    |    |    |    |    |    |    |    |    |    |    |    |    |
+| Range                                     |    |    | x  | x  | x  | x  |    | x  |    |    |    |    |    |    |    |    |    | x  |
 | Scoped range                              |    |    |    |    |    |    |    |    |    |    |    |    |    |    |    |    |    |    |
-| Existential                               |    |    |    |    |    |    |    |    |    |    |    |    |    |    |    |    |    |    |
+| Existential                               |    |    |    |    | x  | x  |    | x  |    |    |    |    |    |    |    |    |    | x  |
 | Inverse existential                       |    |    |    |    |    |    |    |    |    |    |    |    |    |    |    |    |    |    |
 | Functionality                             |    |    |    |    |    |    |    |    |    |    |    |    |    |    |    |    |    |    |
-| Qualified functionality                   |    |    |    |    |    |    |    |    |    |    |    |    |    |    |    |    |    |    |
+| Qualified functionality                   |    |    |    |    | x  | x  |    | x  |    |    |    |    |    |    |    |    |    | x  |
 | Scoped functionality                      |    |    |    |    |    |    |    |    |    |    |    |    |    |    |    |    |    |    |
 | Qualified scoped functionality            |    |    |    |    |    |    |    |    |    |    |    |    |    |    |    |    |    |    |
 | Inverse functionality                     |    |    |    |    |    |    |    |    |    |    |    |    |    |    |    |    |    |    |
