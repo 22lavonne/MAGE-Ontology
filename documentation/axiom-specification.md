@@ -67,19 +67,19 @@
 | Class disjointness                        |    |    |    |    |    |    |    |    |    |    |    |    |    |    |    |    |
 | Domain                                    |    |    |    |    |    |    |    |    |    |    |    |    |    |    |    |    |
 | Scoped domain                             |    |    |    |    |    |    |    |    |    |    |    |    |    |    |    |    |
-| Range                                     | x  | x  |    |    |    |    |    |    |    | x  | x  |    |    |    |    |    |
+| Range                                     | x  | x  |    |    |    |    |    |    |    | x  | x  |    |    |    |    | x  |
 | Scoped range                              |    |    |    |    |    |    |    |    |    |    |    |    |    |    |    |    |
-| Existential                               |    |    |    |    |    |    |    |    |    | x  | x  | x  | x  | x  | x  |    |
+| Existential                               |    |    |    |    |    |    |    |    |    | x  | x  | x  | x  |    | x  |    |
 | Inverse existential                       |    |    |    |    |    |    |    |    |    |    |    |    |    | x  |    |    |
-| Functionality                             |    | x  |    |    |    |    |    |    |    |    |    |    |    |    |    |    |
+| Functionality                             |    | x  | x  |    |    |    |    |    |    |    |    |    |    |    |    |    |
 | Qualified functionality                   |    |    |    |    |    |    |    |    |    |    |    |    |    |    |    |    |
-| Scoped functionality                      |    |    |    |    |    |    |    |    |    | ?  | ?  | x  | x  | x  | x  |    |
+| Scoped functionality                      |    |    |    |    |    |    |    |    |    | x  | x  | x  | x  |    | x  |    |
 | Qualified scoped functionality            |    |    |    |    |    |    |    |    |    |    |    |    |    |    |    |    |
 | Inverse functionality                     |    |    |    |    |    |    |    |    |    |    |    |    |    |    |    |    |
 | Inverse qualified functionality           |    |    |    |    |    |    |    |    |    |    |    |    |    |    |    |    |
 | Inverse scoped functionality              |    |    |    |    |    |    |    |    |    |    |    |    |    |    |    |    |
 | Inverse qualified scoped functionality    |    |    |    |    |    |    |    |    |    |    |    |    |    |    |    |    |
-| Structural tautology                      |    |    |    |    |    |    |    |    |    |    |    |    |    |    |    |    |
+| Structural tautology                      | x  |    |    |    |    |    | x  |    |    |    |    |    |    | x  |    |    |
 |                                           |    |    |    |    |    |    |    |    |    |    |    |    |    |    |    |    |
 | Symmetry                                  |    |    |    |    |    |    |    |    |    |    |    |    |    |    |    |    |
 | Asymmetry                                 | x  | x  | x  | x  | x  | x  | x  | x  | x  | x  | x  | x  | x  | x  | x  | x  |
@@ -93,20 +93,20 @@
 | ---------                                 |----|----|----|----|----|----|----|----|----|----|----|----|----|----|----|----|----|----|
 | Subclass                                  | x  | x  |    |    |    |    | x  |    |    |    |    |    |    |    |    | x  |    |    |
 | Class disjointness                        |    |    |    |    |    |    |    |    |    |    |    |    |    |    |    |    |    |    |
-| Domain                                    |    |    |    |    |    |    |    |    |    |    |    |    |    |    |    |    |    |    |
+| Domain                                    |    |    |    |    |    |    |    |    | x  | x  |    |    |    |    |    |    |    |    |
 | Scoped domain                             |    |    |    |    |    |    |    |    |    |    |    |    |    |    |    |    |    |    |
-| Range                                     |    |    | x  | x  | x  | x  |    | x  |    |    |    |    |    |    |    |    |    | x  |
+| Range                                     |    |    | x  | x  | x  | x  |    | x  | x  | x  |    |    |    |    |    |    |    | x  |
 | Scoped range                              |    |    |    |    |    |    |    |    |    |    |    |    |    |    |    |    |    |    |
 | Existential                               |    |    |    |    | x  | x  |    | x  |    |    |    |    |    |    |    |    |    | x  |
 | Inverse existential                       |    |    |    |    |    |    |    |    |    |    |    |    |    |    |    |    |    |    |
-| Functionality                             |    |    |    |    |    |    |    |    |    |    |    |    |    |    |    |    |    |    |
+| Functionality                             |    |    |    |    |    |    |    |    | x  | x  |    |    |    |    |    |    |    |    |
 | Qualified functionality                   |    |    |    |    | x  | x  |    | x  |    |    |    |    |    |    |    |    |    | x  |
 | Scoped functionality                      |    |    |    |    |    |    |    |    |    |    |    |    |    |    |    |    |    |    |
 | Qualified scoped functionality            |    |    |    |    |    |    |    |    |    |    |    |    |    |    |    |    |    |    |
 | Inverse functionality                     |    |    |    |    |    |    |    |    |    |    |    |    |    |    |    |    |    |    |
 | Inverse qualified functionality           |    |    |    |    |    |    |    |    |    |    |    |    |    |    |    |    |    |    |
 | Inverse scoped functionality              |    |    |    |    |    |    |    |    |    |    |    |    |    |    |    |    |    |    |
-| Inverse qualified scoped functionality    |    |    |    |    |    |    |    |    |    |    |    |    |    |    |    |    |    |    |
+| Inverse qualified scoped functionality    |    |    |    |    |    |    |    |    | x  | x  |    |    |    |    |    |    |    |    |
 | Structural tautology                      |    |    |    |    |    |    |    |    |    |    |    |    |    |    |    |    |    |    |
 |                                           |    |    |    |    |    |    |    |    |    |    |    |    |    |    |    |    |    |    |
 | Symmetry                                  |    |    |    |    |    |    |    |    |    |    |    |    |    |    |    |    |    |    |
