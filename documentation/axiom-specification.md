@@ -93,20 +93,20 @@
 | ---------                                 |----|----|----|----|----|----|----|----|----|----|----|----|----|----|----|----|----|----|
 | Subclass                                  | x  | x  |    |    |    |    | x  |    |    |    |    |    |    |    |    | x  |    |    |
 | Class disjointness                        |    |    |    |    |    |    |    |    |    |    |    |    |    |    |    |    |    |    |
-| Domain                                    |    |    |    |    |    |    |    |    | x  | x  |    |    |    |    |    |    |    |    |
+| Domain                                    |    |    |    |    |    |    |    |    | x  | x  | x  | x  | x  |    |    |    |    |    |
 | Scoped domain                             |    |    |    |    |    |    |    |    |    |    |    |    |    |    |    |    |    |    |
-| Range                                     |    |    | x  | x  | x  | x  |    | x  | x  | x  |    |    |    |    |    |    |    | x  |
+| Range                                     |    |    | x  | x  | x  | x  |    | x  | x  | x  | x  | x  | x  |    | x  |    |    | x  |
 | Scoped range                              |    |    |    |    |    |    |    |    |    |    |    |    |    |    |    |    |    |    |
-| Existential                               |    |    |    |    | x  | x  |    | x  |    |    |    |    |    |    |    |    |    | x  |
+| Existential                               |    |    |    |    | x  | x  |    | x  |    |    |    |    |    |    | x  |    |    | x  |
 | Inverse existential                       |    |    |    |    |    |    |    |    |    |    |    |    |    |    |    |    |    |    |
-| Functionality                             |    |    |    |    |    |    |    |    | x  | x  |    |    |    |    |    |    |    |    |
+| Functionality                             |    |    |    |    |    |    |    |    | x  | x  |    |    |    | x  |    |    |    |    |
 | Qualified functionality                   |    |    |    |    | x  | x  |    | x  |    |    |    |    |    |    |    |    |    | x  |
 | Scoped functionality                      |    |    |    |    |    |    |    |    |    |    |    |    |    |    |    |    |    |    |
 | Qualified scoped functionality            |    |    |    |    |    |    |    |    |    |    |    |    |    |    |    |    |    |    |
 | Inverse functionality                     |    |    |    |    |    |    |    |    |    |    |    |    |    |    |    |    |    |    |
 | Inverse qualified functionality           |    |    |    |    |    |    |    |    |    |    |    |    |    |    |    |    |    |    |
 | Inverse scoped functionality              |    |    |    |    |    |    |    |    |    |    |    |    |    |    |    |    |    |    |
-| Inverse qualified scoped functionality    |    |    |    |    |    |    |    |    | x  | x  |    |    |    |    |    |    |    |    |
+| Inverse qualified scoped functionality    |    |    |    |    |    |    |    |    | x  | x  |    | x  | x  |    |    |    |    |    |
 | Structural tautology                      |    |    |    |    |    |    |    |    |    |    |    |    |    |    |    |    |    |    |
 |                                           |    |    |    |    |    |    |    |    |    |    |    |    |    |    |    |    |    |    |
 | Symmetry                                  |    |    |    |    |    |    |    |    |    |    |    |    |    |    |    |    |    |    |
