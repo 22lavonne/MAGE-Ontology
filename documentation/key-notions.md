@@ -42,14 +42,10 @@ A symbol is a named entity in an executable file that is associated with a speci
 "Every Data Symbol is a Symbol"
 * `Lexical Scope Symbol subClassOf Symbol` <br />
 "Every Lexical Scope Symbol is a Symbol"
-* `Namespace subClassOf Symbol` <br />
-"Every Namespace is a Symbol"
 * `Data Symbol definedIn Lexical Scope Symbol min 0 Symbol` <br />
 "Every data symbol is defined in 0 or more Lexical Scope Symbols" <br />
 * `Data Symbol definedIn namespace exactly 1 namespace` <br />
 "Every data symbol is defined in exactly 1 namespace"
-* `Lexical Scope Symbol definedIn namespace exactly 1 namespace` <br />
-"Every lexical scope symbol is defined in exactly 1 namespace"
 
 ## Reference
 ### Description
@@ -73,8 +69,6 @@ An object that holds the Memory address of a given symbol. It's an object itself
 ![Address](../Schema/schema_diagram_images/address_schema.png)
 
 ### Axioms
-* `Address pointsTo Symbol exactly 1 Symbol` <br />
-"An address points to exactly one symbol"
 * `Address addressOf xsd:string` <br />
 "An address refers to a memory address represented by a string"
 * `Address performsRole Operand min 0 Operand` <br />
@@ -90,10 +84,10 @@ Imports allow files to use outside functions within the current file through dyn
 "Every import is a lexical scope symbol"
 * `Export subClassOf Lexical Scope Symbol` <br />
 "Every export is a lexical scope symbol"
-* `Import declares min 0 DLL` <br />
-"Every import declares 0 or more DLLs"
-* `Export declares min 0 DLL` <br />
-"Every export declares 0 or more DLLs"
+* `DLL definedIn min 0 Imports` <br />
+"Every DLL is defined in 0 or more imports"
+* `DLL definedIn min 0 Exports` <br />
+"Every DLL is defined in 0 or more exports"
 * `Import hasLabel Label exactly 1 label` <br />
 "Every import has exactly one label"
 * `Export hasLabel Label exactly 1 label` <br />
@@ -112,16 +106,18 @@ Keeps track of all the aspects of a function, including the variables passed in 
 "Every function has exactly one label"
 * `Function hasReturnType DataType min 0 max 1 datatype` <br />
 "Every function has either no return type (void) or one return type"
-* `Function returns min 0 max 1 variable` <br />
-"Every function returns either no variables or one variable"
 * `Function hasParameter min 0 variable` <br />
 "A function can pass in 0 or more parameters"
+* `Function returns min 0 max 1 variable` <br />
+"Every function returns either no variables or one variable"
 * `Function calls min 0 Function` <br />
 "A function can call 0 or more other functions"
 * `Function calledBy min 0 Function` <br />
 "A function can be called by 0 or more other functions"
 * `Function definedIn class min 0 max 1 Class` <br />
-"A function is defined in either 0 or 1 class"
+"A function is defined in either 0 or 1 classes"
+* `Function definedIn Namespace exactly 1 Namespace` <br />
+"A function is defined in exactly 1 namespace"
 * `Function containsInstruction min 1 instruction` <br />
 "A function contains one or more instructions"
 
@@ -137,8 +133,6 @@ Keeps track of all the informtion about a variable, including what kind of varia
 "Every variable has exactly one label"
 * `Variable hasDataType DataType exactly 1 Datatype` <br />
 "Every variable has exactly one data type"
-* `Variable passesInParameter function min 0 parameter` <br />
-"A variable can be passed in as a parameter in 0 or more functions"
 
 ## Data Type
 ### Description
@@ -156,10 +150,10 @@ An object that signifies the data type of a variable, or the return type of a fu
 ![Class](../Schema/schema_diagram_images/class_schema.png)
 
 ### Axioms
-* `Class subClassOf Symbol` <br />
-"Every class is a symbol"
-* `Class definesFunction Function min 0 Function` <br />
-"Every class defines 0 or more functions"
+* `Class subClassOf Lexical Scope Symbol` <br />
+"Every class is a lexical scope symbol"
+* `Class definedIn Namespace exactly 1 Namespace` <br />
+"A class is defined in exactly 1 namespace"
 * `Class hasLabel Label exactly 1 Label` <br />
 "Every class has exactly one label"
 
@@ -186,8 +180,8 @@ Namespaces group together symbols like functions and classes to make sure there 
 
 ![Namespace](../Schema/schema_diagram_images/namespace_schema.png)
 ### Axioms
-* `Namespace subClassOf Symbol` <br />
-"Every namespace is a symbol"
+* `Namespace subClassOf Lexical Scope Symbol` <br />
+"Every namespace is a lexical scope symbol"
 * `Namespace hasName xsd:string exactly 1 name` <br />
 "Every namespace has exactly one name indicated by xsd:string"
 
