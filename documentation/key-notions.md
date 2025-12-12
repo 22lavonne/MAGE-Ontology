@@ -6,19 +6,19 @@ A symbol is a named entity in an executable file that is associated with a speci
 
 ![Symbol](../Schema/schema_diagram_images/symbol_schema.png)
 ### Axioms
-* `Symbol hasReference min 0 Reference` <br />
+* `(1) Symbol hasReference min 0 Reference` <br />
 "A symbol has 0 or more references"
-* `Symbol hasPrimaryReference min 0 max 1 Reference` <br />
+* `(2) Symbol hasPrimaryReference min 0 max 1 Reference` <br />
 "A symbol has up to one primary reference"
-* `Symbol associatedWith Address exactly 1 Address` <br />
+* `(3) Symbol associatedWith Address exactly 1 Address` <br />
 "A symbol is associated with exactly 1 address"
 * `Data Symbol subClassOf Symbol` <br />
 "Every Data Symbol is a Symbol"
 * `Lexical Scope Symbol subClassOf Symbol` <br />
 "Every Lexical Scope Symbol is a Symbol"
-* `Data Symbol definedIn Lexical Scope Symbol min 0 Symbol` <br />
+* `(4) Data Symbol definedIn Lexical Scope Symbol min 0 Symbol` <br />
 "Every data symbol is defined in 0 or more Lexical Scope Symbols" <br />
-* `Data Symbol definedIn namespace exactly 1 namespace` <br />
+* `(5) Data Symbol definedIn namespace exactly 1 namespace` <br />
 "Every data symbol is defined in exactly 1 namespace"
 
 ## Reference
@@ -27,13 +27,13 @@ A reference is where two memory addresses interact with each other in some way, 
 
 ![Reference](../Schema/schema_diagram_images/reference_schema.png)
 ### Axioms
-* `Reference hasSourceAddress address exactly 1 sourceAddress` <br />
+* `(6) Reference hasSourceAddress address exactly 1 sourceAddress` <br />
 "A reference has exactly one source address"
-* `Reference hasDestinationAddress address exactly 1 destinationAddress` <br />
+* `(7) Reference hasDestinationAddress address exactly 1 destinationAddress` <br />
 "A reference has exactly one destination address"
-* `Reference hasType xsd:string exactly 1 type` <br />
+* `(8) Reference hasType xsd:string exactly 1 type` <br />
 "A reference has exactly one reference type indicated by a string"
-* `Reference hasOperandIndex xsd:integer exactly 1 index` <br />
+* `(9) Reference hasOperandIndex xsd:integer exactly 1 index` <br />
 "A reference has exactly one operand index indicated by an integer"
 
 ## Address
@@ -43,9 +43,9 @@ An address is the memory address that holds the data of a given symbol. It is co
 ![Address](../Schema/schema_diagram_images/address_schema.png)
 
 ### Axioms
-* `Address addressOf xsd:string` <br />
+* `(10) Address addressOf xsd:string` <br />
 "An address refers to a memory address represented by a string"
-* `Address performsRole Operand min 0 Operand` <br />
+* `(11) Address performsRole Operand min 0 Operand` <br />
 "An address can perform the role of an operand in an instruction"
 
 ## Import/Export
@@ -59,14 +59,12 @@ In terms of malware detection, imports and exports can contain vulnerable functi
 "Every import is a lexical scope symbol"
 * `Export subClassOf Lexical Scope Symbol` <br />
 "Every export is a lexical scope symbol"
-* `DLL definedIn min 0 Imports` <br />
+* `(12) DLL definedIn min 0 Imports` <br />
 "Every DLL is defined in 0 or more imports"
-* `DLL definedIn min 0 Exports` <br />
+* `(13) DLL definedIn min 0 Exports` <br />
 "Every DLL is defined in 0 or more exports"
-* `Import hasLabel Label exactly 1 label` <br />
-"Every import has exactly one label"
-* `Export hasLabel Label exactly 1 label` <br />
-"Every export has exactly one label"
+(defines is the inverse of definedIn)
+
 
 ## Function
 ### Description
@@ -77,23 +75,20 @@ The Function objects keeps track of all the aspects of a function, including any
 ### Axioms
 * `Function subClassOf Lexical Scope Symbol` <br />
 "Every function is a lexical scope symbol"
-* `Function hasLabel Label exactly 1 label` <br />
-"Every function has exactly one label"
-* `Function hasReturnType DataType min 0 max 1 datatype` <br />
+* `(14) Function hasReturnType Data Type min 0 max 1 datatype` <br />
 "Every function has either no return type (void) or one return type"
-* `Function hasParameter min 0 variable` <br />
+* `(15) Function hasParameter min 0 variable` <br />
 "A function can pass in 0 or more parameters"
-* `Function returns min 0 max 1 variable` <br />
+* `(16) Function returns min 0 max 1 variable` <br />
 "Every function returns either no variables or one variable"
-* `Function calls min 0 Function` <br />
+* `(17) Function calls min 0 Function` <br />
 "A function can call 0 or more other functions"
-* `Function calledBy min 0 Function` <br />
-"A function can be called by 0 or more other functions"
-* `Function definedIn class min 0 max 1 Class` <br />
+(calledBy is the inverse of calls)
+* `(18) Function definedIn class min 0 max 1 Class` <br />
 "A function is defined in either 0 or 1 classes"
-* `Function definedIn Namespace exactly 1 Namespace` <br />
+* `(19) Function definedIn Namespace exactly 1 Namespace` <br />
 "A function is defined in exactly 1 namespace"
-* `Function containsInstruction min 1 instruction` <br />
+* `(20) Function containsInstruction min 1 instruction` <br />
 "A function contains one or more instructions"
 
 ## Variable
@@ -104,9 +99,9 @@ The variable object keeps track of the information about a variable used within 
 ### Axioms
 * `Variable subClassOf Data Symbol` <br />
 "Every variable is a data symbol"
-* `Variable hasLabel Label exactly 1 Label` <br />
+* `(21) Variable hasLabel Label exactly 1 Label` <br />
 "Every variable has exactly one label"
-* `Variable hasDataType DataType exactly 1 Datatype` <br />
+* `(22) Variable hasDataType DataType exactly 1 Datatype` <br />
 "Every variable has exactly one data type"
 
 ## Data Type
@@ -116,7 +111,7 @@ The data type object signifies the data type of a variable or the return type of
 ![DataType](../Schema/schema_diagram_images/datatype_schema.png)
 
 ### Axioms
-* `Data Type hasDataTypeName xsd:string exactly 1 name` <br />
+* `(23) Data Type hasDataTypeName xsd:string exactly 1 name` <br />
 "Data type has exactly one data type name indicated by a string"
 
 ## Class
@@ -128,10 +123,8 @@ The class objects keeps track of information about a given class. It is defined 
 ### Axioms
 * `Class subClassOf Lexical Scope Symbol` <br />
 "Every class is a lexical scope symbol"
-* `Class definedIn Namespace exactly 1 Namespace` <br />
+* `(24) Class definedIn Namespace exactly 1 Namespace` <br />
 "A class is defined in exactly 1 namespace"
-* `Class hasLabel Label exactly 1 Label` <br />
-"Every class has exactly one label"
 
 
 ## Label
@@ -142,11 +135,11 @@ The label object is a type of data symbol that contains a human readable label f
 ### Axioms
 * `Label subClassOf Data Symbol` <br />
 "Every label is a data symbol"
-* `Label hasName xsd:string exactly 1 name` <br />
+* `(25) Label hasName xsd:string exactly 1 name` <br />
 "Every label has exactly one name indicated as xsd:string"
-* `Label hasAddress Address exactly 1 address` <br />
+* `(26) Label hasAddress Address exactly 1 address` <br />
 "Every label has exactly one memory address"
-* `Label modified xsd:boolean` <br />
+* `(27) Label modified xsd:boolean` <br />
 "A label has a value modified that is either true or false" <br />
 (If the user modifies the name of a label, this will be set to true.)
 
@@ -158,7 +151,7 @@ Namespaces group together symbols like functions and classes to make sure there 
 ### Axioms
 * `Namespace subClassOf Lexical Scope Symbol` <br />
 "Every namespace is a lexical scope symbol"
-* `Namespace hasName xsd:string exactly 1 name` <br />
+* `(28) Namespace hasName xsd:string exactly 1 name` <br />
 "Every namespace has exactly one name indicated by xsd:string"
 
 ## Instruction
@@ -169,19 +162,19 @@ Assembly instructions that come from Ghidra's disassembly from an executable fil
 ![Instruction](../Schema/schema_diagram_images/instruction_schema.png)
 
 ### Axioms
-* `Instruction hasOpcode exactly 1 Opcode` <br />
+* `(29) Instruction hasOpcode exactly 1 Opcode` <br />
 "Every instruction has exactly 1 opcode"
-* `Instruction hasSourceOperand min 0 Operand` <br />
+* `(30) Instruction hasSourceOperand min 0 Operand` <br />
 "Every instruction has 0 or more source operands"
-* `Instruction hasDestinationOperand min 0 max 1 Operand` <br />
+* `(31) Instruction hasDestinationOperand min 0 max 1 Operand` <br />
 "Every instruction has exactly 0 or 1 destination oeprands"
-* `Address performsRole Operand` <br />
+* `(32) Address performsRole Operand` <br />
 "An address can perform the role of an operand"
-* `Register performsRole Operand` <br />
+* `(33) Register performsRole Operand` <br />
 "A register can perform the role of an operand"
-* `ImmediateOperand performsRole Operand` <br />
+* `(34) ImmediateOperand performsRole Operand` <br />
 "An immediateOperand can perform the role of an operand"
-* `Symbol performsRole Operand` <br />
+* `(35) Symbol performsRole Operand` <br />
 "A symbol can perform the role of an operand"
 
 
