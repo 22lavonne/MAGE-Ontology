@@ -1,34 +1,8 @@
-<!-- 
-Identify a thorough list of key notions.
-
-    For each key notion, explain the rationale of why it is a key notion.
-    For each key notion or set of key notions, identify a pattern which can be used to model them, otherwise indicate that there is no existing pattern.
-        Draft an instantiation of the pattern (a module) based on the use-case, where possible.
-        For key notions with no pattern, draft a module which would model them.
-    Connect the key notion to where the data is coming from. For example, if an Event is a key notion, which piece of the identified datasets are used to populate the module.
-        Occasionally there will be controlled vocabularies. These are not technically patterns, but are a list of individuals that are important (and will not change). Indicate which key notions behave as such and their list of individuals.
--->
-
 # Key Notions (Modules)
 
-<!--
-* Key Notion
-    * Rationale: rationale
-    * Connected Pattern: pattern name (pattern source)
-    * Source Dataset(s): dataset n, dataset n+1
-* Key Notion
-    * Rationale: rationale
-    * Connected Pattern: pattern name (pattern source)
-    * Source Dataset(s): dataset n, dataset n+1
-* Key Notion
-    * Rationale: rationale
-    * Connected Pattern: pattern name (pattern source)
-    * Source Dataset(s): dataset n, dataset n+1
-
--->
 ## Symbol
 ### Description
-A symbol is a named entity in an executable file that is associated with a specific memory address. A symbol can have one or more references, but only one reference is designated as the primary.
+A symbol is a named entity in an executable file that is associated with a specific memory address. For this schema, symbols are broken down into two subclasses; data symbols and lexical scope symbols. Data symbols consist of variables and labels, while lexical scope symbols contain symbols where other things can be defined in (functions, classes, imports, exports, and namespaces). A symbol can have one or more references, but only one reference is designated as the primary.
 
 ![Symbol](../Schema/schema_diagram_images/symbol_schema.png)
 ### Axioms
@@ -49,7 +23,7 @@ A symbol is a named entity in an executable file that is associated with a speci
 
 ## Reference
 ### Description
-A reference is where two memory addresses interact in some way with each other, where one address uses another. This is used for things like when a function calls another function or when data is accessed by an instrution. References are 4-tuples, which include the source address, destination address, the type of reference (function call, data being accessed, etc.), and the operand index (which is an int that is either -1, 0, or 1).
+A reference is where two memory addresses interact with each other in some way, where one address uses another. This is used for things like when a function calls another function or when data is accessed by an instrution. References are 4-tuples, which include the source address, destination address, the type of reference (function call, data being accessed, etc.), and the operand index (which is an int that is either -1, 0, or 1).
 
 ![Reference](../Schema/schema_diagram_images/reference_schema.png)
 ### Axioms
@@ -64,7 +38,7 @@ A reference is where two memory addresses interact in some way with each other, 
 
 ## Address
 ### Description
-An object that holds the Memory address of a given symbol. It's an object itself so it can point to other objects.
+An address is the memory address that holds the data of a given symbol. It is considered an object in this schema so it can be referenced, while also be used as an operand in assmebly instructions. The address itself is stored as a string.
 
 ![Address](../Schema/schema_diagram_images/address_schema.png)
 
@@ -76,7 +50,8 @@ An object that holds the Memory address of a given symbol. It's an object itself
 
 ## Import/Export
 ### Description
-Imports allow files to use outside functions within the current file through dynamic link libraries (DLLs). Exports allow other files to use the functions from the current file through DLLs. The imports and edxports are important to look at to see if anything imported or exported is either vulnerable or is similar to other malware behavior, as they can direclty affect the safety of the other files in the supplu chain.
+Imports allow files to use outside functions within the current file through dynamic link libraries (DLLs). Exports allow other files to use the functions from the current file through DLLs. <br /> <br />
+In terms of malware detection, imports and exports can contain vulnerable functions or functions commonly used in other malware.
 
 ![Import/Export](../Schema/schema_diagram_images/import_export_schema.png)
 ### Axioms
@@ -95,7 +70,7 @@ Imports allow files to use outside functions within the current file through dyn
 
 ## Function
 ### Description
-Keeps track of all the aspects of a function, including the variables passed in (parameters), the local variables defined in the function, the return type of the function, the return variable of the function, and the label that the function has.
+The Function objects keeps track of all the aspects of a function, including any functions it calls or functions called by it, the variables passed in (parameters), the local variables defined in the function, the return type of the function, the return variable of the function, the instructions the function contains, and what class the function is contained in (if any).
 
 ![Function](../Schema/schema_diagram_images/function_schema.png)
 
@@ -123,7 +98,7 @@ Keeps track of all the aspects of a function, including the variables passed in 
 
 ## Variable
 ### Description
-Keeps track of all the informtion about a variable, including what kind of variable it is (parameter vs local variable vs global variable), what label it has, and its data type.
+The variable object keeps track of the information about a variable used within the program, including its data type and label. Since it's of type Data Symbol, it means it can be defined in all lexical scope symbols (meaning it can be defined in functions, classes, imports, exports, and/or namespaces).
 
 ![Variable](../Schema/schema_diagram_images/variable_schema.png)
 ### Axioms
@@ -136,7 +111,7 @@ Keeps track of all the informtion about a variable, including what kind of varia
 
 ## Data Type
 ### Description
-An object that signifies the data type of a variable, or the return type of a function.
+The data type object signifies the data type of a variable or the return type of a function. The name of the data type is specified via string.
 
 ![DataType](../Schema/schema_diagram_images/datatype_schema.png)
 
@@ -146,6 +121,7 @@ An object that signifies the data type of a variable, or the return type of a fu
 
 ## Class
 ### Description
+The class objects keeps track of information about a given class. It is defined within a namespace, and variables and functions are defined within the class.
 
 ![Class](../Schema/schema_diagram_images/class_schema.png)
 
@@ -160,7 +136,7 @@ An object that signifies the data type of a variable, or the return type of a fu
 
 ## Label
 ### Description
-Contains a human readable label for a symbol (function, variable, etc.). Contains the string of the name of the label and the memory address the label points to.
+The label object is a type of data symbol that contains a human readable label for all other kinds of symbols. It contains the string of the name of the label and the memory address the label points to.
 
 ![Label](../Schema/schema_diagram_images/label_schema.png)
 ### Axioms
@@ -187,6 +163,7 @@ Namespaces group together symbols like functions and classes to make sure there 
 
 ## Instruction
 ### Description
+The instruction object refers to an assembly instruction that will originate from the disassembly acquired from Ghidra from a given executable file. An instruction includes one opcode, and one or more operands, where registers, immediate operands (constant values), addresses, or symbols can play the role of an operand.
 Assembly instructions that come from Ghidra's disassembly from an executable file. 
 
 ![Instruction](../Schema/schema_diagram_images/instruction_schema.png)
