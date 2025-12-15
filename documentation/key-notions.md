@@ -20,6 +20,9 @@ A symbol is a named entity in an executable file that is associated with a speci
 "Every data symbol is defined in 0 or more Lexical Scope Symbols" <br />
 * `(5) Data Symbol definedIn namespace exactly 1 namespace` <br />
 "Every data symbol is defined in exactly 1 namespace"
+* `(6) Lexical Scope Symbol hasLabel Label exactly 1 Label` <br />
+"Every lexical scope symbol has exactly one label"
+
 
 ## Reference
 ### Description
@@ -27,13 +30,13 @@ A reference is where two memory addresses interact with each other in some way, 
 
 ![Reference](../Schema/schema_diagram_images/reference_schema.png)
 ### Axioms
-* `(6) Reference hasSourceAddress address exactly 1 sourceAddress` <br />
+* `(7) Reference hasSourceAddress address exactly 1 sourceAddress` <br />
 "A reference has exactly one source address"
-* `(7) Reference hasDestinationAddress address exactly 1 destinationAddress` <br />
+* `(8) Reference hasDestinationAddress address exactly 1 destinationAddress` <br />
 "A reference has exactly one destination address"
-* `(8) Reference hasType xsd:string exactly 1 type` <br />
+* `(9) Reference hasType xsd:string exactly 1 type` <br />
 "A reference has exactly one reference type indicated by a string"
-* `(9) Reference hasOperandIndex xsd:integer exactly 1 index` <br />
+* `(10) Reference hasOperandIndex xsd:integer exactly 1 index` <br />
 "A reference has exactly one operand index indicated by an integer"
 
 ## Address
@@ -43,9 +46,9 @@ An address is the memory address that holds the data of a given symbol. It is co
 ![Address](../Schema/schema_diagram_images/address_schema.png)
 
 ### Axioms
-* `(10) Address addressOf xsd:string` <br />
+* `(11) Address addressOf xsd:string` <br />
 "An address refers to a memory address represented by a string"
-* `(11) Address performsRole Operand min 0 Operand` <br />
+* `(12) Address performsRole Operand min 0 Operand` <br />
 "An address can perform the role of an operand in an instruction"
 
 ## Import/Export
@@ -59,9 +62,9 @@ In terms of malware detection, imports and exports can contain vulnerable functi
 "Every import is a lexical scope symbol"
 * `Export subClassOf Lexical Scope Symbol` <br />
 "Every export is a lexical scope symbol"
-* `(12) DLL definedIn min 0 Imports` <br />
+* `(13) DLL definedIn min 0 Imports` <br />
 "Every DLL is defined in 0 or more imports"
-* `(13) DLL definedIn min 0 Exports` <br />
+* `(14) DLL definedIn min 0 Exports` <br />
 "Every DLL is defined in 0 or more exports"
 (defines is the inverse of definedIn)
 
@@ -75,20 +78,20 @@ The Function objects keeps track of all the aspects of a function, including any
 ### Axioms
 * `Function subClassOf Lexical Scope Symbol` <br />
 "Every function is a lexical scope symbol"
-* `(14) Function hasReturnType Data Type min 0 max 1 datatype` <br />
+* `(15) Function hasReturnType Data Type min 0 max 1 datatype` <br />
 "Every function has either no return type (void) or one return type"
-* `(15) Function hasParameter min 0 variable` <br />
+* `(16) Function hasParameter min 0 variable` <br />
 "A function can pass in 0 or more parameters"
-* `(16) Function returns min 0 max 1 variable` <br />
+* `(17) Function returns min 0 max 1 variable` <br />
 "Every function returns either no variables or one variable"
-* `(17) Function calls min 0 Function` <br />
+* `(18) Function calls min 0 Function` <br />
 "A function can call 0 or more other functions"
 (calledBy is the inverse of calls)
-* `(18) Function definedIn class min 0 max 1 Class` <br />
+* `(19) Function definedIn class min 0 max 1 Class` <br />
 "A function is defined in either 0 or 1 classes"
-* `(19) Function definedIn Namespace exactly 1 Namespace` <br />
+* `(20) Function definedIn Namespace exactly 1 Namespace` <br />
 "A function is defined in exactly 1 namespace"
-* `(20) Function containsInstruction min 1 instruction` <br />
+* `(21) Function containsInstruction min 1 instruction` <br />
 "A function contains one or more instructions"
 
 ## Variable
@@ -99,9 +102,9 @@ The variable object keeps track of the information about a variable used within 
 ### Axioms
 * `Variable subClassOf Data Symbol` <br />
 "Every variable is a data symbol"
-* `(21) Variable hasLabel Label exactly 1 Label` <br />
+* `(22) Variable hasLabel Label exactly 1 Label` <br />
 "Every variable has exactly one label"
-* `(22) Variable hasDataType DataType exactly 1 Datatype` <br />
+* `(23) Variable hasDataType DataType exactly 1 Datatype` <br />
 "Every variable has exactly one data type"
 
 ## Data Type
@@ -111,7 +114,7 @@ The data type object signifies the data type of a variable or the return type of
 ![DataType](../Schema/schema_diagram_images/datatype_schema.png)
 
 ### Axioms
-* `(23) Data Type hasDataTypeName xsd:string exactly 1 name` <br />
+* `(24) Data Type hasDataTypeName xsd:string exactly 1 name` <br />
 "Data type has exactly one data type name indicated by a string"
 
 ## Class
@@ -123,7 +126,7 @@ The class objects keeps track of information about a given class. It is defined 
 ### Axioms
 * `Class subClassOf Lexical Scope Symbol` <br />
 "Every class is a lexical scope symbol"
-* `(24) Class definedIn Namespace exactly 1 Namespace` <br />
+* `(25) Class definedIn Namespace exactly 1 Namespace` <br />
 "A class is defined in exactly 1 namespace"
 
 
@@ -135,11 +138,11 @@ The label object is a type of data symbol that contains a human readable label f
 ### Axioms
 * `Label subClassOf Data Symbol` <br />
 "Every label is a data symbol"
-* `(25) Label hasName xsd:string exactly 1 name` <br />
+* `(26) Label hasName xsd:string exactly 1 name` <br />
 "Every label has exactly one name indicated as xsd:string"
-* `(26) Label hasAddress Address exactly 1 address` <br />
+* `(27) Label hasAddress Address exactly 1 address` <br />
 "Every label has exactly one memory address"
-* `(27) Label modified xsd:boolean` <br />
+* `(28) Label modified xsd:boolean` <br />
 "A label has a value modified that is either true or false" <br />
 (If the user modifies the name of a label, this will be set to true.)
 
@@ -151,7 +154,7 @@ Namespaces group together symbols like functions and classes to make sure there 
 ### Axioms
 * `Namespace subClassOf Lexical Scope Symbol` <br />
 "Every namespace is a lexical scope symbol"
-* `(28) Namespace hasName xsd:string exactly 1 name` <br />
+* `(29) Namespace hasName xsd:string exactly 1 name` <br />
 "Every namespace has exactly one name indicated by xsd:string"
 
 ## Instruction
@@ -162,19 +165,19 @@ Assembly instructions that come from Ghidra's disassembly from an executable fil
 ![Instruction](../Schema/schema_diagram_images/instruction_schema.png)
 
 ### Axioms
-* `(29) Instruction hasOpcode exactly 1 Opcode` <br />
+* `(30) Instruction hasOpcode exactly 1 Opcode` <br />
 "Every instruction has exactly 1 opcode"
-* `(30) Instruction hasSourceOperand min 0 Operand` <br />
+* `(31) Instruction hasSourceOperand min 0 Operand` <br />
 "Every instruction has 0 or more source operands"
-* `(31) Instruction hasDestinationOperand min 0 max 1 Operand` <br />
+* `(32) Instruction hasDestinationOperand min 0 max 1 Operand` <br />
 "Every instruction has exactly 0 or 1 destination oeprands"
-* `(32) Address performsRole Operand` <br />
+* `(33) Address performsRole Operand` <br />
 "An address can perform the role of an operand"
-* `(33) Register performsRole Operand` <br />
+* `(34) Register performsRole Operand` <br />
 "A register can perform the role of an operand"
-* `(34) ImmediateOperand performsRole Operand` <br />
+* `(35) ImmediateOperand performsRole Operand` <br />
 "An immediateOperand can perform the role of an operand"
-* `(35) Symbol performsRole Operand` <br />
+* `(36) Symbol performsRole Operand` <br />
 "A symbol can perform the role of an operand"
 
 
