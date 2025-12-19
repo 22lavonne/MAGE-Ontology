@@ -1,22 +1,18 @@
 ## List of Axioms
 
-### Key:
-* LSS: Lexical Scope Symbol
-
-
 | #     | Subject       | Relationship          | Object        |
 | ----- | ------------- | -----------------     | -----------   |
 |   1   |Symbol         |hasReference           |Reference      |
 |   2   |Symbol         |hasPrimaryReference    |Reference      |
 |   3   |Symbol         |associatedWith         |Address        |
-|   4   |Data Symbol    |definedIn              |LSS            |
+|   4   |Data Symbol    |definedIn              |Lexical Scope Symbol|
 |   5   |Data Symbol    |definedIn              |Namespace      |
-|   6   |Reference      |hasSourceAddress       |Address        |
-|   7   |Reference      |hasDestinationAddress  |Address        |
-|   8   |Reference      |hasType                |xsd:string     |
-|   9   |Reference      |hasOperandIndex        |xsd:integer    |
-|  10   |Address        |addressOf              |xsd:string     |
-|  11   |Address        |performsRole           |Operand        |
+|   6   |Lexical Scope Symbol|hasLabel          |Label          |
+|   7   |Reference      |hasSourceAddress       |Address        |
+|   8   |Reference      |hasDestinationAddress  |Address        |
+|   9   |Reference      |hasType                |xsd:string     |
+|  10   |Reference      |hasOperandIndex        |xsd:integer    |
+|  11   |Address        |addressOf              |xsd:string     |
 |  12   |DLL            |definedIn              |Import         |
 |  13   |DLL            |definedIn              |Export         |
 |  14   |Function       |hasReturnType          |Data Type      |
@@ -65,36 +61,35 @@
 |1    |     |  x  |     |  x  |     |     |     |     |     |     |     |     |     |     |     |  x  |     |     |     |     |
 |2    |     |  x  |     |  x  |     |     |     |     |  x  |  x  |     |     |     |     |     |     |     |     |     |     |
 |3    |     |  x  |     |     |     |     |     |     |     |     |     |     |     |     |     |     |     |     |     |Most symbols must have an associated address, but there are some symbols that are tied to a context or constant value instead.|
-|4    |     |     |  x  |     |     |     |     |     |     |     |     |     |     |     |     |  x  |     |     |     |     |
-|5    |     |     |     |     |     |     |     |     |     |     |  x  |     |     |     |     |     |     |     |     |     |
+|4    |     |     |  x  |     |     |     |     |     |     |     |     |     |     |     |     |  x  |     |     |     |Inverse is: Lexical Scope Symbol defines Data Symbol|
+|5    |     |     |     |     |     |     |     |     |     |     |  x  |     |     |     |     |     |     |     |     |Inverse is: Namespace contains Data Symbol|
 |6    |     |     |     |  x  |     |  x  |     |     |     |     |  x  |     |     |     |     |     |     |     |     |     |
 |7    |     |  x  |     |  x  |     |     |     |     |  x  |  x  |     |     |     |     |     |     |     |     |     |     |
 |8    |     |  x  |     |  x  |     |     |     |     |  x  |  x  |     |     |     |     |     |     |     |     |     |     |
 |9    |     |  x  |     |     |     |     |     |     |     |  x  |     |     |     |     |     |     |     |     |     |     |
 |10   |     |  x  |     |     |     |     |     |     |     |  x  |     |     |     |     |     |     |     |     |     |     |
-|11   |     |  x  |     |     |     |     |     |     |     |  x  |     |     |     |     |     |     |     |     |     |     |
-|12   |     |     |     |  x  |     |     |     |     |     |     |     |     |     |     |     |  x  |     |     |     |     |
-|13   |     |     |  x  |     |     |     |     |     |     |     |     |     |     |     |     |  x  |     |     |     |     |
-|14   |     |     |  x  |     |     |     |     |     |     |     |     |     |     |     |     |  x  |     |     |     |     |
-|15   |     |  x  |     |  x  |     |     |     |     |  x  |  x  |     |     |     |     |     |     |     |     |     |     |
-|16   |     |  x  |     |  x  |     |     |     |     |     |     |     |     |     |     |     |  x  |     |     |     |     |
-|17   |     |  x  |     |  x  |     |     |     |     |  x  |  x  |     |     |     |     |     |     |     |     |     |     |
-|18   |     |  x  |     |     |     |     |     |     |     |     |     |     |     |     |     |  x  |     |     |  x  |Inverse of calls is calledBy|
-|19   |     |     |  x  |     |     |     |     |     |     |     |  ?  |     |     |     |     |     |     |     |     |     |
-|20   |     |     |     |     |     |  x  |     |     |  x  |  x  |  ?  |     |     |     |     |     |     |     |     |     |
-|21   |     |  x  |     |  x  |     |     |     |     |     |     |     |     |     |     |     |  x  |     |     |     |     |
-|22   |     |     |     |  x  |     |  x  |     |     |     |     |  x  |     |     |     |     |     |     |     |     |     |
-|23   |     |  x  |     |  x  |     |  x  |     |     |  x  |  x  |     |     |     |     |     |     |     |     |     |     |
-|24   |     |  x  |     |     |     |     |     |     |     |  x  |     |     |     |     |     |     |     |     |     |     |
-|25   |     |     |     |     |  x  |  x  |     |     |     |     |  x  |     |     |     |     |     |     |     |     |     |
-|26   |     |  x  |     |     |     |     |     |     |     |  x  |     |     |     |     |     |     |     |     |     |     |
-|27   |     |  x  |     |  x  |     |     |     |     |  x  |  x  |     |     |     |     |     |     |     |     |     |     |
-|28   |     |  x  |     |     |     |     |     |     |     |     |     |     |     |     |     |     |     |     |     |     |
-|29   |     |  x  |     |     |     |     |     |     |     |  x  |     |     |     |     |     |     |     |     |     |     |
-|30   |     |  x  |     |  x  |     |  x  |     |     |  x  |     |  x  |     |     |     |     |     |     |     |     |     |
-|31   |     |  x  |     |  x  |     |     |     |     |     |     |     |     |     |     |     |     |     |     |     |     |
-|32   |     |  x  |     |  x  |     |     |     |     |  x  |     |  x  |     |     |     |     |     |     |     |     |     |
+|11   |     |     |     |  x  |     |     |     |     |     |     |     |     |     |     |     |  x  |     |     |     |     |
+|12   |     |     |  x  |     |     |     |     |     |     |     |     |     |     |     |     |  x  |     |     |     |Inverse is: Import defines DLL|
+|13   |     |     |  x  |     |     |     |     |     |     |     |     |     |     |     |     |  x  |     |     |     |Inverse is: Export defines DLL|
+|14   |     |  x  |     |  x  |     |     |     |     |  x  |  x  |     |     |     |     |     |     |     |     |     |     |
+|15   |     |  x  |     |  x  |     |     |     |     |     |     |     |     |     |     |     |  x  |     |     |     |     |
+|16   |     |  x  |     |  x  |     |     |     |     |  x  |  x  |     |     |     |     |     |     |     |     |     |     |
+|17   |     |  x  |     |     |     |     |     |     |     |     |     |     |     |     |     |  x  |     |     |  x  |Inverse is: Function calledBy Function|
+|18   |     |     |  x  |     |     |     |     |     |     |     |  ?  |     |     |     |     |     |     |     |     |Inverse is: Class defines Function|
+|19   |     |     |     |     |     |  x  |     |     |  x  |  x  |  ?  |     |     |     |     |     |     |     |     |Inverse is: Namespace contains Function|
+|20   |     |  x  |     |  x  |     |     |     |     |     |     |     |     |     |     |     |  x  |     |     |     |     |
+|21   |     |     |     |  x  |     |  x  |     |     |     |     |  x  |     |     |     |     |     |     |     |     |     |
+|22   |     |  x  |     |  x  |     |  x  |     |     |  x  |  x  |     |     |     |     |     |     |     |     |     |     |
+|23   |     |  x  |     |     |     |     |     |     |     |  x  |     |     |     |     |     |     |     |     |     |     |
+|24   |     |     |     |     |  x  |  x  |     |     |     |     |  x  |     |     |     |     |     |     |     |     |Inverse is: Namespace contains Class|
+|25   |     |  x  |     |     |     |     |     |     |     |  x  |     |     |     |     |     |     |     |     |     |     |
+|26   |     |  x  |     |  x  |     |     |     |     |  x  |  x  |     |     |     |     |     |     |     |     |     |     |
+|27   |     |  x  |     |     |     |     |     |     |     |     |     |     |     |     |     |     |     |     |     |     |
+|28   |     |  x  |     |     |     |     |     |     |     |  x  |     |     |     |     |     |     |     |     |     |     |
+|29   |     |  x  |     |  x  |     |  x  |     |     |  x  |     |  x  |     |     |     |     |     |     |     |     |     |
+|30   |     |  x  |     |  x  |     |     |     |     |     |     |     |     |     |     |     |     |     |     |     |     |
+|31   |     |  x  |     |  x  |     |     |     |     |  x  |     |  x  |     |     |     |     |     |     |     |     |     |
+|32   |     |     |     |  x  |     |     |     |     |     |     |     |     |     |     |     |  x  |     |     |     |     |
 |33   |     |     |     |  x  |     |     |     |     |     |     |     |     |     |     |     |  x  |     |     |     |     |
 |34   |     |     |     |  x  |     |     |     |     |     |     |     |     |     |     |     |  x  |     |     |     |     |
 |35   |     |     |     |  x  |     |     |     |     |     |     |     |     |     |     |     |  x  |     |     |     |     |
-|36   |     |     |     |  x  |     |     |     |     |     |     |     |     |     |     |     |  x  |     |     |     |     |
