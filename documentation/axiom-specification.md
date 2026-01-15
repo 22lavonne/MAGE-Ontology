@@ -56,40 +56,51 @@
 * REF: Reflexivity
 
 
-| Rel | CD  |  D  | SD  |  R  | SR  |  E  | IE  |  F  | QF  | SF  | QSF | IF  | IQF | ISF | IQSF| ST  | SY  |TRANS| REF |Notes|
-| --- | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- |
-|1    |     |  x  |     |  x  |     |     |     |     |     |     |     |     |     |     |     |  x  |     |     |     |     |
-|2    |     |  x  |     |  x  |     |     |     |     |  x  |  x  |     |     |     |     |     |     |     |     |     |     |
-|3    |     |  x  |     |     |     |     |     |     |     |     |     |     |     |     |     |     |     |     |     |Most symbols must have an associated address, but there are some symbols that are tied to a context or constant value instead.|
-|4    |     |     |  x  |     |     |     |     |     |     |     |     |     |     |     |     |  x  |     |     |     |Inverse is: Lexical Scope Symbol defines Data Symbol|
-|5    |     |     |     |     |     |     |     |     |     |     |  x  |     |     |     |     |     |     |     |     |Inverse is: Namespace contains Data Symbol|
-|6    |     |     |     |  x  |     |  x  |     |     |     |     |  x  |     |     |     |     |     |     |     |     |     |
-|7    |     |  x  |     |  x  |     |     |     |     |  x  |  x  |     |     |     |     |     |     |     |     |     |     |
-|8    |     |  x  |     |  x  |     |     |     |     |  x  |  x  |     |     |     |     |     |     |     |     |     |     |
-|9    |     |  x  |     |     |     |     |     |     |     |  x  |     |     |     |     |     |     |     |     |     |     |
-|10   |     |  x  |     |     |     |     |     |     |     |  x  |     |     |     |     |     |     |     |     |     |     |
-|11   |     |     |     |  x  |     |     |     |     |     |     |     |     |     |     |     |  x  |     |     |     |     |
-|12   |     |     |  x  |     |     |     |     |     |     |     |     |     |     |     |     |  x  |     |     |     |Inverse is: Import defines DLL|
-|13   |     |     |  x  |     |     |     |     |     |     |     |     |     |     |     |     |  x  |     |     |     |Inverse is: Export defines DLL|
-|14   |     |  x  |     |  x  |     |     |     |     |  x  |  x  |     |     |     |     |     |     |     |     |     |     |
-|15   |     |  x  |     |  x  |     |     |     |     |     |     |     |     |     |     |     |  x  |     |     |     |     |
-|16   |     |  x  |     |  x  |     |     |     |     |  x  |  x  |     |     |     |     |     |     |     |     |     |     |
-|17   |     |  x  |     |     |     |     |     |     |     |     |     |     |     |     |     |  x  |     |     |  x  |Inverse is: Function calledBy Function|
-|18   |     |     |  x  |     |     |     |     |     |     |     |  ?  |     |     |     |     |     |     |     |     |Inverse is: Class defines Function|
-|19   |     |     |     |     |     |  x  |     |     |  x  |  x  |  ?  |     |     |     |     |     |     |     |     |Inverse is: Namespace contains Function|
-|20   |     |  x  |     |  x  |     |     |     |     |     |     |     |     |     |     |     |  x  |     |     |     |     |
-|21   |     |     |     |  x  |     |  x  |     |     |     |     |  x  |     |     |     |     |     |     |     |     |     |
-|22   |     |  x  |     |  x  |     |  x  |     |     |  x  |  x  |     |     |     |     |     |     |     |     |     |     |
-|23   |     |  x  |     |     |     |     |     |     |     |  x  |     |     |     |     |     |     |     |     |     |     |
-|24   |     |     |     |     |  x  |  x  |     |     |     |     |  x  |     |     |     |     |     |     |     |     |Inverse is: Namespace contains Class|
-|25   |     |  x  |     |     |     |     |     |     |     |  x  |     |     |     |     |     |     |     |     |     |     |
-|26   |     |  x  |     |  x  |     |     |     |     |  x  |  x  |     |     |     |     |     |     |     |     |     |     |
-|27   |     |  x  |     |     |     |     |     |     |     |     |     |     |     |     |     |     |     |     |     |     |
-|28   |     |  x  |     |     |     |     |     |     |     |  x  |     |     |     |     |     |     |     |     |     |     |
-|29   |     |  x  |     |  x  |     |  x  |     |     |  x  |     |  x  |     |     |     |     |     |     |     |     |     |
-|30   |     |  x  |     |  x  |     |     |     |     |     |     |     |     |     |     |     |     |     |     |     |     |
-|31   |     |  x  |     |  x  |     |     |     |     |  x  |     |  x  |     |     |     |     |     |     |     |     |     |
-|32   |     |     |     |  x  |     |     |     |     |     |     |     |     |     |     |     |  x  |     |     |     |     |
-|33   |     |     |     |  x  |     |     |     |     |     |     |     |     |     |     |     |  x  |     |     |     |     |
-|34   |     |     |     |  x  |     |     |     |     |     |     |     |     |     |     |     |  x  |     |     |     |     |
-|35   |     |     |     |  x  |     |     |     |     |     |     |     |     |     |     |     |  x  |     |     |     |     |
+| Rel | CD  |  D  | SD  |  R  | SR  |  E  | IE  |  F  | QF  | SF  | QSF | IF  | IQF | ISF | IQSF| ST  | SY  |TRANS| REF |
+| --- | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- |
+|1    |     |  x  |     |  x  |     |     |     |     |     |     |     |     |     |     |     |  x  |     |     |     |
+|2    |     |  x  |     |  x  |     |     |     |     |  x  |  x  |     |     |     |     |     |     |     |     |     |
+|3    |     |  x  |     |     |     |     |     |     |     |     |     |     |     |     |     |     |     |     |     |
+|4    |     |     |  x  |     |     |     |     |     |     |     |     |     |     |     |     |  x  |     |     |     |
+|5    |     |     |     |     |     |     |     |     |     |     |  x  |     |     |     |     |     |     |     |     |
+|6    |     |     |     |  x  |     |  x  |     |     |     |     |  x  |     |     |     |     |     |     |     |     |
+|7    |     |  x  |     |  x  |     |     |     |     |  x  |  x  |     |     |     |     |     |     |     |     |     |
+|8    |     |  x  |     |  x  |     |     |     |     |  x  |  x  |     |     |     |     |     |     |     |     |     |
+|9    |     |  x  |     |     |     |     |     |     |     |  x  |     |     |     |     |     |     |     |     |     |
+|10   |     |  x  |     |     |     |     |     |     |     |  x  |     |     |     |     |     |     |     |     |     |
+|11   |     |     |     |  x  |     |     |     |     |     |     |     |     |     |     |     |  x  |     |     |     |
+|12   |     |     |  x  |     |     |     |     |     |     |     |     |     |     |     |     |  x  |     |     |     |
+|13   |     |     |  x  |     |     |     |     |     |     |     |     |     |     |     |     |  x  |     |     |     |
+|14   |     |  x  |     |  x  |     |     |     |     |  x  |  x  |     |     |     |     |     |     |     |     |     |
+|15   |     |  x  |     |  x  |     |     |     |     |     |     |     |     |     |     |     |  x  |     |     |     |
+|16   |     |  x  |     |  x  |     |     |     |     |  x  |  x  |     |     |     |     |     |     |     |     |     |
+|17   |     |  x  |     |     |     |     |     |     |     |     |     |     |     |     |     |  x  |     |     |  x  |
+|18   |     |     |  x  |     |     |     |     |     |     |     |  ?  |     |     |     |     |     |     |     |     |
+|19   |     |     |     |     |     |  x  |     |     |  x  |  x  |  ?  |     |     |     |     |     |     |     |     |
+|20   |     |  x  |     |  x  |     |     |     |     |     |     |     |     |     |     |     |  x  |     |     |     |
+|21   |     |     |     |  x  |     |  x  |     |     |     |     |  x  |     |     |     |     |     |     |     |     |
+|22   |     |  x  |     |  x  |     |  x  |     |     |  x  |  x  |     |     |     |     |     |     |     |     |     |
+|23   |     |  x  |     |     |     |     |     |     |     |  x  |     |     |     |     |     |     |     |     |     |
+|24   |     |     |     |     |  x  |  x  |     |     |     |     |  x  |     |     |     |     |     |     |     |     |
+|25   |     |  x  |     |     |     |     |     |     |     |  x  |     |     |     |     |     |     |     |     |     |
+|26   |     |  x  |     |  x  |     |     |     |     |  x  |  x  |     |     |     |     |     |     |     |     |     |
+|27   |     |  x  |     |     |     |     |     |     |     |     |     |     |     |     |     |     |     |     |     |
+|28   |     |  x  |     |     |     |     |     |     |     |  x  |     |     |     |     |     |     |     |     |     |
+|29   |     |  x  |     |  x  |     |  x  |     |     |  x  |     |  x  |     |     |     |     |     |     |     |     |
+|30   |     |  x  |     |  x  |     |     |     |     |     |     |     |     |     |     |     |     |     |     |     |
+|31   |     |  x  |     |  x  |     |     |     |     |  x  |     |  x  |     |     |     |     |     |     |     |     |
+|32   |     |     |     |  x  |     |     |     |     |     |     |     |     |     |     |     |  x  |     |     |     |
+|33   |     |     |     |  x  |     |     |     |     |     |     |     |     |     |     |     |  x  |     |     |     |
+|34   |     |     |     |  x  |     |     |     |     |     |     |     |     |     |     |     |  x  |     |     |     |
+|35   |     |     |     |  x  |     |     |     |     |     |     |     |     |     |     |     |  x  |     |     |     |
+
+### Notes:
+- 3: Most symbols must have an associated address, but there are some symbols that are tied to a context or constant value instead.
+- 4: Inverse is: Lexical Scope Symbol defines Data Symbol
+- 5: Inverse is: Namespace contains Data Symbol
+- 12: Inverse is: Import defines DLL
+- 13: Inverse is: Export defines DLL
+- 17: Inverse is: Function calledBy Function
+- 18: Inverse is: Class defines Function
+- 19: Inverse is: Namespace contains Function
+- 24: Inverse is: Namespace contains Class
