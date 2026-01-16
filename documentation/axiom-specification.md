@@ -79,7 +79,7 @@ TODO: Look through the types of functionality and change where necessary
 |16   |     |  x  |     |  x  |     |     |     |     |     |     |     |     |     |     |     |     |     |     |  x  |
 |17   |     |     |     |     |     |     |     |  x  |     |  x  |     |     |     |     |     |     |     |     |     |
 |18   |     |     |     |     |     |  x  |     |  x  |     |  x  |     |     |     |     |     |     |     |     |     |
-|19   |     |  x  |     |  x  |     |  x  |     |     |     |     |     |     |     |     |     |     |     |     |     |
+|19   |     |  x  |     |  x  |     |  x  |     |     |     |     |     |  x  |     |     |  x  |     |     |     |     |
 |20   |     |  x  |     |  x  |     |  x  |     |  x  |     |     |  x  |     |     |     |     |     |     |     |     |
 |21   |     |  x  |     |  x  |     |  x  |     |  x  |     |     |  x  |     |     |     |     |     |     |     |     |
 |22   |     |  x  |     |     |  x  |  x  |     |  x  |     |     |  x  |     |     |     |     |     |     |     |     |
