@@ -16,8 +16,8 @@ A symbol is a named entity in an executable file that is associated with a speci
 "Every Data Symbol is a Symbol"
 * `Lexical Scope Symbol subClassOf Symbol` <br />
 "Every Lexical Scope Symbol is a Symbol"
-* `(4) Data Symbol definedIn Lexical Scope Symbol min 0 Symbol` <br />
-"Every data symbol is defined in 0 or more Lexical Scope Symbols" <br />
+* `(4) Data Symbol definedIn Lexical Scope Symbol exactly 1 Lexical Scope Symbol` <br />
+"Every data symbol is defined in exactly one lexical scope symbol" <br />
 * `(5) Lexical Scope Symbol hasLabel Label exactly 1 Label` <br />
 "Every lexical scope symbol has exactly one label"
 
