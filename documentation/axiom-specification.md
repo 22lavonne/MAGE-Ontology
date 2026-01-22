@@ -4,38 +4,37 @@
 | ----- | ------------- | -----------------     | -----------   |
 |   1   |Symbol         |hasReference           |Reference      |
 |   2   |Symbol         |hasPrimaryReference    |Reference      |
-|   3   |Symbol         |associatedWith         |Address        |
+|   3   |Symbol         |hasAddress             |Address        |
 |   4   |Data Symbol    |definedIn              |Lexical Scope Symbol|
 |   5   |Lexical Scope Symbol|hasLabel          |Label          |
 |   6   |Reference      |hasSourceAddress       |Address        |
 |   7   |Reference      |hasDestinationAddress  |Address        |
 |   8   |Reference      |hasType                |xsd:string     |
 |   9   |Reference      |hasOperandIndex        |xsd:integer    |
-|  10   |Address        |addressOf              |xsd:string     |
+|  10   |Address        |addressAsString        |xsd:string     |
 |  11   |DLL            |definedIn              |Import         |
 |  12   |DLL            |definedIn              |Export         |
 |  13   |Function       |hasReturnType          |Data Type      |
 |  14   |Function       |hasParameter           |Variable       |
 |  15   |Function       |returns                |Variable       |
 |  16   |Function       |calls                  |Function       |
-|  17   |Function       |definedIn              |Class          |
-|  18   |Function       |definedIn              |Namespace      |
-|  19   |Function       |containsInstruction    |Instruction    |
-|  20   |Variable       |hasLabel               |Label          |
-|  21   |Variable       |hasDataType            |Data Type      |
-|  22   |Data Type      |hasDataTypeName        |xsd:string     |
+|  17   |Function       |definedIn              |Lexical Scope Symbol |
+|  18   |Function       |containsInstruction    |Instruction    |
+|  19   |Variable       |hasLabel               |Label          |
+|  20   |Variable       |hasDataType            |Data Type      |
+|  21   |Data Type      |hasName                |xsd:string     |
+|  22   |Class          |definedIn              |Class          |
 |  23   |Class          |definedIn              |Namespace      |
 |  24   |Label          |hasName                |xsd:string     |
 |  25   |Label          |hasAddress             |Address        |
-|  26   |Label          |modified               |xsd:boolean    |
-|  27   |Namespace      |hasName                |xsd:string     |
-|  28   |Instruction    |hasOpcode              |Opcode         |
-|  29   |Instruction    |hasSourceOperand       |Operand        |
-|  30   |Instruction    |hasDestinationOperand  |Operand        |
-|  31   |Address        |performsRole           |Operand        |
-|  32   |Register       |performsRole           |Operand        |
-|  33   |ImmediateOperand|performsRole          |Operand        |
-|  34   |Symbol         |performsRole           |Operand        |
+|  26   |Namespace      |hasName                |xsd:string     |
+|  27   |Instruction    |hasOpcode              |Opcode         |
+|  28   |Instruction    |hasSourceOperand       |Operand        |
+|  29   |Instruction    |hasDestinationOperand  |Operand        |
+|  30   |Address        |performsRole           |Operand        |
+|  31   |Register       |performsRole           |Operand        |
+|  32   |ImmediateOperand|performsRole          |Operand        |
+|  33   |Symbol         |performsRole           |Operand        |
 
 
 ## Axiom Selection
@@ -62,39 +61,38 @@ TODO: Look through the types of functionality and change where necessary
 | Rel | CD  |  D  | SD  |  R  | SR  |  E  | IE  |  F  | QF  | SF  | QSF | IF  | IQF | ISF | IQSF| ST  | SY  |TRANS| REF |
 | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- |
 |1    |     |  x  |     |  x  |     |     |  x  |     |     |     |     |     |     |     |     |  x  |     |     |     |
-|2    |     |  x  |     |  x  |     |     |  x  |  x  |     |     |  x  |     |     |     |     |  x  |     |     |     |
-|3    |     |  x  |     |  x  |     |  x  |     |  x  |     |     |  x  |     |     |     |     |     |     |     |     |
-|4    |     |     |  x  |     |     |  x  |     |  x  |     |  x  |     |     |     |     |     |  x  |     |     |     |
-|5    |     |     |     |  x  |     |  x  |     |  x  |     |     |  x  |     |     |     |     |     |     |     |     |
-|6    |     |  x  |     |  x  |     |  x  |     |  x  |     |     |  x  |     |     |     |     |     |     |     |     |
-|7    |     |  x  |     |  x  |     |  x  |     |  x  |     |     |  x  |     |     |     |     |     |     |     |     |
-|8    |     |  x  |     |     |     |     |     |  x  |     |     |  x  |     |     |     |     |     |     |     |     |
-|9    |     |  x  |     |     |     |     |     |  x  |     |     |  x  |     |     |     |     |     |     |     |     |
-|10   |     |  x  |     |     |     |     |     |  x  |     |     |  x  |     |     |     |     |     |     |     |     |
-|11   |     |     |  x  |     |     |     |     |  x  |     |     |  x  |     |     |     |     |     |     |     |     |
-|12   |     |     |  x  |     |     |     |     |  x  |     |  x  |     |     |     |     |     |     |     |     |     |
-|13   |     |  x  |     |  x  |     |     |     |  x  |     |  x  |     |     |     |     |     |     |     |     |     |
+|2    |     |  x  |     |  x  |     |     |  x  |     |     |     |  x  |     |     |     |     |  x  |     |     |     |
+|3    |     |     |  x  |     |  x  |  x  |     |     |     |     |  x  |     |     |     |     |     |     |     |     |
+|4    |     |     |  x  |     |     |  x  |     |     |     |     |     |     |     |     |     |  x  |     |     |     |
+|5    |     |     |     |  x  |     |  x  |     |     |     |     |  x  |     |     |     |     |     |     |     |     |
+|6    |     |  x  |     |  x  |     |  x  |     |     |     |     |  x  |     |     |     |     |     |     |     |     |
+|7    |     |  x  |     |  x  |     |  x  |     |     |     |     |  x  |     |     |     |     |     |     |     |     |
+|8    |     |  x  |     |     |     |     |     |     |     |     |  x  |     |     |     |     |     |     |     |     |
+|9    |     |  x  |     |  x  |     |     |     |     |     |     |  x  |     |     |     |     |     |     |     |     |
+|10   |     |  x  |     |  x  |     |     |     |     |     |     |  x  |     |     |     |     |     |     |     |     |
+|11   |     |     |  x  |     |     |     |     |     |     |     |  x  |     |     |     |     |     |     |     |     |
+|12   |     |     |  x  |     |     |     |     |     |     |     |  x  |     |     |     |     |     |     |     |     |
+|13   |     |  x  |     |  x  |     |     |     |     |     |     |     |     |     |     |     |     |     |     |     |
 |14   |     |  x  |     |  x  |     |     |     |     |     |     |     |     |     |     |     |  x  |     |     |     |
-|15   |     |  x  |     |  x  |     |     |     |  x  |     |     |  x  |     |     |     |     |     |     |     |     |
+|15   |     |  x  |     |  x  |     |     |     |     |     |     |  x  |     |     |     |     |     |     |     |     |
 |16   |     |  x  |     |  x  |     |     |     |     |     |     |     |     |     |     |     |     |     |     |  x  |
-|17   |     |     |     |     |     |     |     |  x  |     |  x  |     |     |     |     |     |     |     |     |     |
-|18   |     |     |     |     |     |  x  |     |  x  |     |  x  |     |     |     |     |     |     |     |     |     |
-|19   |     |  x  |     |  x  |     |  x  |     |     |     |     |     |  x  |     |     |  x  |     |     |     |     |
-|20   |     |  x  |     |  x  |     |  x  |     |  x  |     |     |  x  |     |     |     |     |     |     |     |     |
-|21   |     |  x  |     |  x  |     |  x  |     |  x  |     |     |  x  |     |     |     |     |     |     |     |     |
-|22   |     |  x  |     |     |  x  |  x  |     |  x  |     |     |  x  |     |     |     |     |     |     |     |     |
-|23   |     |     |  x  |     |  x  |  x  |     |  x  |     |  x  |     |     |     |     |     |     |     |     |     |
-|24   |     |  x  |     |     |     |     |     |  x  |     |     |  x  |     |     |     |     |     |     |     |     |
-|25   |     |  x  |     |  x  |     |  x  |     |  x  |     |     |  x  |     |     |     |     |     |     |     |     |
-|26   |     |  x  |     |     |     |     |     |     |     |     |     |     |     |     |     |     |     |     |     |
-|27   |     |  x  |     |     |     |     |     |  x  |     |     |  x  |     |     |     |     |     |     |     |     |
-|28   |     |  x  |     |  x  |     |  x  |  x  |  x  |     |     |  x  |     |     |     |     |     |     |     |     |
-|29   |     |  x  |     |  x  |     |     |     |     |     |     |     |     |     |     |     |     |     |     |     |
-|30   |     |  x  |     |  x  |     |     |     |  x  |     |     |  x  |     |     |     |     |     |     |     |     |
+|17   |     |     |  x  |     |  x  |     |     |     |     |     |  x  |     |     |     |     |     |     |     |     |
+|18   |     |  x  |     |  x  |     |  x  |     |     |     |     |     |     |     |     |  x  |     |     |     |     |
+|19   |     |  x  |     |  x  |     |  x  |     |     |     |     |  x  |     |     |     |     |     |     |     |     |
+|20   |     |  x  |     |  x  |     |  x  |     |     |     |     |  x  |     |     |     |     |     |     |     |     |
+|21   |     |  x  |     |  x  |  x  |  x  |     |     |     |     |  x  |     |     |     |     |     |     |     |     |
+|22   |     |     |  x  |     |  x  |  x  |     |     |     |     |  x  |     |     |     |     |     |     |     |     |
+|23   |     |     |  x  |     |  x  |  x  |     |     |     |     |  x  |     |     |     |     |     |     |     |     |
+|24   |     |  x  |     |  x  |     |     |     |     |     |     |  x  |     |     |     |     |     |     |     |     |
+|25   |     |  x  |     |  x  |     |  x  |     |     |     |     |  x  |     |     |     |     |     |     |     |     |
+|26   |     |  x  |     |  x  |     |     |     |     |     |     |  x  |     |     |     |     |     |     |     |     |
+|27   |     |  x  |     |  x  |     |  x  |  x  |     |     |     |  x  |     |     |     |     |     |     |     |     |
+|28   |     |  x  |     |  x  |     |     |     |     |     |     |     |     |     |     |     |     |     |     |     |
+|29   |     |  x  |     |  x  |     |     |     |     |     |     |  x  |     |     |     |     |     |     |     |     |
+|30   |     |  x  |     |  x  |     |     |     |     |     |     |     |     |     |     |     |     |     |     |     |
 |31   |     |  x  |     |  x  |     |     |     |     |     |     |     |     |     |     |     |     |     |     |     |
 |32   |     |  x  |     |  x  |     |     |     |     |     |     |     |     |     |     |     |     |     |     |     |
 |33   |     |  x  |     |  x  |     |     |     |     |     |     |     |     |     |     |     |     |     |     |     |
-|34   |     |  x  |     |  x  |     |     |     |     |     |     |     |     |     |     |     |     |     |     |     |
 
 ### Notes:
 - 3: Most symbols must have an associated address, but there are some symbols that are tied to a context or constant value instead.
