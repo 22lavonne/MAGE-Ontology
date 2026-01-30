@@ -7,5 +7,7 @@ documentation/annotated-bib/*.blg
 documentation/annotated-bib/*.log
 documentation/annotated-bib/*.out
 
-Ghidra-Scripting/function_output.txt
-Ghidra-Scripting/instruction_output.txt
+schema/schema-diagram-notes.graphml
+
+ghidra-scripting/function-output.txt
+ghidra-scripting/instruction-output.txt

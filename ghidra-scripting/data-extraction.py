@@ -21,7 +21,7 @@ from pathlib import Path
 # with open("\\wsl$\Ubuntu\home\emiller\MKG\Ghidra-Scriptin\goutput.txt", "w+", encoding="utf-8") as f:
 # with redirect_stdout(f):
 script_dir = Path(getSourceFile().getAbsolutePath()).parent
-func_out_path = script_dir / "function_output.txt"
+func_out_path = script_dir / "function-output.txt"
 
 # TODO: figure out how to get all the variables from each function
 # returns all functions in function_output.txt
@@ -32,7 +32,7 @@ with func_out_path.open("w", encoding="utf-8") as f:
         function = getFunctionAfter(function)
 
 # returns all instructions in instruction_output.txt
-ins_out_path = script_dir / "instruction_output.txt"
+ins_out_path = script_dir / "instruction-output.txt"
 
 
 with ins_out_path.open("w", encoding="utf-8") as f:

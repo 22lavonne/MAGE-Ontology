@@ -3,7 +3,7 @@
 clear
 latexmk -C
 
-yes "" | pdflatex --shell-escape Bibliography.tex
-bibtex Bibliography   
-yes "" | pdflatex --shell-escape Bibliography.tex
-yes "" | pdflatex --shell-escape Bibliography.tex
+yes "" | pdflatex --shell-escape bibliography.tex
+bibtex bibliography   
+yes "" | pdflatex --shell-escape bibliography.tex
+yes "" | pdflatex --shell-escape bibliography.tex
