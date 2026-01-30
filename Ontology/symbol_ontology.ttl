@@ -12,81 +12,81 @@
 #    Object Properties
 #################################################################
 
-###  http://www.semanticweb.org/jaspe/ontologies/2026/0/symbol-ontology#calls
+###  http://www.semanticweb.org/jaspe/ontologies/2026/0/symbol-ontology/calls
 :calls rdf:type owl:ObjectProperty ;
        rdfs:subPropertyOf owl:topObjectProperty .
 
 
-###  http://www.semanticweb.org/jaspe/ontologies/2026/0/symbol-ontology#containsInstruction
+###  http://www.semanticweb.org/jaspe/ontologies/2026/0/symbol-ontology/containsInstruction
 :containsInstruction rdf:type owl:ObjectProperty .
 
 
-###  http://www.semanticweb.org/jaspe/ontologies/2026/0/symbol-ontology#definedIn
+###  http://www.semanticweb.org/jaspe/ontologies/2026/0/symbol-ontology/definedIn
 :definedIn rdf:type owl:ObjectProperty ;
            rdfs:subPropertyOf owl:topObjectProperty .
 
 
-###  http://www.semanticweb.org/jaspe/ontologies/2026/0/symbol-ontology#hasAddress
+###  http://www.semanticweb.org/jaspe/ontologies/2026/0/symbol-ontology/hasAddress
 :hasAddress rdf:type owl:ObjectProperty ;
             rdfs:subPropertyOf owl:topObjectProperty .
 
 
-###  http://www.semanticweb.org/jaspe/ontologies/2026/0/symbol-ontology#hasDestinationAddress
+###  http://www.semanticweb.org/jaspe/ontologies/2026/0/symbol-ontology/hasDestinationAddress
 :hasDestinationAddress rdf:type owl:ObjectProperty ;
                        rdfs:subPropertyOf owl:topObjectProperty .
 
 
-###  http://www.semanticweb.org/jaspe/ontologies/2026/0/symbol-ontology#hasDestinationOperand
+###  http://www.semanticweb.org/jaspe/ontologies/2026/0/symbol-ontology/hasDestinationOperand
 :hasDestinationOperand rdf:type owl:ObjectProperty ;
                        rdfs:subPropertyOf owl:topObjectProperty .
 
 
-###  http://www.semanticweb.org/jaspe/ontologies/2026/0/symbol-ontology#hasLabel
+###  http://www.semanticweb.org/jaspe/ontologies/2026/0/symbol-ontology/hasLabel
 :hasLabel rdf:type owl:ObjectProperty ;
           rdfs:subPropertyOf owl:topObjectProperty .
 
 
-###  http://www.semanticweb.org/jaspe/ontologies/2026/0/symbol-ontology#hasOpcode
+###  http://www.semanticweb.org/jaspe/ontologies/2026/0/symbol-ontology/hasOpcode
 :hasOpcode rdf:type owl:ObjectProperty ;
            rdfs:subPropertyOf owl:topObjectProperty .
 
 
-###  http://www.semanticweb.org/jaspe/ontologies/2026/0/symbol-ontology#hasParameter
+###  http://www.semanticweb.org/jaspe/ontologies/2026/0/symbol-ontology/hasParameter
 :hasParameter rdf:type owl:ObjectProperty ;
               rdfs:subPropertyOf owl:topObjectProperty .
 
 
-###  http://www.semanticweb.org/jaspe/ontologies/2026/0/symbol-ontology#hasPrimaryReference
+###  http://www.semanticweb.org/jaspe/ontologies/2026/0/symbol-ontology/hasPrimaryReference
 :hasPrimaryReference rdf:type owl:ObjectProperty ;
                      rdfs:subPropertyOf owl:topObjectProperty .
 
 
-###  http://www.semanticweb.org/jaspe/ontologies/2026/0/symbol-ontology#hasReference
+###  http://www.semanticweb.org/jaspe/ontologies/2026/0/symbol-ontology/hasReference
 :hasReference rdf:type owl:ObjectProperty ;
               rdfs:subPropertyOf owl:topObjectProperty .
 
 
-###  http://www.semanticweb.org/jaspe/ontologies/2026/0/symbol-ontology#hasReturnType
+###  http://www.semanticweb.org/jaspe/ontologies/2026/0/symbol-ontology/hasReturnType
 :hasReturnType rdf:type owl:ObjectProperty ;
                rdfs:subPropertyOf owl:topObjectProperty .
 
 
-###  http://www.semanticweb.org/jaspe/ontologies/2026/0/symbol-ontology#hasSourceAddress
+###  http://www.semanticweb.org/jaspe/ontologies/2026/0/symbol-ontology/hasSourceAddress
 :hasSourceAddress rdf:type owl:ObjectProperty ;
                   rdfs:subPropertyOf owl:topObjectProperty .
 
 
-###  http://www.semanticweb.org/jaspe/ontologies/2026/0/symbol-ontology#hasSourceOperand
+###  http://www.semanticweb.org/jaspe/ontologies/2026/0/symbol-ontology/hasSourceOperand
 :hasSourceOperand rdf:type owl:ObjectProperty ;
                   rdfs:subPropertyOf owl:topObjectProperty .
 
 
-###  http://www.semanticweb.org/jaspe/ontologies/2026/0/symbol-ontology#performsRole
+###  http://www.semanticweb.org/jaspe/ontologies/2026/0/symbol-ontology/performsRole
 :performsRole rdf:type owl:ObjectProperty ;
               rdfs:subPropertyOf owl:topObjectProperty .
 
 
-###  http://www.semanticweb.org/jaspe/ontologies/2026/0/symbol-ontology#returns
+###  http://www.semanticweb.org/jaspe/ontologies/2026/0/symbol-ontology/returns
 :returns rdf:type owl:ObjectProperty ;
          rdfs:subPropertyOf owl:topObjectProperty .
 
@@ -95,22 +95,22 @@
 #    Data properties
 #################################################################
 
-###  http://www.semanticweb.org/jaspe/ontologies/2026/0/symbol-ontology#addressAsString
+###  http://www.semanticweb.org/jaspe/ontologies/2026/0/symbol-ontology/addressAsString
 :addressAsString rdf:type owl:DatatypeProperty ;
                  rdfs:subPropertyOf owl:topDataProperty .
 
 
-###  http://www.semanticweb.org/jaspe/ontologies/2026/0/symbol-ontology#hasName
+###  http://www.semanticweb.org/jaspe/ontologies/2026/0/symbol-ontology/hasName
 :hasName rdf:type owl:DatatypeProperty ;
          rdfs:subPropertyOf owl:topDataProperty .
 
 
-###  http://www.semanticweb.org/jaspe/ontologies/2026/0/symbol-ontology#hasOperandIndex
+###  http://www.semanticweb.org/jaspe/ontologies/2026/0/symbol-ontology/hasOperandIndex
 :hasOperandIndex rdf:type owl:DatatypeProperty ;
                  rdfs:subPropertyOf owl:topDataProperty .
 
 
-###  http://www.semanticweb.org/jaspe/ontologies/2026/0/symbol-ontology#hasType
+###  http://www.semanticweb.org/jaspe/ontologies/2026/0/symbol-ontology/hasType
 :hasType rdf:type owl:DatatypeProperty ;
          rdfs:subPropertyOf owl:topDataProperty .
 
@@ -133,7 +133,7 @@
 
 ###  http://www.semanticweb.org/jaspe/ontologies/2026/0/symbol-ontology/Class
 :Class rdf:type owl:Class ;
-       rdfs:subClassOf :Lexical_Scope_Symbol ,
+       rdfs:subClassOf :LexicalScopeSymbol ,
                        [ rdf:type owl:Restriction ;
                          owl:onProperty :definedIn ;
                          owl:someValuesFrom :Class
@@ -156,31 +156,31 @@
                      ] .
 
 
-###  http://www.semanticweb.org/jaspe/ontologies/2026/0/symbol-ontology/Data_Symbol
-:Data_Symbol rdf:type owl:Class ;
-             rdfs:subClassOf :Symbol ,
-                             [ rdf:type owl:Restriction ;
-                               owl:onProperty :definedIn ;
-                               owl:someValuesFrom :Lexical_Scope_Symbol
-                             ] .
+###  http://www.semanticweb.org/jaspe/ontologies/2026/0/symbol-ontology/DataSymbol
+:DataSymbol rdf:type owl:Class ;
+            rdfs:subClassOf :Symbol ,
+                            [ rdf:type owl:Restriction ;
+                              owl:onProperty :definedIn ;
+                              owl:someValuesFrom :LexicalScopeSymbol
+                            ] .
 
 
-###  http://www.semanticweb.org/jaspe/ontologies/2026/0/symbol-ontology/Data_Type
-:Data_Type rdf:type owl:Class ;
-           rdfs:subClassOf [ rdf:type owl:Restriction ;
-                             owl:onProperty :hasName ;
-                             owl:someValuesFrom xsd:string
-                           ] .
+###  http://www.semanticweb.org/jaspe/ontologies/2026/0/symbol-ontology/DataType
+:DataType rdf:type owl:Class ;
+          rdfs:subClassOf [ rdf:type owl:Restriction ;
+                            owl:onProperty :hasName ;
+                            owl:someValuesFrom xsd:string
+                          ] .
 
 
 ###  http://www.semanticweb.org/jaspe/ontologies/2026/0/symbol-ontology/Export
 :Export rdf:type owl:Class ;
-        rdfs:subClassOf :Lexical_Scope_Symbol .
+        rdfs:subClassOf :LexicalScopeSymbol .
 
 
 ###  http://www.semanticweb.org/jaspe/ontologies/2026/0/symbol-ontology/Function
 :Function rdf:type owl:Class ;
-          rdfs:subClassOf :Lexical_Scope_Symbol ,
+          rdfs:subClassOf :LexicalScopeSymbol ,
                           [ rdf:type owl:Restriction ;
                             owl:onProperty :calls ;
                             owl:someValuesFrom :Function
@@ -191,7 +191,7 @@
                           ] ,
                           [ rdf:type owl:Restriction ;
                             owl:onProperty :definedIn ;
-                            owl:someValuesFrom :Lexical_Scope_Symbol
+                            owl:someValuesFrom :LexicalScopeSymbol
                           ] ,
                           [ rdf:type owl:Restriction ;
                             owl:onProperty :hasParameter ;
@@ -199,7 +199,7 @@
                           ] ,
                           [ rdf:type owl:Restriction ;
                             owl:onProperty :hasReturnType ;
-                            owl:someValuesFrom :Data_Type
+                            owl:someValuesFrom :DataType
                           ] ,
                           [ rdf:type owl:Restriction ;
                             owl:onProperty :returns ;
@@ -207,17 +207,17 @@
                           ] .
 
 
-###  http://www.semanticweb.org/jaspe/ontologies/2026/0/symbol-ontology/Immediate_Operand
-:Immediate_Operand rdf:type owl:Class ;
-                   rdfs:subClassOf [ rdf:type owl:Restriction ;
-                                     owl:onProperty :performsRole ;
-                                     owl:someValuesFrom :Operand
-                                   ] .
+###  http://www.semanticweb.org/jaspe/ontologies/2026/0/symbol-ontology/ImmediateOperand
+:ImmediateOperand rdf:type owl:Class ;
+                  rdfs:subClassOf [ rdf:type owl:Restriction ;
+                                    owl:onProperty :performsRole ;
+                                    owl:someValuesFrom :Operand
+                                  ] .
 
 
 ###  http://www.semanticweb.org/jaspe/ontologies/2026/0/symbol-ontology/Import
 :Import rdf:type owl:Class ;
-        rdfs:subClassOf :Lexical_Scope_Symbol .
+        rdfs:subClassOf :LexicalScopeSymbol .
 
 
 ###  http://www.semanticweb.org/jaspe/ontologies/2026/0/symbol-ontology/Instruction
@@ -238,7 +238,7 @@
 
 ###  http://www.semanticweb.org/jaspe/ontologies/2026/0/symbol-ontology/Label
 :Label rdf:type owl:Class ;
-       rdfs:subClassOf :Data_Symbol ,
+       rdfs:subClassOf :DataSymbol ,
                        [ rdf:type owl:Restriction ;
                          owl:onProperty :hasAddress ;
                          owl:someValuesFrom :Address
@@ -249,18 +249,18 @@
                        ] .
 
 
-###  http://www.semanticweb.org/jaspe/ontologies/2026/0/symbol-ontology/Lexical_Scope_Symbol
-:Lexical_Scope_Symbol rdf:type owl:Class ;
-                      rdfs:subClassOf :Symbol ,
-                                      [ rdf:type owl:Restriction ;
-                                        owl:onProperty :hasLabel ;
-                                        owl:someValuesFrom :Label
-                                      ] .
+###  http://www.semanticweb.org/jaspe/ontologies/2026/0/symbol-ontology/LexicalScopeSymbol
+:LexicalScopeSymbol rdf:type owl:Class ;
+                    rdfs:subClassOf :Symbol ,
+                                    [ rdf:type owl:Restriction ;
+                                      owl:onProperty :hasLabel ;
+                                      owl:someValuesFrom :Label
+                                    ] .
 
 
 ###  http://www.semanticweb.org/jaspe/ontologies/2026/0/symbol-ontology/Namespace
 :Namespace rdf:type owl:Class ;
-           rdfs:subClassOf :Lexical_Scope_Symbol ,
+           rdfs:subClassOf :LexicalScopeSymbol ,
                            [ rdf:type owl:Restriction ;
                              owl:onProperty :hasName ;
                              owl:someValuesFrom xsd:string
@@ -325,7 +325,7 @@
 
 ###  http://www.semanticweb.org/jaspe/ontologies/2026/0/symbol-ontology/Variable
 :Variable rdf:type owl:Class ;
-          rdfs:subClassOf :Data_Symbol ,
+          rdfs:subClassOf :DataSymbol ,
                           [ rdf:type owl:Restriction ;
                             owl:onProperty :hasAddress ;
                             owl:someValuesFrom :Address
