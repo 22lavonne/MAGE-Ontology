@@ -1,2 +1,11 @@
 documentation/axiom-specification-old1.md
 documentation/axiom-specification-old2.md
+
+documentation/annotated-bib/*.aux
+documentation/annotated-bib/*.bbl
+documentation/annotated-bib/*.blg
+documentation/annotated-bib/*.log
+documentation/annotated-bib/*.out
+
+Ghidra-Scripting/function_output.txt
+Ghidra-Scripting/instruction_output.txt
