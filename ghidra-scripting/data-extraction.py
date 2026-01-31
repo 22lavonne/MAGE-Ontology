@@ -18,7 +18,9 @@ from pathlib import Path
 script_dir = Path(getSourceFile().getAbsolutePath()).parent
 
 
-# TODO: figure out how to get all the variables from each function
+# TODO: if necessary, make variables easier to parse using functions like 
+    # variable.getName(), variable.getMinAddress(), variable.getDataType()
+# TODO: Figure out how to find out if functions call other functions
 # prints all function names and their entry points entry points into function.txt
 func_out_path = script_dir / "function-output.txt"
 var_out_path = script_dir / "variable-output.txt"
@@ -32,6 +34,10 @@ with func_out_path.open("w", encoding="utf-8") as f:
                 # can also use getFunction() method to get the function the variable is located in
                 f2.write("Variable from " + str(function) + ": " + variable.getName() + ": " + str(variable) + "\n")
             function = getFunctionAfter(function)
+# variable format:
+# [undefined4 local_8@Stack[-0x8]:4]
+# [data_type variable_name@stack[location]:#_of_bits?]
+
 
 # prints all instructions in instruction-output.txt
 ins_out_path = script_dir / "instruction-output.txt"
@@ -42,13 +48,17 @@ with ins_out_path.open("w", encoding="utf-8") as f:
         instruction = getInstructionAfter(instruction)
 
 # prints all symbols in symbol-output.txt
+# TODO: make printing the references in a better format for parsing
+# NOTE: there might not be a way to get the primary reference of a symbol, might have to remove it from schema
 symbol_out_path = script_dir / "symbol-output.txt"
 with symbol_out_path.open("w", encoding="utf-8") as f:
     symbol_iterator = currentProgram.getSymbolTable().getAllSymbols(True)
     for s in symbol_iterator:
-        f.write("Symbol: " + str(s) + " address: " + str(s.getAddress()) +  "\n")
-
-
+        f.write("Symbol: " + str(s) + " address: " + str(s.getAddress()) + " References: ")
+        ref_array = s.getReferences()
+        for reference in ref_array:
+            f.write(str(reference) + ",")
+        f.write("\n")
 
 # notes about instructions:
 # ghidra api website: https://ghidra.re/ghidra_docs/api/index.html 
