@@ -9,5 +9,4 @@ documentation/annotated-bib/*.out
 
 schema/schema-diagram-notes.graphml
 
-ghidra-scripting/function-output.txt
-ghidra-scripting/instruction-output.txt
+ghidra-scripting/*.txt
