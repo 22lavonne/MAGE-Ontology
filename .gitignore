@@ -10,3 +10,4 @@ documentation/annotated-bib/*.out
 schema/schema-diagram-notes.graphml
 
 ghidra-scripting/*.txt
+ghidra-scripting/__pycache__/

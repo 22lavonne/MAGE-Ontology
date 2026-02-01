@@ -11,7 +11,12 @@ from ghidra.program.model.symbol import SymbolType
 # TODO:
 # modify script if necessary when working on string parsing
 # figure out if there are other variables outside of functions that need to be added to variable-output.txt
-# print the primary reference for a symbol
+# get all labels maybe?
+
+# NOTE:
+# labels seem very related to variables. Variables are not quite symbols, but many have symbols associated with them
+# I feel like I should distinguish them from symbols in the schema, which should be fine to just remove the superclass relation
+# since some variables will still have a label (which links it to a type of symbol)
 
 # TODO: AFTER getting all the data into output files, THEN update the schema with all the changes you need
 # changes:
@@ -70,9 +75,13 @@ def main():
         for s in symbol_iterator:
             f.write("Symbol: " + str(s) + " address: " + str(s.getAddress()) + " Symbol Type: " + str(s.getSymbolType()) + " Parent namespace: " + str(s.getParentNamespace()) +  " References: ")
             ref_array = s.getReferences()
+            primary_reference = ""
             for reference in ref_array:
-                f.write(str(reference) + ",")
-            f.write("\n")
+                if reference.isPrimary():
+                    primary_reference = str(reference)
+                else:
+                    f.write(str(reference) + ",")
+            f.write(" Primary reference: " + primary_reference + "\n")
 
     # prints all classes in class-output.txt
     # NOTE: all the classes do not have an associated address, which is the case for class and namespace definitions
