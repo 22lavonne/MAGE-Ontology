@@ -1,4 +1,3 @@
-#TODO extract the data needed from the decompiled ghidra executable
 #@Emily Miller
 #@category ontology
 #@keybinding 
@@ -9,16 +8,23 @@
 from pathlib import Path
 
 # TODO:
-# get all the function names and entry points
-# get all the local variables for each function
-# get all the symbols and their addresses
-# maybe put all types of symbols into their own classes?
+# get all namespaces (names and addresses associated with namespace)
+# get all imports and exports
+# get the DLLs defined in imports and exports (might just be functions)
+# Figure out how to find out if functions call other functions
+
+# TODO: AFTER getting all the data into output files, THEN update the schema with all the changes you need
+# changes:
+    # remove labels
+    # add functions and variables to imports and exports (since they are external symbols)
+
+# NOTE: for any given symbol, you can use getParentSymbol() to return the namespace symbol of the namespace containing this symbol
 
 # gets path of where this script is actually located so any extracted txt files can be put in this directory
 script_dir = Path(getSourceFile().getAbsolutePath()).parent
 
 
-# TODO: if necessary, make variables easier to parse using functions like 
+# NOTE: if necessary, make variables easier to parse using functions like 
     # variable.getName(), variable.getMinAddress(), variable.getDataType()
 # TODO: Figure out how to find out if functions call other functions
 # prints all function names and their entry points entry points into function.txt
@@ -60,5 +66,23 @@ with symbol_out_path.open("w", encoding="utf-8") as f:
             f.write(str(reference) + ",")
         f.write("\n")
 
-# notes about instructions:
-# ghidra api website: https://ghidra.re/ghidra_docs/api/index.html 
+# prints all classes in class-output.txt
+# NOTE: all the classes do not have an associated address, which is the case for class and namespace definitions
+class_out_path = script_dir / "class-output.txt"
+with class_out_path.open("w", encoding="utf-8") as f:
+    class_iterator = currentProgram.getSymbolTable().getClassNamespaces()
+    for c in class_iterator:
+        f.write("Class: " + str(c) + " at address " + str(c.getSymbol().getAddress()) + "\n")
+
+# accessing all namespaces will be a little more difficult, as there is not a function in the API that does this
+
+# TODO: get all symbols for each library
+# prints all the DLLs in dll-output.txt
+dll_out_path = script_dir / "dll-output.txt"
+with dll_out_path.open("w", encoding="utf-8") as f:
+    dll_iterator_strs = currentProgram.getExternalManager().getExternalLibraryNames()
+    for dll_str in dll_iterator_strs:
+        f.write("DLL: " + dll_str + " at address " + str(currentProgram.getExternalManager().getExternalLibrary(dll_str).getSymbol().getAddress()) + "\n")
+
+# getExternalSymbols() gets all symbols external to the given binary, meaning from imports
+# TODO: do I update the schema so DLLs contain both variables and functions?
