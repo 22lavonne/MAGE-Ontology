@@ -4,7 +4,7 @@
 ### Description
 A symbol is a named entity in an executable file that is associated with a specific memory address. For this schema, symbols are broken down into two subclasses; data symbols and lexical scope symbols. Data symbols consist of variables and labels, while lexical scope symbols contain symbols where other things can be defined in (functions, classes, imports, exports, and namespaces). A symbol can have one or more references, but only one reference is designated as the primary.
 
-![Symbol](../schema/schema-diagram-images/symbol_schema.png)
+![Symbol](../schema/schema-diagram-images-old/symbol_schema.png)
 ### Axioms
 * `(1) Symbol hasReference min 0 Reference` <br />
 "A symbol has 0 or more references"
@@ -26,7 +26,7 @@ A symbol is a named entity in an executable file that is associated with a speci
 ### Description
 A reference is where two memory addresses interact with each other in some way, where one address uses another. This is used for things like when a function calls another function or when data is accessed by an instrution. References are 4-tuples, which include the source address, destination address, the type of reference (function call, data being accessed, etc.), and the operand index (which is an int that is either -1, 0, or 1).
 
-![Reference](../schema/schema-diagram-images/reference_schema.png)
+![Reference](../schema/schema-diagram-images-old/reference_schema.png)
 ### Axioms
 * `(6) Reference hasSourceAddress address exactly 1 sourceAddress` <br />
 "A reference has exactly one source address"
@@ -41,7 +41,7 @@ A reference is where two memory addresses interact with each other in some way, 
 ### Description
 An address is the memory address that holds the data of a given symbol. It is considered an object in this schema so it can be referenced, while also be used as an operand in assmebly instructions. The address itself is stored as a string.
 
-![Address](../schema/schema-diagram-images/address_schema.png)
+![Address](../schema/schema-diagram-images-old/address_schema.png)
 
 ### Axioms
 * `(10) Address addressAsString xsd:string` <br />
@@ -54,7 +54,7 @@ An address is the memory address that holds the data of a given symbol. It is co
 Imports allow files to use outside functions within the current file through dynamic link libraries (DLLs). Exports allow other files to use the functions from the current file through DLLs. <br /> <br />
 In terms of malware detection, imports and exports can contain vulnerable functions or functions commonly used in other malware.
 
-![Import/Export](../schema/schema-diagram-images/import_export_schema.png)
+![Import/Export](../schema/schema-diagram-images-old/import_export_schema.png)
 ### Axioms
 * `Import subClassOf Lexical Scope Symbol` <br />
 "Every import is a lexical scope symbol"
@@ -72,7 +72,7 @@ In terms of malware detection, imports and exports can contain vulnerable functi
 ### Description
 The Function objects keeps track of all the aspects of a function, including any functions it calls or functions called by it, the variables passed in (parameters), the local variables defined in the function, the return type of the function, the return variable of the function, the instructions the function contains, and what class the function is contained in (if any).
 
-![Function](../schema/schema-diagram-images/function_schema.png)
+![Function](../schema/schema-diagram-images-old/function_schema.png)
 
 ### Axioms
 * `Function subClassOf Lexical Scope Symbol` <br />
@@ -86,7 +86,6 @@ The Function objects keeps track of all the aspects of a function, including any
 * `(16) Function calls min 0 Function` <br />
 "A function can call 0 or more other functions"
 (calledBy is the inverse of calls)
-
 * `(17) Function definedIn Lexical Scope Symbol Exactly 1 Lexical Scope Symbol` <br />
 "A function is defined in exactly one lexical scope symbol"
 * `(18) Function containsInstruction min 1 instruction` <br />
@@ -96,7 +95,7 @@ The Function objects keeps track of all the aspects of a function, including any
 ### Description
 The variable object keeps track of the information about a variable used within the program, including its data type and label. Since it's of type Data Symbol, it means it can be defined in all lexical scope symbols (meaning it can be defined in functions, classes, imports, exports, and/or namespaces).
 
-![Variable](../schema/schema-diagram-images/variable_schema.png)
+![Variable](../schema/schema-diagram-images-old/variable_schema.png)
 ### Axioms
 * `Variable subClassOf Data Symbol` <br />
 "Every variable is a data symbol"
@@ -109,7 +108,7 @@ The variable object keeps track of the information about a variable used within 
 ### Description
 The data type object signifies the data type of a variable or the return type of a function. The name of the data type is specified via string.
 
-![DataType](../schema/schema-diagram-images/datatype_schema.png)
+![DataType](../schema/schema-diagram-images-old/datatype-schema.png)
 
 ### Axioms
 * `(21) Data Type hasName xsd:string exactly 1 name` <br />
@@ -119,7 +118,7 @@ The data type object signifies the data type of a variable or the return type of
 ### Description
 The class objects keeps track of information about a given class. It is defined within a namespace, and variables and functions are defined within the class.
 
-![Class](../schema/schema-diagram-images/class_schema.png)
+![Class](../schema/schema-diagram-images-old/class_schema.png)
 
 ### Axioms
 * `Class subClassOf Lexical Scope Symbol` <br />
@@ -134,7 +133,7 @@ The class objects keeps track of information about a given class. It is defined 
 ### Description
 The label object is a type of data symbol that contains a human readable label for all other kinds of symbols. It contains the string of the name of the label and the memory address the label points to.
 
-![Label](../schema/schema-diagram-images/label_schema.png)
+![Label](../schema/schema-diagram-images-old/label_schema.png)
 ### Axioms
 * `Label subClassOf Data Symbol` <br />
 "Every label is a data symbol"
@@ -147,7 +146,7 @@ The label object is a type of data symbol that contains a human readable label f
 ### Description
 Namespaces group together symbols like functions and classes to make sure there is no naming conflicts within the same scope. Namespaces can hold functions, variables, classes, and other namespaces. Namespaces cannot share names, and classes cannot share names with namespaces.
 
-![Namespace](../schema/schema-diagram-images/namespace_schema.png)
+![Namespace](../schema/schema-diagram-images-old/namespace_schema.png)
 ### Axioms
 * `Namespace subClassOf Lexical Scope Symbol` <br />
 "Every namespace is a lexical scope symbol"
@@ -159,7 +158,7 @@ Namespaces group together symbols like functions and classes to make sure there 
 The instruction object refers to an assembly instruction that will originate from the disassembly acquired from Ghidra from a given executable file. An instruction includes one opcode, and one or more operands, where registers, immediate operands (constant values), addresses, or symbols can play the role of an operand.
 Assembly instructions that come from Ghidra's disassembly from an executable file. 
 
-![Instruction](../schema/schema-diagram-images/instruction_schema.png)
+![Instruction](../schema/schema-diagram-images-old/instruction-schema.png)
 
 ### Axioms
 * `(27) Instruction hasOpcode exactly 1 Opcode` <br />
@@ -179,4 +178,4 @@ Assembly instructions that come from Ghidra's disassembly from an executable fil
 
 
 ## Overall Schema Diagram
-![Schema](../schema/schema-diagram-images/schema.png)
+![Schema](../schema/schema-diagram-images-old/schema.png)

@@ -9,22 +9,12 @@ from pathlib import Path
 from ghidra.program.model.symbol import SymbolType
 
 # TODO:
+# update key notions and axiomization with new schema
 # modify script if necessary when working on string parsing
-# figure out if there are other variables outside of functions that need to be added to variable-output.txt
+# if undefined does not work for a data type, change it to something that can work 
+    # (functions can return both void and undefined)
 # get all labels maybe?
-
-# NOTE:
-# labels seem very related to variables. Variables are not quite symbols, but many have symbols associated with them
-# I feel like I should distinguish them from symbols in the schema, which should be fine to just remove the superclass relation
-# since some variables will still have a label (which links it to a type of symbol)
-
-# TODO: AFTER getting all the data into output files, THEN update the schema with all the changes you need
-# changes:
-    # add functions and variables to imports and exports (since they are external symbols)
-    # remove having variables as a type of symbol
-    # remove imports and exports, and have DLLs be a subclass of symbol
-    # remove data symbol (since only label would be in it)
-    # rename lexical scope symbol to namespace symbol, then have libraries, classes, namespaces, and functions be a subclass of that
+# figure out how to see if there are nested classes
 
 def main():
     # gets path of where this script is actually located so any extracted txt files can be put in this directory
@@ -34,14 +24,13 @@ def main():
         # variable.getName(), variable.getMinAddress(), variable.getDataType()
     # prints all function names and their entry points entry points into function-output.txt
     # also prints all local and parameter variables from these functions into variable-output.txt
-    # TODO: figure out if there are other variables outside of functions that need to be added to variable-output.txt
     func_out_path = script_dir / "function-output.txt"
     var_out_path = script_dir / "variable-output.txt"
     with func_out_path.open("w", encoding="utf-8") as f:
         function = getFirstFunction()
         with var_out_path.open("w", encoding="utf-8") as f2:
             while function is not None:
-                f.write("Function name: " + function.getName() + " Function Entry Point: " + str(function.getEntryPoint()))
+                f.write("Function name: " + function.getName() + " Entry Point: " + str(function.getEntryPoint()) + " Return Type: " + str(function.getReturnType()))
                 var_array = function.getAllVariables()
                 for variable in var_array:
                     # can also use getFunction() method to get the function the variable is located in
@@ -67,8 +56,7 @@ def main():
             f.write("Instruction: " + str(instruction) + "\n")
             instruction = getInstructionAfter(instruction)
 
-    # prints all symbols in symbol-output.txt
-    # TODO: add primary reference to symbol
+    # prints all symbols in symbol-output.txt, including their references and primary reference
     symbol_out_path = script_dir / "symbol-output.txt"
     with symbol_out_path.open("w", encoding="utf-8") as f:
         symbol_iterator = currentProgram.getSymbolTable().getAllSymbols(True)
