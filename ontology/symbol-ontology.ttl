@@ -12,10 +12,6 @@
 #    Object Properties
 #################################################################
 
-###  http://www.semanticweb.org/jaspe/ontologies/2026/0/symbol-ontology#hasDataType
-:hasDataType rdf:type owl:ObjectProperty .
-
-
 ###  http://www.semanticweb.org/jaspe/ontologies/2026/0/symbol-ontology/calls
 :calls rdf:type owl:ObjectProperty ;
        rdfs:subPropertyOf owl:topObjectProperty .
@@ -33,6 +29,10 @@
 ###  http://www.semanticweb.org/jaspe/ontologies/2026/0/symbol-ontology/hasAddress
 :hasAddress rdf:type owl:ObjectProperty ;
             rdfs:subPropertyOf owl:topObjectProperty .
+
+
+###  http://www.semanticweb.org/jaspe/ontologies/2026/0/symbol-ontology/hasDataType
+:hasDataType rdf:type owl:ObjectProperty .
 
 
 ###  http://www.semanticweb.org/jaspe/ontologies/2026/0/symbol-ontology/hasDestinationAddress
@@ -99,12 +99,8 @@
 #    Data properties
 #################################################################
 
-###  http://www.semanticweb.org/jaspe/ontologies/2026/0/symbol-ontology#addressOf
+###  http://www.semanticweb.org/jaspe/ontologies/2026/0/symbol-ontology/addressOf
 :addressOf rdf:type owl:DatatypeProperty .
-
-
-###  http://www.semanticweb.org/jaspe/ontologies/2026/0/symbol-ontology#hasReferenceType
-:hasReferenceType rdf:type owl:DatatypeProperty .
 
 
 ###  http://www.semanticweb.org/jaspe/ontologies/2026/0/symbol-ontology/hasName
@@ -117,6 +113,10 @@
                  rdfs:subPropertyOf owl:topDataProperty .
 
 
+###  http://www.semanticweb.org/jaspe/ontologies/2026/0/symbol-ontology/hasReferenceType
+:hasReferenceType rdf:type owl:DatatypeProperty .
+
+
 ###  http://www.semanticweb.org/jaspe/ontologies/2026/0/symbol-ontology/hasType
 :hasType rdf:type owl:DatatypeProperty ;
          rdfs:subPropertyOf owl:topDataProperty .
@@ -125,11 +125,6 @@
 #################################################################
 #    Classes
 #################################################################
-
-###  http://www.semanticweb.org/jaspe/ontologies/2026/0/symbol-ontology#DLL
-:DLL rdf:type owl:Class ;
-     rdfs:subClassOf :NamespaceSymbol .
-
 
 ###  http://www.semanticweb.org/jaspe/ontologies/2026/0/symbol-ontology/Address
 :Address rdf:type owl:Class ;
@@ -154,6 +149,11 @@
                          owl:onProperty :definedIn ;
                          owl:someValuesFrom :Namespace
                        ] .
+
+
+###  http://www.semanticweb.org/jaspe/ontologies/2026/0/symbol-ontology/DLL
+:DLL rdf:type owl:Class ;
+     rdfs:subClassOf :NamespaceSymbol .
 
 
 ###  http://www.semanticweb.org/jaspe/ontologies/2026/0/symbol-ontology/DataType
@@ -221,6 +221,10 @@
 :Label rdf:type owl:Class ;
        rdfs:subClassOf :Symbol ,
                        [ rdf:type owl:Restriction ;
+                         owl:onProperty :definedIn ;
+                         owl:someValuesFrom :NamespaceSymbol
+                       ] ,
+                       [ rdf:type owl:Restriction ;
                          owl:onProperty :hasName ;
                          owl:someValuesFrom xsd:string
                        ] .
@@ -263,12 +267,12 @@
                              owl:someValuesFrom :Address
                            ] ,
                            [ rdf:type owl:Restriction ;
-                             owl:onProperty :hasReferenceType ;
-                             owl:someValuesFrom xsd:string
-                           ] ,
-                           [ rdf:type owl:Restriction ;
                              owl:onProperty :hasOperandIndex ;
                              owl:someValuesFrom xsd:integer
+                           ] ,
+                           [ rdf:type owl:Restriction ;
+                             owl:onProperty :hasReferenceType ;
+                             owl:someValuesFrom xsd:string
                            ] .
 
 
@@ -299,12 +303,12 @@
 ###  http://www.semanticweb.org/jaspe/ontologies/2026/0/symbol-ontology/Variable
 :Variable rdf:type owl:Class ;
           rdfs:subClassOf [ rdf:type owl:Restriction ;
-                            owl:onProperty :hasDataType ;
-                            owl:someValuesFrom :DataType
-                          ] ,
-                          [ rdf:type owl:Restriction ;
                             owl:onProperty :definedIn ;
                             owl:someValuesFrom :Function
+                          ] ,
+                          [ rdf:type owl:Restriction ;
+                            owl:onProperty :hasDataType ;
+                            owl:someValuesFrom :DataType
                           ] .
 
 
