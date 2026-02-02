@@ -11,12 +11,23 @@ from ghidra.program.model.symbol import SymbolType
 # TODO:
 # look into the differences between variables in functions and SymbolType.PARAMETER, SymbolType.LOCAL_VAR, and SymbolType.GLOBAL_VAR
     # also see if variables should always have a label associated with them
+# remove `namespace symbol hasLabel label`
+    # only functions have labels I think?
+    # but labels also signify global variables I think
+# change `label definedIn Namespace Symbol` or `Namespace symbol hasLabel label` if necessary
+    # might need to change both honestly
+    # maybe labels are only defined in namespaces?
+    # some things are saying label is a type of symbol, 
+    #   while others are accessing symbols when asked to access labels
 # update key notions and axiomization with new schema
 # modify script if necessary when working on string parsing
 # if undefined does not work for a data type, change it to something that can work 
     # (functions can return both void and undefined)
 # get all labels maybe?
 # figure out how to see if there are nested classes
+
+# NOTE: use getSymbolIterator() to get all label symbols
+
 
 def main():
     # gets path of where this script is actually located so any extracted txt files can be put in this directory
@@ -69,8 +80,7 @@ def main():
             for reference in ref_array:
                 if reference.isPrimary():
                     primary_reference = str(reference)
-                else:
-                    f.write(str(reference) + ",")
+                f.write(str(reference) + ",")
             f.write(" Primary reference: " + primary_reference + "\n")
 
     # prints all classes in class-output.txt

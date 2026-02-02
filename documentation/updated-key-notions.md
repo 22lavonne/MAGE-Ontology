@@ -2,20 +2,23 @@
 
 ## Symbol
 ### Description
-
+A symbol is a named entity in an executable file that is associated with a specific memory address. For this schema, the types of symbols include labels, then a sub class of symbol called namesapce symbol, which includes functions, classes, namespaces, and DLLs (dynamic link library). A symbol can have one or more references, but only one reference is designated as the primary reference.
 ![Symbol](../schema/schema-diagram-images/symbol-schema.png)
 ### Axioms
-* 
-
-* 
-
-* 
-
-* 
-
-* 
-
-* 
+* `(1) Symbol hasReference min 0 Reference` <br/>
+"A symbol has 0 or more references"
+* `(2) Symbol hasPrimaryReference min 0 max 1 Reference` <br/>
+"A symbol has up to one primary reference"
+* `(3) Symbol hasAddress Address exactly 1 Address` <br/>
+"A symbol is associated with exactly 1 address"
+*  `Label subClassOf Symbol` <br/>
+"Every label is a symbol"
+*  `Namespace Symbol subClassOf Symbol` <br/>
+"Every namespace symbol is a symbol"
+* `Label definedIn Namespace Symbol exactly 1 Namespace Symbol` <br/>
+" Every label is defined in exactly one lexical scope symbol" 
+* `(5) Namespace Symbol hasLabel Label exactly 1 Label` <br/>
+"Every namespace symbol has exactly one label"
 
 ## Reference
 ### Description
