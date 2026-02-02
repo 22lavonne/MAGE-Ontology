@@ -11,19 +11,13 @@ from ghidra.program.model.symbol import SymbolType
 # TODO:
 # look into the differences between variables in functions and SymbolType.PARAMETER, SymbolType.LOCAL_VAR, and SymbolType.GLOBAL_VAR
     # also see if variables should always have a label associated with them
-# remove `namespace symbol hasLabel label`
-    # only functions have labels I think?
-    # but labels also signify global variables I think
-# change `label definedIn Namespace Symbol` or `Namespace symbol hasLabel label` if necessary
-    # might need to change both honestly
-    # maybe labels are only defined in namespaces?
-    # some things are saying label is a type of symbol, 
-    #   while others are accessing symbols when asked to access labels
+# remove `namespace symbol hasLabel label` from BOTH SCHEMA AND ONTOLOGY
+# for this schema we are having label be a type of symbol, so not a label for all symbols
+
 # update key notions and axiomization with new schema
 # modify script if necessary when working on string parsing
 # if undefined does not work for a data type, change it to something that can work 
     # (functions can return both void and undefined)
-# get all labels maybe?
 # figure out how to see if there are nested classes
 
 # NOTE: use getSymbolIterator() to get all label symbols
@@ -33,28 +27,44 @@ def main():
     # gets path of where this script is actually located so any extracted txt files can be put in this directory
     script_dir = Path(getSourceFile().getAbsolutePath()).parent
 
-    # NOTE: if necessary, make variables easier to parse using functions like 
-        # variable.getName(), variable.getMinAddress(), variable.getDataType()
-    # prints all function names and their entry points entry points into function-output.txt
-    # also prints all local and parameter variables from these functions into variable-output.txt
+    # prints all label symbols in label-output.txt
+    label_out_path = script_dir / "label-output.txt"
     func_out_path = script_dir / "function-output.txt"
     var_out_path = script_dir / "variable-output.txt"
-    with func_out_path.open("w", encoding="utf-8") as f:
-        function = getFirstFunction()
-        with var_out_path.open("w", encoding="utf-8") as f2:
-            while function is not None:
-                f.write("Function name: " + function.getName() + " Entry Point: " + str(function.getEntryPoint()) + " Return Type: " + str(function.getReturnType()))
-                var_array = function.getAllVariables()
-                for variable in var_array:
-                    # can also use getFunction() method to get the function the variable is located in
-                    f2.write("Variable from " + str(function) + ": " + variable.getName() + ": " + str(variable) + "\n")
-                func_calls = function.getCalledFunctions(monitor)
-                # there is also a function that returns all the functions that call this function
-                #func_called = function.getCallsFunction(monitor)
-                for fun in func_calls:
-                    f.write(" Functions called: " + str(fun) + ", ")
-                f.write("\n")
-                function = getFunctionAfter(function)
+    with label_out_path.open("w", encoding="utf-8") as label_file:
+        with func_out_path.open("w", encoding="utf-8") as func_file:
+            with var_out_path.open("w", encoding="utf-8") as var_file:
+                symbol_iterator = currentProgram.getSymbolTable().getSymbolIterator()
+                for s in symbol_iterator:
+                    file_to_write = label_file
+                    # if current symbol type is a function, print in function file
+                    if (s.getSymbolType() == SymbolType.FUNCTION):
+                        func_file.write("Function name: " + s.getName() + " Addesss: " + str(s.getAddress()) + " Parent Namespace: " + str(s.getParentNamespace()) + " References: ")
+                        # then print the corresponding variables from that function
+                        # since s is currently of type Function Symbol (which is just the naming mechanism) 
+                        # and not Function (which represents the actual function), we have to get the function object from the symbol
+                        # in order to call the method getAllVariables() on it.
+                        var_array = s.getObject().getAllVariables()
+                        for var in var_array:
+                            # TODO: make this easier to parse through by using methods like var.getName(), var.getMinAddress, and var.getDataType()
+                            # there is also a way to get if the variable is a parameter or local variable
+                            var_file.write("Variable from " + str(s) + ": " + var.getName() + ": " + str(var) + "\n")
+                        # change this to f2 so the references print to the function output file for this symbol
+                        file_to_write = func_file
+                    # if it's not a function, then it's a label
+                    else:
+                        label_file.write("Label name: " + s.getName() + " Addesss: " + str(s.getAddress()) + " Parent Namespace: " + str(s.getParentNamespace()) + " References: ")
+                        file_to_write = label_file
+                    # then, no matter if it was a function or label, print its references
+                    ref_array = s.getReferences()
+                    primary_reference = ""
+                    file_to_write.write("")
+                    for reference in ref_array:
+                        if reference.isPrimary():
+                            primary_reference = str(reference)
+                        file_to_write.write(str(reference) + ",")
+                    #TODO: maybe write something here that will make it print something different if there is no primary reference
+                    file_to_write.write(" Primary reference: " + primary_reference + "\n")
     # variable format:
     # [undefined4 local_8@Stack[-0x8]:4]
     # [data_type variable_name@stack[location]:#_of_bits?]
@@ -68,21 +78,7 @@ def main():
         while instruction is not None:
             f.write("Instruction: " + str(instruction) + "\n")
             instruction = getInstructionAfter(instruction)
-
-    # prints all symbols in symbol-output.txt, including their references and primary reference
-    symbol_out_path = script_dir / "symbol-output.txt"
-    with symbol_out_path.open("w", encoding="utf-8") as f:
-        symbol_iterator = currentProgram.getSymbolTable().getAllSymbols(True)
-        for s in symbol_iterator:
-            f.write("Symbol: " + str(s) + " address: " + str(s.getAddress()) + " Symbol Type: " + str(s.getSymbolType()) + " Parent namespace: " + str(s.getParentNamespace()) +  " References: ")
-            ref_array = s.getReferences()
-            primary_reference = ""
-            for reference in ref_array:
-                if reference.isPrimary():
-                    primary_reference = str(reference)
-                f.write(str(reference) + ",")
-            f.write(" Primary reference: " + primary_reference + "\n")
-
+    
     # prints all classes in class-output.txt
     # NOTE: all the classes do not have an associated address, which is the case for class and namespace definitions
     class_out_path = script_dir / "class-output.txt"
@@ -91,7 +87,6 @@ def main():
         for c in class_iterator:
             f.write("Class: " + str(c) + " at address " + str(c.getSymbol().getAddress()) + "\n")
 
-    # TODO: Do I remove this?
     # prints all the DLLs in dll-output.txt
     dll_out_path = script_dir / "dll-output.txt"
     with dll_out_path.open("w", encoding="utf-8") as f:
