@@ -9,6 +9,8 @@ from pathlib import Path
 from ghidra.program.model.symbol import SymbolType
 
 # TODO:
+# look into the differences between variables in functions and SymbolType.PARAMETER, SymbolType.LOCAL_VAR, and SymbolType.GLOBAL_VAR
+    # also see if variables should always have a label associated with them
 # update key notions and axiomization with new schema
 # modify script if necessary when working on string parsing
 # if undefined does not work for a data type, change it to something that can work 
