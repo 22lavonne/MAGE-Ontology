@@ -11,31 +11,37 @@ A symbol is a named entity in an executable file that is associated with a speci
 "A symbol has up to one primary reference"
 * `(3) Symbol hasAddress Address exactly 1 Address` <br/>
 "A symbol is associated with exactly 1 address"
-*  `Label subClassOf Symbol` <br/>
+* `Label subClassOf Symbol` <br/>
 "Every label is a symbol"
-*  `Namespace Symbol subClassOf Symbol` <br/>
+* `Namespace Symbol subClassOf Symbol` <br/>
 "Every namespace symbol is a symbol"
+* `Class subClassOf Namespace Symbol` <br/>
+"Every class is a namespace symbol"
+* `DLL subClassOf Namespace Symbol` <br/>
+"Every dll is a namespace symbol"
 * `(4) Label definedIn Namespace Symbol exactly 1 Namespace Symbol` <br/>
-" Every label is defined in exactly one lexical scope symbol" 
+"Every label is defined in exactly one namespace symbol" 
+* `(5) Class definedIn Namespace Symbol exactly 1 Namespace Symbol` <br>
+"Every class is defined in exactly one namespace symbol"
 
 
 ## Reference
 ### Description
-A reference is where two memory addresses interact with each other in some way, where one address uses another. This is used for things like when a function calls another function or when data is accessed by an instrution. References are 4-tuples, which include the source address, destination address, the type of reference (function call, data being accessed, etc.), and the operand index (which is an int that is either -1, 0, or 1).
-<!-- image -->
+A reference is where two memory addresses interact with each other in some way, where one address uses another. This is used for things like when a function calls another function or when data is accessed by an instrution. References are 4-tuples, which include the source address, destination address, the type of reference (function call, data being accessed, etc.), and the operand index (which is an int that is either -1, 0, or 1). <br/>
+![Reference](../schema/schema-diagram-images/reference-schema.png)
 ### Axioms
-* `(#) Reference hasSourceAddress address exactly 1 sourceAddress` <br />
+* `(#) Reference hasSourceAddress address exactly 1 sourceAddress` <br/>
 "A reference has exactly one source address"
 * `(#) Reference hasDestinationAddress address exactly 1 destinationAddress` <br />
 "A reference has exactly one destination address"
-* `(#) Reference hasType xsd:string exactly 1 type` <br />
+* `(#) Reference hasType xsd:string exactly 1 type` <br/>
 "A reference has exactly one reference type indicated by a string"
-* `(#) Reference hasOperandIndex xsd:integer exactly 1 index` <br />
+* `(#) Reference hasOperandIndex xsd:integer exactly 1 index` <br/>
 "A reference has exactly one operand index indicated by an integer"
 ## Address
 ### Description
-An address is the memory address that holds the data of a given symbol. It is considered an object in this schema so it can be referenced, while also be used as an operand in assmebly instructions. The address itself is stored as a string.
-<!-- image -->
+An address is the memory address that holds the data of a given symbol. It is considered an object in this schema so it can be referenced, while also be used as an operand in assmebly instructions. The address itself is stored as a string. <br/>
+![Address](../schema/schema-diagram-images/address-schema.png)
 ### Axioms
 * `(#) Address addressAsString xsd:string` <br />
 "An address refers to a memory address represented by a string"
@@ -44,7 +50,7 @@ An address is the memory address that holds the data of a given symbol. It is co
 ## Function
 ### Description
 The Function objects keeps track of all the aspects of a function, including any functions it calls or functions called by it, the variables passed in (parameters), the local variables defined in the function, the return type of the function, the return variable of the function, the instructions the function contains, and what class the function is contained in (if any).
-<!-- image -->
+![Function](../schema/schema-diagram-images/function-schema.png)
 ### Axioms
 * `Function subClassOf Namespace Symbol` <br />
 "Every function is a lexical scope symbol"

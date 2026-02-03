@@ -9,8 +9,7 @@ from pathlib import Path
 from ghidra.program.model.symbol import SymbolType
 
 # TODO:
-# get parent namespaces and addresses for all symbol types, including classes, DLLs, and namespaces
-# see what else you need to include for all symbols based on schema and ontology and add them in too
+# see what else you need to include for all symbols based on schema and ontology and add them in too (once you start scripting)
 
 # look into the differences between variables in functions and SymbolType.PARAMETER, SymbolType.LOCAL_VAR, and SymbolType.GLOBAL_VAR
     # also see if variables should always have a label associated with them
