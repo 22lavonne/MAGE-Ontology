@@ -9,10 +9,6 @@ from pathlib import Path
 from ghidra.program.model.symbol import SymbolType
 
 # TODO:
-# finish updating the formatting of variables
-# finsih the formatting of the other output files
-# make a function to print the references instead of copy and pasting everything
-
 # see what else you need to include for all symbols based on schema and ontology and add them in too (once you start string parsing)
 
 # update key notions and axiomization with new schema
@@ -46,6 +42,7 @@ def main():
                                     func_file.write("FUNCTIONCALLED func=" + func.getName() + "\n")                        
                             # then print the corresponding variables from that function
                             # both the local variables and the parameters
+                            # NOTE: all local variables have the undefined data type
                             local_array = s.getObject().getLocalVariables()
                             if local_array:
                                 for local in local_array:
