@@ -15,10 +15,9 @@ A symbol is a named entity in an executable file that is associated with a speci
 "Every label is a symbol"
 *  `Namespace Symbol subClassOf Symbol` <br/>
 "Every namespace symbol is a symbol"
-* `Label definedIn Namespace Symbol exactly 1 Namespace Symbol` <br/>
+* `(4) Label definedIn Namespace Symbol exactly 1 Namespace Symbol` <br/>
 " Every label is defined in exactly one lexical scope symbol" 
-* `(5) Namespace Symbol hasLabel Label exactly 1 Label` <br/>
-"Every namespace symbol has exactly one label"
+
 
 ## Reference
 ### Description

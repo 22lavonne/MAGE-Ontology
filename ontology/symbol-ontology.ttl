@@ -143,11 +143,7 @@
        rdfs:subClassOf :NamespaceSymbol ,
                        [ rdf:type owl:Restriction ;
                          owl:onProperty :definedIn ;
-                         owl:someValuesFrom :Class
-                       ] ,
-                       [ rdf:type owl:Restriction ;
-                         owl:onProperty :definedIn ;
-                         owl:someValuesFrom :Namespace
+                         owl:someValuesFrom :NamespaceSymbol
                        ] .
 
 
@@ -241,11 +237,7 @@
 
 ###  http://www.semanticweb.org/jaspe/ontologies/2026/0/symbol-ontology/NamespaceSymbol
 :NamespaceSymbol rdf:type owl:Class ;
-                 rdfs:subClassOf :Symbol ,
-                                 [ rdf:type owl:Restriction ;
-                                   owl:onProperty :hasLabel ;
-                                   owl:someValuesFrom :Label
-                                 ] .
+                 rdfs:subClassOf :Symbol .
 
 
 ###  http://www.semanticweb.org/jaspe/ontologies/2026/0/symbol-ontology/Opcode

@@ -9,18 +9,21 @@ from pathlib import Path
 from ghidra.program.model.symbol import SymbolType
 
 # TODO:
+# get parent namespaces and addresses for all symbol types, including classes, DLLs, and namespaces
+# see what else you need to include for all symbols based on schema and ontology and add them in too
+
 # look into the differences between variables in functions and SymbolType.PARAMETER, SymbolType.LOCAL_VAR, and SymbolType.GLOBAL_VAR
     # also see if variables should always have a label associated with them
-# remove `namespace symbol hasLabel label` from BOTH SCHEMA AND ONTOLOGY
-# for this schema we are having label be a type of symbol, so not a label for all symbols
 
 # update key notions and axiomization with new schema
 # modify script if necessary when working on string parsing
 # if undefined does not work for a data type, change it to something that can work 
     # (functions can return both void and undefined)
-# figure out how to see if there are nested classes
 
-# NOTE: use getSymbolIterator() to get all label symbols
+# NOTE: if all dlls have a parent namespace of global, should that be hard coded into the ontology somehow?
+
+# Types of Namespaces: namespace, class, library, function, global (the global namespace)
+# TODO: should I add another object for the global namespace?
 
 
 def main():
@@ -39,26 +42,24 @@ def main():
                     file_to_write = label_file
                     # if current symbol type is a function, print in function file
                     if (s.getSymbolType() == SymbolType.FUNCTION):
-                        func_file.write("Function name: " + s.getName() + " Addesss: " + str(s.getAddress()) + " Parent Namespace: " + str(s.getParentNamespace()) + " References: ")
+                        func_file.write("Function: " + s.getName() + " Addesss: " + str(s.getAddress()) + " Parent Namespace: " + str(s.getParentNamespace()) + " References: ")
                         # then print the corresponding variables from that function
                         # since s is currently of type Function Symbol (which is just the naming mechanism) 
                         # and not Function (which represents the actual function), we have to get the function object from the symbol
                         # in order to call the method getAllVariables() on it.
                         var_array = s.getObject().getAllVariables()
                         for var in var_array:
-                            # TODO: make this easier to parse through by using methods like var.getName(), var.getMinAddress, and var.getDataType()
-                            # there is also a way to get if the variable is a parameter or local variable
-                            var_file.write("Variable from " + str(s) + ": " + var.getName() + ": " + str(var) + "\n")
+                            # NOTE: add address here if needed, but it is currently not on schema
+                            var_file.write("Variable: " + var.getName() +  " Defined in: " + str(s) + " Data type: " + str(var.getDataType()) + "\n")
                         # change this to f2 so the references print to the function output file for this symbol
                         file_to_write = func_file
                     # if it's not a function, then it's a label
                     else:
-                        label_file.write("Label name: " + s.getName() + " Addesss: " + str(s.getAddress()) + " Parent Namespace: " + str(s.getParentNamespace()) + " References: ")
+                        label_file.write("Label: " + s.getName() + " Addesss: " + str(s.getAddress()) + " Parent Namespace: " + str(s.getParentNamespace()) + " References: ")
                         file_to_write = label_file
                     # then, no matter if it was a function or label, print its references
                     ref_array = s.getReferences()
                     primary_reference = ""
-                    file_to_write.write("")
                     for reference in ref_array:
                         if reference.isPrimary():
                             primary_reference = str(reference)
@@ -85,21 +86,53 @@ def main():
     with class_out_path.open("w", encoding="utf-8") as f:
         class_iterator = currentProgram.getSymbolTable().getClassNamespaces()
         for c in class_iterator:
-            f.write("Class: " + str(c) + " at address " + str(c.getSymbol().getAddress()) + "\n")
+            # NOTE: classes do not have any references when trying to access them through the ghidra api
+            # this is because references to classes are often indirect
+            # so if I want classes to be able to have references, I might have to do more digging to find them
+            f.write("Class: " + str(c) + " Address: " + str(c.getSymbol().getAddress()) + " Parent Namespace: " + str(c.getSymbol().getParentNamespace()) + " References: ")
+            ref_array = c.getSymbol().getReferences()
+            primary_reference = ""
+            for reference in ref_array:
+                if reference.isPrimary():
+                    primary_reference = str(reference)
+                f.write(str(reference) + ", ")
+            f.write(" Primary reference: " + primary_reference + "\n")
 
     # prints all the DLLs in dll-output.txt
     dll_out_path = script_dir / "dll-output.txt"
+    # define the external manager here to make other calls shorter
+    ext_manager = currentProgram.getExternalManager()
     with dll_out_path.open("w", encoding="utf-8") as f:
-        dll_iterator_strs = currentProgram.getExternalManager().getExternalLibraryNames()
+        dll_iterator_strs = ext_manager.getExternalLibraryNames()
         for dll_str in dll_iterator_strs:
-            f.write("DLL: " + dll_str + " at address " + str(currentProgram.getExternalManager().getExternalLibrary(dll_str).getSymbol().getAddress()) + "\n")
+            # get the symbol representation of the library
+            dll_symbol = ext_manager.getExternalLibrary(dll_str).getSymbol()
+            # NOTE: all external libraries (which are dlls) will have the parent namespace of global
+            # dlls also have no direct references
+            f.write("DLL: " + dll_str + " Address: " + str(dll_symbol.getAddress()) + " Parent Namespace: " + str(dll_symbol.getParentNamespace()) + " References: ")
+            ref_array = dll_symbol.getReferences()
+            primary_reference = ""
+            for reference in ref_array:
+                if reference.isPrimary():
+                    primary_reference = str(reference)
+                f.write(str(reference) + ", ")
+            f.write(" Primary reference: " + primary_reference + "\n")
+
 
     # prints all namespaces into namespace-output.txt
     namespace_out_path = script_dir / "namespace-output.txt"
     with namespace_out_path.open("w", encoding="utf-8") as f:
         namespace_iterator = get_all_namespaces(currentProgram, monitor)
         for namespace in namespace_iterator:
-            f.write("Namespace: " + str(namespace) + "\n")
+            f.write("Namespace: " + str(namespace) + " Address: " + str(namespace.getSymbol().getAddress()) + " Parent Namespace: " + str(namespace.getSymbol().getParentNamespace()) + " References: ")
+            # NOTE: namespaces also do not have direct references
+            ref_array = namespace.getSymbol().getReferences()
+            primary_reference = ""
+            for reference in ref_array:
+                if reference.isPrimary():
+                    primary_reference = str(reference)
+                f.write(str(reference) + ", ")
+            f.write(" Primary reference: " + primary_reference + "\n")
 
 # function to get all the namespaces of the program
 # (since there is no built in method to do that in the current ghidra api)
