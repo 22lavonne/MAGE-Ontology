@@ -1,0 +1,8 @@
+@prefix ex: <https://example.com/> .
+
+ex:Andrea a ex:Person .
+
+ex:Brandon a ex:Person .
+
+ex:Cogan a ex:Person .
+

@@ -9,6 +9,11 @@ from pathlib import Path
 from ghidra.program.model.symbol import SymbolType
 
 # TODO:
+# I should probably make 2 subclasses for variables: local variables and parameters
+# then change like everything relating to variables to be for local or parameters instead (INCLUDING ONTOLOGY)
+
+# Finish fixing the formatting of all the output.txt files
+
 # see what else you need to include for all symbols based on schema and ontology and add them in too (once you start scripting)
 
 # look into the differences between variables in functions and SymbolType.PARAMETER, SymbolType.LOCAL_VAR, and SymbolType.GLOBAL_VAR
@@ -41,7 +46,15 @@ def main():
                     file_to_write = label_file
                     # if current symbol type is a function, print in function file
                     if (s.getSymbolType() == SymbolType.FUNCTION):
-                        func_file.write("Function: " + s.getName() + " Addesss: " + str(s.getAddress()) + " Parent Namespace: " + str(s.getParentNamespace()) + " References: ")
+                        # func_file.write("Function: " + s.getName() + " Addesss: " + str(s.getAddress()) + " Parent Namespace: " + str(s.getParentNamespace()) + " References: ")
+                        # TODO: get return type of function, and what functions this function calls
+                        func_file.write("FUNCTION func=" + s.getName() + " address:" + str(s.getAddress()) + " parent=" + str(s.getParentNamespace()) + " returntype=" + str(s.getReturnType()) + "\n")
+                        # TODO: do a similar thing here with called functions that you do with references
+                        func_array = s.getCalledFunctions(monitor)
+                        if func_array:
+                            for func in func_array:
+                                # NOTE: should I add more identification to the functions here besides the name?
+                                func_file.write("FUNCTIONCALLED func=" + func.getName() + "\n")                        
                         # then print the corresponding variables from that function
                         # since s is currently of type Function Symbol (which is just the naming mechanism) 
                         # and not Function (which represents the actual function), we have to get the function object from the symbol
@@ -49,22 +62,30 @@ def main():
                         var_array = s.getObject().getAllVariables()
                         for var in var_array:
                             # NOTE: add address here if needed, but it is currently not on schema
-                            var_file.write("Variable: " + var.getName() +  " Defined in: " + str(s) + " Data type: " + str(var.getDataType()) + "\n")
+                            # var_file.write("Variable: " + var.getName() +  " Defined in: " + str(s) + " Data type: " + str(var.getDataType()) + "\n")
+                            var_file.write("VARIABLE var=" + var.getName() + " datatype=" + str(var.getDataType()) + " parent=" + str(s) + "\n")
+                        local_array = s.getObject().getLocalVariables()
+                        param_array = s.getObject().getParameters()
+                        # TODO: should parameters and local variables be subclasses of type variable?
                         # change this to f2 so the references print to the function output file for this symbol
                         file_to_write = func_file
                     # if it's not a function, then it's a label
                     else:
-                        label_file.write("Label: " + s.getName() + " Addesss: " + str(s.getAddress()) + " Parent Namespace: " + str(s.getParentNamespace()) + " References: ")
+                        # label_file.write("LABEL Label: " + s.getName() + " Addresss: " + str(s.getAddress()) + " Parent Namespace: " + str(s.getParentNamespace()) + " References: ")
+                        label_file.write("LABEL label=" + s.getName() + " address:" + str(s.getAddress()) + " parent=" + str(s.getParentNamespace()) + "\n")
                         file_to_write = label_file
                     # then, no matter if it was a function or label, print its references
                     ref_array = s.getReferences()
-                    primary_reference = ""
-                    for reference in ref_array:
-                        if reference.isPrimary():
-                            primary_reference = str(reference)
-                        file_to_write.write(str(reference) + ",")
-                    #TODO: maybe write something here that will make it print something different if there is no primary reference
-                    file_to_write.write(" Primary reference: " + primary_reference + "\n")
+                    # if there is at least one reference, then print the references.
+                    # if there is not, then no references will be printed.
+                    if ref_array:
+                        primary_reference = ""
+                        for reference in ref_array:
+                            if reference.isPrimary():
+                                primary_reference = str(reference)
+                            # file_to_write.write(str(reference) + ",")
+                            file_to_write.write("REFERENCE source=" + str(reference.getFromAddress()) + " destination=" + str(reference.getToAddress()) + " operandindex=" + str(reference.getOperandIndex()) + " type=" + str(reference.getReferenceType()) + "\n")
+                        file_to_write.write("PRIMARYREFERENCE source=" + str(reference.getFromAddress()) + " destination=" + str(reference.getToAddress()) + " operandindex=" + str(reference.getOperandIndex()) + " type=" + str(reference.getReferenceType()) + "\n")
     # variable format:
     # [undefined4 local_8@Stack[-0x8]:4]
     # [data_type variable_name@stack[location]:#_of_bits?]

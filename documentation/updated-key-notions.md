@@ -50,7 +50,7 @@ An address is the memory address that holds the data of a given symbol. It is co
 ## Function
 ### Description
 The Function objects keeps track of all the aspects of a function, including any functions it calls or functions called by it, the variables passed in (parameters), the local variables defined in the function, the return type of the function, the return variable of the function, the instructions the function contains, and what class the function is contained in (if any).
-![Function](../schema/schema-diagram-images/function-schema.png)
+<!-- image here -->
 ### Axioms
 * `Function subClassOf Namespace Symbol` <br />
 "Every function is a lexical scope symbol"
