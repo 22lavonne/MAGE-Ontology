@@ -12,6 +12,10 @@
 #    Object Properties
 #################################################################
 
+###  http://www.semanticweb.org/jaspe/ontologies/2026/0/symbol-ontology#passesInto
+:passesInto rdf:type owl:ObjectProperty .
+
+
 ###  http://www.semanticweb.org/jaspe/ontologies/2026/0/symbol-ontology/calls
 :calls rdf:type owl:ObjectProperty ;
        rdfs:subPropertyOf owl:topObjectProperty .
@@ -126,6 +130,24 @@
 #    Classes
 #################################################################
 
+###  http://www.semanticweb.org/jaspe/ontologies/2026/0/symbol-ontology#LocalVariable
+:LocalVariable rdf:type owl:Class ;
+               rdfs:subClassOf :Variable ,
+                               [ rdf:type owl:Restriction ;
+                                 owl:onProperty :definedIn ;
+                                 owl:someValuesFrom :Function
+                               ] .
+
+
+###  http://www.semanticweb.org/jaspe/ontologies/2026/0/symbol-ontology#Parameter
+:Parameter rdf:type owl:Class ;
+           rdfs:subClassOf :Variable ,
+                           [ rdf:type owl:Restriction ;
+                             owl:onProperty :passesInto ;
+                             owl:someValuesFrom :Function
+                           ] .
+
+
 ###  http://www.semanticweb.org/jaspe/ontologies/2026/0/symbol-ontology/Address
 :Address rdf:type owl:Class ;
          rdfs:subClassOf [ rdf:type owl:Restriction ;
@@ -176,12 +198,12 @@
                             owl:someValuesFrom :NamespaceSymbol
                           ] ,
                           [ rdf:type owl:Restriction ;
-                            owl:onProperty :hasParameter ;
-                            owl:someValuesFrom :Variable
-                          ] ,
-                          [ rdf:type owl:Restriction ;
                             owl:onProperty :hasReturnType ;
                             owl:someValuesFrom :DataType
+                          ] ,
+                          [ rdf:type owl:Restriction ;
+                            owl:onProperty :returns ;
+                            owl:someValuesFrom :Parameter
                           ] ,
                           [ rdf:type owl:Restriction ;
                             owl:onProperty :returns ;
@@ -295,10 +317,6 @@
 ###  http://www.semanticweb.org/jaspe/ontologies/2026/0/symbol-ontology/Variable
 :Variable rdf:type owl:Class ;
           rdfs:subClassOf [ rdf:type owl:Restriction ;
-                            owl:onProperty :definedIn ;
-                            owl:someValuesFrom :Function
-                          ] ,
-                          [ rdf:type owl:Restriction ;
                             owl:onProperty :hasDataType ;
                             owl:someValuesFrom :DataType
                           ] .
