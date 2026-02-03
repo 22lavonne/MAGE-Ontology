@@ -35,7 +35,7 @@ def main():
                         # if current symbol type is a function, print in function file
                         if (s.getSymbolType() == SymbolType.FUNCTION):
                             # TODO: change the formatting of the return parameter if necessary 
-                            func_file.write("FUNCTION func=" + s.getName() + " address:" + str(s.getAddress()) + " parent=" + str(s.getParentNamespace()) + " returntype=" + str(s.getObject().getReturnType()) + " returnvalue=" + str(s.getObject().getReturn()) + "\n")
+                            func_file.write("FUNCTION func=" + s.getName() + " address=" + str(s.getAddress()) + " parent=" + str(s.getParentNamespace()) + " returntype=" + str(s.getObject().getReturnType()) + " returnvalue=" + str(s.getObject().getReturn()) + "\n")
                             func_array = s.getObject().getCalledFunctions(monitor)
                             if func_array:
                                 for func in func_array:
@@ -56,7 +56,7 @@ def main():
                             file_to_write = func_file
                         # if it's not a function, then it's a label
                         else:
-                            label_file.write("LABEL label=" + s.getName() + " address:" + str(s.getAddress()) + " parent=" + str(s.getParentNamespace()) + "\n")
+                            label_file.write("LABEL label=" + s.getName() + " address=" + str(s.getAddress()) + " parent=" + str(s.getParentNamespace()) + "\n")
                             file_to_write = label_file
                         # then, no matter if it was a function or label, print its references
                         ref_array = s.getReferences()
@@ -98,8 +98,7 @@ def main():
             # NOTE: all external libraries (which are dlls) will have the parent namespace of global
             # dlls also have no direct references
             # f.write("DLL: " + dll_str + " Address: " + str(dll_symbol.getAddress()) + " Parent Namespace: " + str(dll_symbol.getParentNamespace()) + " References: ")
-            f.write("DLL dll:" + dll_str + " address:" + str(dll_symbol.getAddress()) + " parent:" + str(dll_symbol.getParentNamespace()) + "\n")
-            
+            f.write("DLL dll=" + dll_str + " address=" + str(dll_symbol.getAddress()) + " parent:" + str(dll_symbol.getParentNamespace()) + "\n")
             ref_array = dll_symbol.getReferences()
             print_references(ref_array, f)
 
