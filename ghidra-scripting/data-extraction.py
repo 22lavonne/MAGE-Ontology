@@ -83,10 +83,11 @@ def main():
             # for object in instruction.getOpObjects():
             #     f.write(" operand=" + str(object))
             # f.write("\n")
+            op_index = 0
             for op_index in range(num_operands):
                 operand_objects = instruction.getOpObjects(op_index)
                 for object in operand_objects:
-                    if (op_index == num_operands-1):
+                    if (op_index == num_operands - 1):
                         f.write(" destinationoperand=" + str(object))
                     else:
                         f.write(" sourceoperand=" + str(object))

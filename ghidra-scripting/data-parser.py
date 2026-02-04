@@ -211,9 +211,24 @@ def parse_instructions(filename):
     # hint: use .getMnemonicString(), which instruction inherits
     instruction_list = []
     with open(filename, 'r') as file:
-        for line in file:
-            instruction_list.append(line)
-    print(instruction_list[0].getMnemonicString())
+        for read_line in file:
+            line = read_line.strip()
+            if not line:
+                continue
+            parts = line.split()
+            if not parts:
+                break
+            current_key = None
+            result = {}
+            for part in parts:
+                if '=' in part:
+                    key, value = part.split('=', 1)
+                    result[key] = value
+                    current_key = key
+                elif current_key is not None:
+                    result[current_key] += ' ' + part
+            instruction_list.append(result)
+    print(instruction_list[31])
     return
 
 def main():
