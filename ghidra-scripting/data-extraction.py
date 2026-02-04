@@ -7,8 +7,13 @@
 
 from pathlib import Path
 from ghidra.program.model.symbol import SymbolType
+from ghidra.program.model.lang import OperandType
 
 # TODO:
+# change the formatting of instructions to be similar to the reference stuff so multiple source operands can be accounted for
+    # or maybe find an easier way that doesn't take as many lines since there are a lot of instructions
+# change the isA relation from opcode back if necessary
+# add stuff to opcode in schema if necessary
 # see what else you need to include for all symbols based on schema and ontology and add them in too (once you start string parsing)
 
 # update key notions and axiomization with new schema
@@ -64,33 +69,42 @@ def main():
                         # if there is not, then no references will be printed.
                         print_references(ref_array, file_to_write)
 
-    # prints all instructions in instruction-output.txt
-    # TODO: use methods for instructions to make parsing easier if necessary
+    # test code that just prints all the instructions normally without any formatting
+    # ins_out_path = script_dir / "instruction-test-output.txt"
+    # with ins_out_path.open("w", encoding="utf-8") as f:
+    #     instruction = getFirstInstruction()
+    #     while instruction is not None:
+    #         f.write("Instruction: " + str(instruction) + "\n")
+    #         instruction = getInstructionAfter(instruction)
+
+    # prints all instructions in output.txt
     ins_out_path = script_dir / "instruction-output.txt"
     with ins_out_path.open("w", encoding="utf-8") as f:
         instruction = getFirstInstruction()
         while instruction is not None:
-            # f.write("instruction: " + str(instruction) + "\n")
             f.write("INSTRUCTION opcode=" + str(instruction.getMnemonicString()))
             num_operands = instruction.getNumOperands()
-            # for i in range(num_operands):
-            #     if i != num_operands-1:
-            #         f.write(" sourceoperand=" + str(instruction.getPrimaryReference()))
-            #     else:
-            #         f.write(" destinationoperand=" + str(instruction.getPrimaryReference()))
-            # f.write(" operand=" + )
-            # i = 0
-            # for object in instruction.getOpObjects():
-            #     f.write(" operand=" + str(object))
-            # f.write("\n")
-            op_index = 0
+            f.write(" numoperands=" + str(num_operands))
             for op_index in range(num_operands):
-                operand_objects = instruction.getOpObjects(op_index)
-                for object in operand_objects:
+                # FIXME: change the formatting to similar to the reference stuff so multiple operands can be accounted for
+                operand_type = instruction.getOperandType(op_index)
+                operand = instruction.getDefaultOperandRepresentation(op_index)
+                # f.write(" type=" + get_operand_type_string(operand_type))
+                # f.write( "type=" + str(operand_type))
+                if (num_operands == 1):
+                    # if there is only one operand, then it is considered both the source and destination operand
+                    # (for instructions like push and pop)
+                    f.write(" sourceoperand=" + operand)
+                    f.write(" type=" + get_operand_type_string(operand_type))
+                    f.write(" destinationoperand=" + operand)
+                    f.write(" type=" + get_operand_type_string(operand_type))
+                else:
                     if (op_index == num_operands - 1):
-                        f.write(" destinationoperand=" + str(object))
+                        f.write(" destinationoperand=" + operand)
+                        f.write(" type=" + get_operand_type_string(operand_type))
                     else:
-                        f.write(" sourceoperand=" + str(object))
+                        f.write(" sourceoperand=" + operand)
+                        f.write(" type=" + get_operand_type_string(operand_type))
             f.write("\n")
             
             # TODO: get the number of operands from this instruction, then loop that many times to print the operands
@@ -173,6 +187,25 @@ def print_references(ref_array, file):
         if primary_reference:
             file.write("PRIMARYREFERENCE source=" + str(primary_reference.getFromAddress()) + " destination=" + str(primary_reference.getToAddress()) + " operandindex=" + str(primary_reference.getOperandIndex()) + " type=" + str(primary_reference.getReferenceType()) + "\n")
     return
+
+def get_operand_type_string(op_type):
+    if OperandType.isRegister(op_type):
+        op_type_str = "REGISTER"
+    elif OperandType.isImmediate(op_type):
+        op_type_str = "IMMEDIATE"
+    elif OperandType.isAddress(op_type):
+        op_type_str = "ADDRESS"
+    elif OperandType.isIndirect(op_type) or OperandType.isDataReference(op_type):
+        op_type_str = "MEMORY"
+    elif OperandType.isImplicit(op_type):
+        op_type_str = "IMPLICIT"
+    elif OperandType.isScalar(op_type):
+        op_type_str = "SCALAR"
+    elif OperandType.isDynamic(op_type):
+        op_type_str = "DYNAMIC"
+    else:
+        op_type_str = "UNKNOWN"
+    return op_type_str
 
 if __name__ == "__main__":
     main()
