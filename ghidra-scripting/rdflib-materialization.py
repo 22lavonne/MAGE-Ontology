@@ -1,4 +1,5 @@
 # modified code from rdflib-starter.py from: https://github.com/kastle-lab/kastle-drawbridge/blob/master/resources/rdflib-starter.py
+# rdflib documentation: https://rdflib.readthedocs.io/en/stable/
 
 ##### Graph stuff
 import rdflib

@@ -2,7 +2,7 @@
 
 ## Symbol
 ### Description
-A symbol is a named entity in an executable file that is associated with a specific memory address. For this schema, the types of symbols include labels, then a sub class of symbol called namesapce symbol, which includes functions, classes, namespaces, and DLLs (dynamic link library). A symbol can have one or more references, but only one reference is designated as the primary reference.
+A symbol is a named entity in an executable file that is associated with a specific memory address. For this schema, the types of symbols include labels, then a sub class of symbol called namesapce symbol, which includes functions, classes, namespaces, and DLLs (dynamic link library). A symbol can have one or more references, but only one reference is designated as the primary reference. <br>
 ![Symbol](../schema/schema-diagram-images/symbol-schema.png)
 ### Axioms
 * `(1) Symbol hasReference min 0 Reference` <br/>
@@ -38,6 +38,7 @@ A reference is where two memory addresses interact with each other in some way, 
 "A reference has exactly one reference type indicated by a string"
 * `(#) Reference hasOperandIndex xsd:integer exactly 1 index` <br/>
 "A reference has exactly one operand index indicated by an integer"
+
 ## Address
 ### Description
 An address is the memory address that holds the data of a given symbol. It is considered an object in this schema so it can be referenced, while also be used as an operand in assmebly instructions. The address itself is stored as a string. <br/>
@@ -47,10 +48,11 @@ An address is the memory address that holds the data of a given symbol. It is co
 "An address refers to a memory address represented by a string"
 * `(#) Address performsRole Operand min 0 Operand` <br />
 "An address can perform the role of an operand in an instruction"
+
 ## Function
 ### Description
-The Function objects keeps track of all the aspects of a function, including any functions it calls or functions called by it, the variables passed in (parameters), the local variables defined in the function, the return type of the function, the return variable of the function, the instructions the function contains, and what class the function is contained in (if any).
-<!-- image here -->
+The Function objects keeps track of all the aspects of a function, including any functions it calls or functions called by it, the variables passed in (parameters), the local variables defined in the function, the return type of the function, the return variable of the function, the instructions the function contains, and what class the function is contained in (if any). <br>
+![Address](../schema/schema-diagram-images/function-schema.png)
 ### Axioms
 * `Function subClassOf Namespace Symbol` <br />
 "Every function is a lexical scope symbol"
