@@ -208,10 +208,12 @@ def parse_local(filename):
     return
 
 def parse_instructions(filename):
+    # hint: use .getMnemonicString(), which instruction inherits
     instruction_list = []
     with open(filename, 'r') as file:
         for line in file:
-            print("")
+            instruction_list.append(line)
+    print(instruction_list[0].getMnemonicString())
     return
 
 def main():
@@ -229,7 +231,9 @@ def main():
     dll_file = "ghidra-scripting/dll-output.txt"
     # parse_dlls(dll_file)
     namespace_file = "ghidra-scripting/namespace-output.txt"
-    parse_namespaces(namespace_file)
+    # parse_namespaces(namespace_file)
+    instruction_file = "ghidra-scripting/instruction-output.txt"
+    parse_instructions(instruction_file)
 
 if __name__ == "__main__":
     main()

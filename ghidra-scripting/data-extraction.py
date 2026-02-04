@@ -70,7 +70,29 @@ def main():
     with ins_out_path.open("w", encoding="utf-8") as f:
         instruction = getFirstInstruction()
         while instruction is not None:
-            f.write("Instruction: " + str(instruction) + "\n")
+            # f.write("instruction: " + str(instruction) + "\n")
+            f.write("INSTRUCTION opcode=" + str(instruction.getMnemonicString()))
+            num_operands = instruction.getNumOperands()
+            # for i in range(num_operands):
+            #     if i != num_operands-1:
+            #         f.write(" sourceoperand=" + str(instruction.getPrimaryReference()))
+            #     else:
+            #         f.write(" destinationoperand=" + str(instruction.getPrimaryReference()))
+            # f.write(" operand=" + )
+            # i = 0
+            # for object in instruction.getOpObjects():
+            #     f.write(" operand=" + str(object))
+            # f.write("\n")
+            for op_index in range(num_operands):
+                operand_objects = instruction.getOpObjects(op_index)
+                for object in operand_objects:
+                    if (op_index == num_operands-1):
+                        f.write(" destinationoperand=" + str(object))
+                    else:
+                        f.write(" sourceoperand=" + str(object))
+            f.write("\n")
+            
+            # TODO: get the number of operands from this instruction, then loop that many times to print the operands
             instruction = getInstructionAfter(instruction)
     
     # prints all classes in class-output.txt
