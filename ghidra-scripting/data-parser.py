@@ -210,34 +210,37 @@ def parse_local(filename):
 def parse_instructions(filename):
     # hint: use .getMnemonicString(), which instruction inherits
     instruction_list = []
+    current_instruction = None
     with open(filename, 'r') as file:
         for read_line in file:
             line = read_line.strip()
             if not line:
                 continue
-            parts = line.split()
-            if not parts:
-                break
-            current_key = None
-            result = {}
-            for part in parts:
-                if '=' in part:
-                    key, value = part.split('=', 1)
-                    result[key] = value
-                    current_key = key
-                elif current_key is not None:
-                    result[current_key] += ' ' + part
-            instruction_list.append(result)
-    print(instruction_list[31])
+            parts = line.split(maxsplit=1)
+            key = parts[0]
+            rest = parts[1] if len(parts) > 1 else ""
+            if key == "INSTRUCTION":
+                current_instruction = key_value_parser(rest)
+                current_instruction["source_operands"] = []
+                current_instruction["destination_operand"] = []
+                instruction_list.append(current_instruction)
+            elif current_instruction is None:
+                continue
+            elif key == "SOURCEOPERAND":
+                current_instruction["source_operands"].append(key_value_parser(rest))
+            elif key == "DESTINATIONOPERAND":
+                current_instruction["destination_operand"].append(key_value_parser(rest))
+            else:
+                continue
+    print(instruction_list[2])
     return
 
 def main():
-    # TODO: either make sure you run this script in the ghidra-scripting directory, or change the paths of these file variables
-    parameter_file = "parameter-output.txt"
+    parameter_file = "ghidra-scripting/parameter-output.txt"
     # parse_parameters(parameter_file)
-    local_file = "local-variable-output.txt"
+    local_file = "ghidra-scripting/local-variable-output.txt"
     # parse_local(local_file)
-    function_file = "function-output.txt"
+    function_file = "ghidra-scripting/function-output.txt"
     # parse_functions(function_file)
     label_file = "ghidra-scripting/label-output.txt"
     # parse_labels(label_file)

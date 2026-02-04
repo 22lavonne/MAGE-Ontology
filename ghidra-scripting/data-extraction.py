@@ -10,8 +10,6 @@ from ghidra.program.model.symbol import SymbolType
 from ghidra.program.model.lang import OperandType
 
 # TODO:
-# change the formatting of instructions to be similar to the reference stuff so multiple source operands can be accounted for
-    # or maybe find an easier way that doesn't take as many lines since there are a lot of instructions
 # change the isA relation from opcode back if necessary
 # add stuff to opcode in schema if necessary
 # see what else you need to include for all symbols based on schema and ontology and add them in too (once you start string parsing)
@@ -84,7 +82,7 @@ def main():
         while instruction is not None:
             f.write("INSTRUCTION opcode=" + str(instruction.getMnemonicString()))
             num_operands = instruction.getNumOperands()
-            f.write(" numoperands=" + str(num_operands))
+            f.write(" numoperands=" + str(num_operands) + "\n")
             for op_index in range(num_operands):
                 # FIXME: change the formatting to similar to the reference stuff so multiple operands can be accounted for
                 operand_type = instruction.getOperandType(op_index)
@@ -94,24 +92,23 @@ def main():
                 if (num_operands == 1):
                     # if there is only one operand, then it is considered both the source and destination operand
                     # (for instructions like push and pop)
-                    f.write(" sourceoperand=" + operand)
-                    f.write(" type=" + get_operand_type_string(operand_type))
-                    f.write(" destinationoperand=" + operand)
-                    f.write(" type=" + get_operand_type_string(operand_type))
+                    f.write("SOURCEOPERAND operand=" + operand)
+                    f.write(" type=" + get_operand_type_string(operand_type) + "\n")
+                    f.write("DESTINATIONOPERAND operand=" + operand)
+                    f.write(" type=" + get_operand_type_string(operand_type) + "\n")
                 else:
                     if (op_index == num_operands - 1):
-                        f.write(" destinationoperand=" + operand)
-                        f.write(" type=" + get_operand_type_string(operand_type))
+                        f.write("DESTINATIONOPERAND operand=" + operand)
+                        f.write(" type=" + get_operand_type_string(operand_type) + "\n")
                     else:
-                        f.write(" sourceoperand=" + operand)
-                        f.write(" type=" + get_operand_type_string(operand_type))
-            f.write("\n")
-            
-            # TODO: get the number of operands from this instruction, then loop that many times to print the operands
+                        f.write("SOURCEOPERAND operand=" + operand)
+                        f.write(" type=" + get_operand_type_string(operand_type) + "\n")
+            # f.write("\n")
             instruction = getInstructionAfter(instruction)
     
     # prints all classes in class-output.txt
-    # NOTE: all the classes do not have an associated address, which is the case for class and namespace definitions
+    # NOTE: all the classes do not have an associated address in the examples I have seen, 
+    # which is the case for class and namespace definitions
     class_out_path = script_dir / "class-output.txt"
     with class_out_path.open("w", encoding="utf-8") as f:
         class_iterator = currentProgram.getSymbolTable().getClassNamespaces()
@@ -123,6 +120,7 @@ def main():
             ref_array = c.getSymbol().getReferences()
             print_references(ref_array, f)
             
+
     # prints all the DLLs in dll-output.txt
     dll_out_path = script_dir / "dll-output.txt"
     # define the external manager here to make other calls shorter
@@ -188,6 +186,8 @@ def print_references(ref_array, file):
             file.write("PRIMARYREFERENCE source=" + str(primary_reference.getFromAddress()) + " destination=" + str(primary_reference.getToAddress()) + " operandindex=" + str(primary_reference.getOperandIndex()) + " type=" + str(primary_reference.getReferenceType()) + "\n")
     return
 
+# returns the string of the type of operand the current operand type is
+# (since operand type is an int that represents what type it is)
 def get_operand_type_string(op_type):
     if OperandType.isRegister(op_type):
         op_type_str = "REGISTER"
