@@ -37,7 +37,8 @@ def parse_functions(filename):
             else:
                 # the key should be one of the above (since all lines should start with one of these names)
                 continue
-    print(func_list[1025])
+    # print(func_list[1025])
+    return func_list
 
 
 def parse_labels(filename):
@@ -64,9 +65,9 @@ def parse_labels(filename):
                 current_label["primary_reference"].append(key_value_parser(rest))
             else:
                 continue
-    print(label_list[3])
+    # print(label_list[3])
                 
-    return
+    return label_list
 
 def parse_classes(filename):
     class_list = []
@@ -92,8 +93,8 @@ def parse_classes(filename):
                 current_class["primary_reference"].append(key_value_parser(rest))
             else:
                 continue
-    print(class_list[3])
-    return
+    # print(class_list[3])
+    return class_list
 
 def parse_dlls(filename):
     dll_list = []
@@ -119,8 +120,8 @@ def parse_dlls(filename):
                 current_dll["primary_reference"].append(key_value_parser(rest))
             else:
                 continue
-    print(dll_list[3])
-    return
+    # print(dll_list[3])
+    return dll_list
 
 def parse_namespaces(filename):
     namespace_list = []
@@ -146,8 +147,8 @@ def parse_namespaces(filename):
                 current_namespace["primary_reference"].append(key_value_parser(rest))
             else:
                 continue
-    print(namespace_list[3])
-    return
+    # print(namespace_list[3])
+    return namespace_list
 
 # examample output:
 # PARAMETER var=hResInfo datatype=typedef HRSRC HRSRC__ * parent=LoadResource
@@ -176,8 +177,8 @@ def parse_parameters(filename):
             elif current_key is not None:
                 result[current_key] += ' ' + part
         result_list.append(result)
-    print(result_list[3])
-    return
+    # print(result_list[3])
+    return param_list
 
 def parse_local(filename):
     local_list = []
@@ -204,8 +205,8 @@ def parse_local(filename):
             elif current_key is not None:
                 result[current_key] += ' ' + part
         result_list.append(result)
-    print(result_list[0])
-    return
+    # print(result_list[0])
+    return result_list
 
 def parse_instructions(filename):
     # hint: use .getMnemonicString(), which instruction inherits
@@ -232,14 +233,14 @@ def parse_instructions(filename):
                 current_instruction["destination_operand"].append(key_value_parser(rest))
             else:
                 continue
-    print(instruction_list[2])
-    return
+    # print(instruction_list[2])
+    return instruction_list
 
 def main():
     parameter_file = "ghidra-scripting/parameter-output.txt"
     # parse_parameters(parameter_file)
     local_file = "ghidra-scripting/local-variable-output.txt"
-    # parse_local(local_file)
+    parse_local(local_file)
     function_file = "ghidra-scripting/function-output.txt"
     # parse_functions(function_file)
     label_file = "ghidra-scripting/label-output.txt"
@@ -251,7 +252,7 @@ def main():
     namespace_file = "ghidra-scripting/namespace-output.txt"
     # parse_namespaces(namespace_file)
     instruction_file = "ghidra-scripting/instruction-output.txt"
-    parse_instructions(instruction_file)
+    # parse_instructions(instruction_file)
 
 if __name__ == "__main__":
     main()

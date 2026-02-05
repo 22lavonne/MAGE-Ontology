@@ -1,6 +1,8 @@
 # modified code from rdflib-starter.py from: https://github.com/kastle-lab/kastle-drawbridge/blob/master/resources/rdflib-starter.py
 # rdflib documentation: https://rdflib.readthedocs.io/en/stable/
 
+from data_parser import *
+
 ##### Graph stuff
 import rdflib
 from rdflib import URIRef, Graph, Namespace, Literal
@@ -43,6 +45,35 @@ graph = init_kg()
 # filename = "path/to/file"
 # with open(filename, "w") as f:
 #     graph.parse(f)
+ontology = "ontology/symbol-ontology.ttl"
+with open(ontology, "r") as f:
+    graph.parse(f)
+
+parameter_file = "ghidra-scripting/parameter-output.txt"
+parameters = parse_parameters(parameter_file)
+local_file = "ghidra-scripting/local-variable-output.txt"
+local_vars = parse_local(local_file)
+function_file = "ghidra-scripting/function-output.txt"
+functions = parse_functions(function_file)
+label_file = "ghidra-scripting/label-output.txt"
+labels = parse_labels(label_file)
+class_file = "ghidra-scripting/class-output.txt"
+classes = parse_classes(class_file)
+dll_file = "ghidra-scripting/dll-output.txt"
+dlls = parse_dlls(dll_file)
+namespace_file = "ghidra-scripting/namespace-output.txt"
+namespaces = parse_namespaces(namespace_file)
+instruction_file = "ghidra-scripting/instruction-output.txt"
+instructions = parse_instructions(instruction_file)
+
+# local variable format:
+# {'var': 'local_8', 'datatype': 'undefined4', 'parent': 'FUN_00401090'}
+# for local in local_vars:
+#     print("Variable: ", local)
+#     graph.add( (pfs(["ex"][local["var"]], definedIn, pfs["ex"][local["parent"]])))
+
+for prefix, namespace in graph.namespaces():
+    print(f"{prefix}: {namespace}")
 
 kastle_members = ["Cogan", "Andrea", "Brandon"]
 for x in kastle_members:
