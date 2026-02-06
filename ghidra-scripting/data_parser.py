@@ -238,21 +238,29 @@ def parse_instructions(filename):
 
 def main():
     parameter_file = "ghidra-scripting/parameter-output.txt"
-    # parse_parameters(parameter_file)
+    l1 = parse_parameters(parameter_file)
+    print(l1[0])
     local_file = "ghidra-scripting/local-variable-output.txt"
-    parse_local(local_file)
+    l1 = parse_local(local_file)
+    print(l1[0])
     function_file = "ghidra-scripting/function-output.txt"
-    # parse_functions(function_file)
+    l1 = parse_functions(function_file)
+    print(l1[0])
     label_file = "ghidra-scripting/label-output.txt"
-    # parse_labels(label_file)
+    ls = parse_labels(label_file)
+    print(l1[0])
     class_file = "ghidra-scripting/class-output.txt"
-    # parse_classes(class_file)
+    l1 = parse_classes(class_file)
+    print(l1[0])
     dll_file = "ghidra-scripting/dll-output.txt"
-    # parse_dlls(dll_file)
+    l1 = parse_dlls(dll_file)
+    print(l1[0])
     namespace_file = "ghidra-scripting/namespace-output.txt"
-    # parse_namespaces(namespace_file)
+    l1 = parse_namespaces(namespace_file)
+    print(l1[0])
     instruction_file = "ghidra-scripting/instruction-output.txt"
-    # parse_instructions(instruction_file)
+    l1 = parse_instructions(instruction_file)
+    print(l1[0])
 
 if __name__ == "__main__":
     main()

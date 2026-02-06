@@ -26,6 +26,8 @@ def main():
     # prints all label symbols in label-output.txt
     label_out_path = script_dir / "label-output.txt"
     func_out_path = script_dir / "function-output.txt"
+    # TODO: maybe get rid of local variables and parameters from output.txt and just have them with functions?
+    # but then local variable can't have defined in and shouold be function defines, but then that makes it inconsistent
     local_var_out_path = script_dir / "local-variable-output.txt"
     param_out_path = script_dir / "parameter-output.txt"
     with label_out_path.open("w", encoding="utf-8") as label_file:
