@@ -12,10 +12,6 @@
 #    Object Properties
 #################################################################
 
-###  http://www.semanticweb.org/jaspe/ontologies/2026/0/symbol-ontology#isA
-:isA rdf:type owl:ObjectProperty .
-
-
 ###  http://www.semanticweb.org/jaspe/ontologies/2026/0/symbol-ontology/calls
 :calls rdf:type owl:ObjectProperty ;
        rdfs:subPropertyOf owl:topObjectProperty .
@@ -47,11 +43,6 @@
 ###  http://www.semanticweb.org/jaspe/ontologies/2026/0/symbol-ontology/hasDestinationOperand
 :hasDestinationOperand rdf:type owl:ObjectProperty ;
                        rdfs:subPropertyOf owl:topObjectProperty .
-
-
-###  http://www.semanticweb.org/jaspe/ontologies/2026/0/symbol-ontology/hasLabel
-:hasLabel rdf:type owl:ObjectProperty ;
-          rdfs:subPropertyOf owl:topObjectProperty .
 
 
 ###  http://www.semanticweb.org/jaspe/ontologies/2026/0/symbol-ontology/hasOpcode
@@ -87,6 +78,10 @@
 ###  http://www.semanticweb.org/jaspe/ontologies/2026/0/symbol-ontology/hasSourceOperand
 :hasSourceOperand rdf:type owl:ObjectProperty ;
                   rdfs:subPropertyOf owl:topObjectProperty .
+
+
+###  http://www.semanticweb.org/jaspe/ontologies/2026/0/symbol-ontology/isA
+:isA rdf:type owl:ObjectProperty .
 
 
 ###  http://www.semanticweb.org/jaspe/ontologies/2026/0/symbol-ontology/passesInto
