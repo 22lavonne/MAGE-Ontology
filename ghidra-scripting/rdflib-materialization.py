@@ -43,6 +43,8 @@ def init_kg(prefixes=pfs):
 a = pfs["rdf"]["type"]
 # definedIn = pfs["ont"]["definedIn"]
 # hasDataType = pfs["ont"]["hasDataType"]
+ONT = Namespace("http://www.semanticweb.org/jaspe/ontologies/2026/0/symbol-ontology/")
+print(ONT.symbol)
 
 # Object Properties
 definedIn = URIRef("http://www.semanticweb.org/jaspe/ontologies/2026/0/symbol-ontology/definedIn")
@@ -94,35 +96,14 @@ operand = URIRef("http://www.semanticweb.org/jaspe/ontologies/2026/0/symbol-onto
 # Initialize an empty graph
 graph = init_kg()
 
-# NOTE: So I define all the axioms, then in the loops with the data I just say each data is a type of thing?
-# but then I still need to define the other parts of the data
-# idk man
-
-
 ontology = "ontology/symbol-ontology.ttl"
 with open(ontology, "r") as f:
     graph.parse(f)
 
 # for individual_class in set(graph.subjects(RDF.type, RDFS.Class)) | set(graph.subjects(RDF.type, OWL.Class)):
 #     print(individual_class)
-    
-# for c in graph.subjects(RDF.type, OWL.Class):
-#     print(c)
 
-
-
-# all_relations = set(graph.predicates())
-
-# # Print all relations
-# for relation in all_relations:
-#     print(relation)
-    
-# print(f"Graph loaded with {len(graph)} triples.")
-# print("--- printing all triples ---")
-# for stmt in graph:
-#     print(stmt)
-
-
+# Data files, and lists of dictionaries containing the data
 parameter_file = "ghidra-scripting/parameter-output.txt"
 parameters = parse_parameters(parameter_file)
 local_file = "ghidra-scripting/local-variable-output.txt"
@@ -140,37 +121,27 @@ namespaces = parse_namespaces(namespace_file)
 instruction_file = "ghidra-scripting/instruction-output.txt"
 instructions = parse_instructions(instruction_file)
 
-# local variable format:
-# {'var': 'local_8', 'datatype': 'undefined4', 'parent': 'FUN_00401090'}
-
-
 # this seems to work to get all the local variables into the triples
 # TODO: make sure the output for this is actually correct, although idk how to even check that
 # Is it supposed to be a subclass relation thing? I currently have the relations defined above in this file and that's probably incorrect
 # check if this correctly makes local variables a subclass of variable
 # LocalVariable = URIRef("http://www.semanticweb.org/jaspe/ontologies/2026/0/symbol-ontology/LocalVariable")
-# for local in local_vars:
-#     # use the urllib.parse.quote() method to make the variable name work with URI syntax
-#     local_var = pfs["mkg"][quote(local['var'])]
-#     data_type = pfs["mkg"][quote(local['datatype'])]
-#     parent_func = pfs["mkg"][quote(local['parent'])]
-#     graph.add((local_var, a, LocalVariable))
-#     graph.add((local_var, definedIn, parent_func))
-#     graph.add((local_var, hasDataType, data_type))
-    
- 
-    
 
-
+for local in local_vars:
+    # use the urllib.parse.quote() method to make the variable name work with URI syntax
+    local_var = pfs["mkg"][quote(local['var'])]
+    data_type = pfs["mkg"][quote(local['datatype'])]
+    parent_func = pfs["mkg"][quote(local['parent'])]
+    graph.add((local_var, a, local_variable))
+    graph.add((local_var, definedIn, parent_func))
+    graph.add((local_var, hasDataType, data_type))
+    
+# local variable format:
+# {'var': 'local_8', 'datatype': 'undefined4', 'parent': 'FUN_00401090'}
+    
 # NAMESPACE namespace=switchD_0040f727 address=NO ADDRESS parent=Global
 # for namespace in namespaces:
 #     graph.add( (pfs["mkg"][str(namespace[namespace])], a, rdfs:subClassOf))
-    
-
-# prints the namespaces contained in graph
-# for prefix, namespace in graph.namespaces():
-#     print(f"{prefix}: {namespace}")
-
 
 output_file = "ghidra-scripting/output.ttl"
 temp = graph.serialize(format="turtle", encoding="utf-8", destination=output_file)
