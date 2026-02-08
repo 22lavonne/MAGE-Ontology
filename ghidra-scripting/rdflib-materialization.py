@@ -105,43 +105,69 @@ with open(ontology, "r") as f:
 
 # Data files, and lists of dictionaries containing the data
 parameter_file = "ghidra-scripting/parameter-output.txt"
-parameters = parse_parameters(parameter_file)
+parameters_list = parse_parameters(parameter_file)
 local_file = "ghidra-scripting/local-variable-output.txt"
-local_vars = parse_local(local_file)
+local_var_list = parse_local(local_file)
 function_file = "ghidra-scripting/function-output.txt"
-functions = parse_functions(function_file)
+function_list = parse_functions(function_file)
 label_file = "ghidra-scripting/label-output.txt"
-labels = parse_labels(label_file)
+label_list = parse_labels(label_file)
 class_file = "ghidra-scripting/class-output.txt"
-classes = parse_classes(class_file)
+class_list = parse_classes(class_file)
 dll_file = "ghidra-scripting/dll-output.txt"
-dlls = parse_dlls(dll_file)
+dll_list = parse_dlls(dll_file)
 namespace_file = "ghidra-scripting/namespace-output.txt"
-namespaces = parse_namespaces(namespace_file)
+namespace_list = parse_namespaces(namespace_file)
 instruction_file = "ghidra-scripting/instruction-output.txt"
-instructions = parse_instructions(instruction_file)
+instruction_list = parse_instructions(instruction_file)
 
 # this seems to work to get all the local variables into the triples
 # TODO: make sure the output for this is actually correct, although idk how to even check that
 # Is it supposed to be a subclass relation thing? I currently have the relations defined above in this file and that's probably incorrect
 # check if this correctly makes local variables a subclass of variable
-# LocalVariable = URIRef("http://www.semanticweb.org/jaspe/ontologies/2026/0/symbol-ontology/LocalVariable")
 
-for local in local_vars:
+# Adding Local Variabels to KG
+# local variable format: {'var': 'local_8', 'datatype': 'undefined4', 'parent': 'FUN_00401090'}
+for l in local_var_list:
     # use the urllib.parse.quote() method to make the variable name work with URI syntax
-    local_var = pfs["mkg"][quote(local['var'])]
-    data_type = pfs["mkg"][quote(local['datatype'])]
-    parent_func = pfs["mkg"][quote(local['parent'])]
+    local_var = pfs["mkg"][quote(l['var'])]
+    data_type = pfs["mkg"][quote(l['datatype'])]
+    parent_func = pfs["mkg"][quote(l['parent'])]
     graph.add((local_var, a, local_variable))
     graph.add((local_var, definedIn, parent_func))
     graph.add((local_var, hasDataType, data_type))
     
-# local variable format:
-# {'var': 'local_8', 'datatype': 'undefined4', 'parent': 'FUN_00401090'}
     
-# NAMESPACE namespace=switchD_0040f727 address=NO ADDRESS parent=Global
-# for namespace in namespaces:
-#     graph.add( (pfs["mkg"][str(namespace[namespace])], a, rdfs:subClassOf))
+# Parameters:
+# param format: {'var': 'hModule', 'datatype': 'typedef HMODULE HINSTANCE', 'parent': 'GetProcAddress'}
+# TODO: fix the parsing in data_parser.py
+# for p in parameters_list:
+#     param = pfs["mkg"][quote(p['var'])]
+#     data_type = pfs["mkg"][quote(p['datatype'])]
+#     parent_func = pfs["mkg"][quote(l['parent'])]
+#     graph.add((param, a, parameter))
+#     graph.add((param, passesInto, parent_func))
+#     graph.add((param, hasDataType, data_type))
+
+# Namespaces:
+# TODO: Adapt this to the other namespace variables
+# format: {'namespace': 'switchD_0040f727', 'address': 'NO ADDRESS', 'parent': 'Global', 'references': [], 'primary_reference': None}
+for n in namespace_list:
+    n_instance = pfs["mkr"][quote(n['namespace'])]
+    graph.add( (n_instance, a, namespace))
+    if n['address'] != "NO ADDRESS":
+        n_address = pfs["mkg"][quote(n['address'])]
+        graph.add( (n_instance, hasAddress, n_address))
+    # in the KG, naming the references based on the source address
+    if n['references']:
+        for r in n['references']:
+           ref = "ref_" + str(r['source'])
+           graph.add( (n_instance, hasReference, ref))
+    if n['primary_reference']:
+        ref = "ref_" + str(n['primary_reference']['source'])
+        n_primary_ref = pfs["mkg"][quote(ref)]
+        graph.add( (n_instance, hasPrimaryReference, n_primary_ref))
+            
 
 output_file = "ghidra-scripting/output.ttl"
 temp = graph.serialize(format="turtle", encoding="utf-8", destination=output_file)

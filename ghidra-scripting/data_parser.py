@@ -22,7 +22,7 @@ def parse_functions(filename):
                 current_function = key_value_parser(rest)
                 current_function["functions_called"] = []
                 current_function["references"] = []
-                current_function["primary_reference"] = []
+                current_function["primary_reference"] = None
                 func_list.append(current_function)
             # if the key isn't function and there is no current function, continue to the next line
             elif current_function is None:
@@ -33,7 +33,7 @@ def parse_functions(filename):
             elif key == "REFERENCE":
                 current_function["references"].append(key_value_parser(rest))
             elif key == "PRIMARYREFERENCE":
-                current_function["primary_reference"].append(key_value_parser(rest))
+                current_function["primary_reference"] = key_value_parser(rest)
             else:
                 # the key should be one of the above (since all lines should start with one of these names)
                 continue
@@ -55,14 +55,14 @@ def parse_labels(filename):
             if key == "LABEL":
                 current_label = key_value_parser(rest)
                 current_label["references"] = []
-                current_label["primary_reference"] = []
+                current_label["primary_reference"] = None
                 label_list.append(current_label)
             elif current_label is None:
                 continue
             elif key == "REFERENCE":
                 current_label["references"].append(key_value_parser(rest))
             elif key == "PRIMARYREFERENCE":
-                current_label["primary_reference"].append(key_value_parser(rest))
+                current_label["primary_reference"] = key_value_parser(rest)
             else:
                 continue
     # print(label_list[3])
@@ -83,14 +83,14 @@ def parse_classes(filename):
             if key == "CLASS":
                 current_class = key_value_parser(rest)
                 current_class["references"] = []
-                current_class["primary_reference"] = []
+                current_class["primary_reference"] = None
                 class_list.append(current_class)
             elif current_class is None:
                 continue
             elif key == "REFERENCE":
                 current_class["references"].append(key_value_parser(rest))
             elif key == "PRIMARYREFERENCE":
-                current_class["primary_reference"].append(key_value_parser(rest))
+                current_class["primary_reference"] = key_value_parser(rest)
             else:
                 continue
     # print(class_list[3])
@@ -110,14 +110,14 @@ def parse_dlls(filename):
             if key == "DLL":
                 current_dll = key_value_parser(rest)
                 current_dll["references"] = []
-                current_dll["primary_reference"] = []
+                current_dll["primary_reference"] = None
                 dll_list.append(current_dll)
             elif current_dll is None:
                 continue
             elif key == "REFERENCE":
                 current_dll["references"].append(key_value_parser(rest))
             elif key == "PRIMARYREFERENCE":
-                current_dll["primary_reference"].append(key_value_parser(rest))
+                current_dll["primary_reference"] = key_value_parser(rest)
             else:
                 continue
     # print(dll_list[3])
@@ -137,14 +137,14 @@ def parse_namespaces(filename):
             if key == "NAMESPACE":
                 current_namespace = key_value_parser(rest)
                 current_namespace["references"] = []
-                current_namespace["primary_reference"] = []
+                current_namespace["primary_reference"] = None
                 namespace_list.append(current_namespace)
             elif current_namespace is None:
                 continue
             elif key == "REFERENCE":
                 current_namespace["references"].append(key_value_parser(rest))
             elif key == "PRIMARYREFERENCE":
-                current_namespace["primary_reference"].append(key_value_parser(rest))
+                current_namespace["primary_reference"] = key_value_parser(rest)
             else:
                 continue
     # print(namespace_list[3])
@@ -178,7 +178,7 @@ def parse_parameters(filename):
                 result[current_key] += ' ' + part
         result_list.append(result)
     # print(result_list[3])
-    return param_list
+    return result_list
 
 def parse_local(filename):
     local_list = []
@@ -239,28 +239,28 @@ def parse_instructions(filename):
 def main():
     parameter_file = "ghidra-scripting/parameter-output.txt"
     l1 = parse_parameters(parameter_file)
-    print(l1[0])
+    print(l1[0], "\n")
     local_file = "ghidra-scripting/local-variable-output.txt"
     l1 = parse_local(local_file)
-    print(l1[0])
+    print(l1[0], "\n")
     function_file = "ghidra-scripting/function-output.txt"
     l1 = parse_functions(function_file)
-    print(l1[0])
+    print(l1[0], "\n")
     label_file = "ghidra-scripting/label-output.txt"
-    ls = parse_labels(label_file)
-    print(l1[0])
+    l1 = parse_labels(label_file)
+    print(l1[0], "\n")
     class_file = "ghidra-scripting/class-output.txt"
     l1 = parse_classes(class_file)
-    print(l1[0])
+    print(l1[0], "\n")
     dll_file = "ghidra-scripting/dll-output.txt"
     l1 = parse_dlls(dll_file)
-    print(l1[0])
+    print(l1[0], "\n")
     namespace_file = "ghidra-scripting/namespace-output.txt"
     l1 = parse_namespaces(namespace_file)
-    print(l1[0])
+    print(l1[0], "\n")
     instruction_file = "ghidra-scripting/instruction-output.txt"
     l1 = parse_instructions(instruction_file)
-    print(l1[0])
+    print(l1[0], "\n")
 
 if __name__ == "__main__":
     main()
