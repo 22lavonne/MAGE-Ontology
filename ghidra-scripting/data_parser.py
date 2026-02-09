@@ -246,7 +246,7 @@ def main():
     print(l1[0], "\n")
     function_file = "ghidra-scripting/function-output.txt"
     l1 = parse_functions(function_file)
-    print(l1[0], "\n")
+    print(l1[6], "\n")
     label_file = "ghidra-scripting/label-output.txt"
     l1 = parse_labels(label_file)
     print(l1[0], "\n")

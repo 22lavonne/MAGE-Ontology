@@ -207,7 +207,32 @@ for l in dll_list:
         l_primary_ref = pfs["mkg"][quote(ref)]
         graph.add( (l_instance, hasPrimaryReference, l_primary_ref))
         
-
+# {'func': 'GetTempFileNameW', 'address': 'EXTERNAL:00000007', 'parent': 'KERNEL32.DLL', 
+# 'returntype': 'typedef UINT uint', 'returnvalue': '[UINT <RETURN>@EAX:4]', 'functions_called': [], 
+# 'references': [{'source': '00422020', 'destination': 'EXTERNAL:00000007', 'operandindex': '0', 'type': 'DATA'}, 
+# {'source': '00401327', 'destination': 'EXTERNAL:00000007', 'operandindex': '-1', 'type': 'COMPUTED_CALL'}], 
+# 'primary_reference': {'source': '00401327', 'destination': 'EXTERNAL:00000007', 'operandindex': '-1', 'type': 'COMPUTED_CALL'}}
+for f in function_list:
+    f_instance = pfs["mkg"][quote(f['dll'])]
+    graph.add( (f_instance, a, function))
+    if f['address'] != "NO ADDRESS":
+        f_address = pfs["mkg"][quote(f['address'])]
+        graph.add( (f_instance, hasAddress, f_address))
+    f_parent = pfs["mkg"][quote(f['parent'])]
+    graph.add((f_instance, definedIn, f_parent)) 
+    # TODO: add stuff to get the functions called into the graph
+    f_return_type = pfs["mkg"][quote(f['returntype'])]
+    graph.add((f_instance, hasReturnType, f_return_type))
+    f_return_value = pfs["mkg"][quote(f['returnvalue'])]
+    graph.add((f_instance, returns, f_return_value))
+    if f['references']:
+        for r in f['references']:
+           ref = "ref_" + str(r['source'])
+           graph.add( (f_instance, hasReference, ref))
+    if f['primary_reference']:
+        ref = "ref_" + str(f['primary_reference']['source'])
+        f_primary_ref = pfs["mkg"][quote(ref)]
+        graph.add( (f_instance, hasPrimaryReference, f_primary_ref))
 
 output_file = "ghidra-scripting/output.ttl"
 temp = graph.serialize(format="turtle", encoding="utf-8", destination=output_file)

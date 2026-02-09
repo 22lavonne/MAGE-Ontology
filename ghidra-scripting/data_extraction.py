@@ -176,6 +176,7 @@ def get_all_namespaces(program, monitor):
 
 # method to print all the references for a given symbol
 # must pass in the array of references contained for the symbol, and the current file you are writing to
+# TODO: make sure this actually gets the primary reference instead of just the last reference
 def print_references(ref_array, file):
     if ref_array:
         primary_reference = None
