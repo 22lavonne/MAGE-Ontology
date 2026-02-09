@@ -152,6 +152,7 @@ def parse_namespaces(filename):
 
 # examample output:
 # PARAMETER var=hResInfo datatype=typedef HRSRC HRSRC__ * parent=LoadResource
+# TODO: fix this parsing, since some parameter lines take up multiple lines of output
 def parse_parameters(filename):
     param_list = []
     result_list = []

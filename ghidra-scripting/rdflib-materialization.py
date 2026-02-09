@@ -153,12 +153,15 @@ for l in local_var_list:
 # TODO: Adapt this to the other namespace variables
 # format: {'namespace': 'switchD_0040f727', 'address': 'NO ADDRESS', 'parent': 'Global', 'references': [], 'primary_reference': None}
 for n in namespace_list:
-    n_instance = pfs["mkr"][quote(n['namespace'])]
+    n_instance = pfs["mkg"][quote(n['namespace'])]
     graph.add( (n_instance, a, namespace))
     if n['address'] != "NO ADDRESS":
         n_address = pfs["mkg"][quote(n['address'])]
         graph.add( (n_instance, hasAddress, n_address))
     # in the KG, naming the references based on the source address
+    # TODO: getting this error: Object Global must be an rdflib term
+    n_parent = pfs["mkg"][quote(n['parent'])]
+    graph.add((n_instance, definedIn, n_parent))
     if n['references']:
         for r in n['references']:
            ref = "ref_" + str(r['source'])
@@ -167,7 +170,44 @@ for n in namespace_list:
         ref = "ref_" + str(n['primary_reference']['source'])
         n_primary_ref = pfs["mkg"][quote(ref)]
         graph.add( (n_instance, hasPrimaryReference, n_primary_ref))
-            
+   
+# {'class': 'type_info (GhidraClass)', 'address': 'NO ADDRESS', 'parent': 'Global', 'references': [], 'primary_reference': None} 
+for c in class_list:
+    c_instance = pfs["mkg"][quote(c['class'])]
+    graph.add( (c_instance, a, class_))
+    if c['address'] != "NO ADDRESS":
+        c_address = pfs["mkg"][quote(c['address'])]
+        graph.add( (c_instance, hasAddress, c_address))
+    c_parent = pfs["mkg"][quote(c['parent'])]
+    graph.add((c_instance, definedIn, c_parent))    
+    if c['references']:
+        for r in c['references']:
+           ref = "ref_" + str(r['source'])
+           graph.add( (c_instance, hasReference, ref))
+    if c['primary_reference']:
+        ref = "ref_" + str(c['primary_reference']['source'])
+        c_primary_ref = pfs["mkg"][quote(ref)]
+        graph.add( (c_instance, hasPrimaryReference, c_primary_ref))         
+
+# {'dll': 'KERNEL32.DLL', 'address': 'NO ADDRESS parent:Global', 'references': [], 'primary_reference': None}
+for l in dll_list:
+    l_instance = pfs["mkg"][quote(l['dll'])]
+    graph.add( (l_instance, a, dll))
+    if l['address'] != "NO ADDRESS":
+        l_address = pfs["mkg"][quote(l['address'])]
+        graph.add( (l_instance, hasAddress, l_address))
+    l_parent = pfs["mkg"][quote(l['parent'])]
+    graph.add((l_instance, definedIn, l_parent))    
+    if l['references']:
+        for r in l['references']:
+           ref = "ref_" + str(r['source'])
+           graph.add( (l_instance, hasReference, ref))
+    if l['primary_reference']:
+        ref = "ref_" + str(l['primary_reference']['source'])
+        l_primary_ref = pfs["mkg"][quote(ref)]
+        graph.add( (l_instance, hasPrimaryReference, l_primary_ref))
+        
+
 
 output_file = "ghidra-scripting/output.ttl"
 temp = graph.serialize(format="turtle", encoding="utf-8", destination=output_file)

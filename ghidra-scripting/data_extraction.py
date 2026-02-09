@@ -135,7 +135,7 @@ def main():
             # NOTE: all external libraries (which are dlls) will have the parent namespace of global
             # dlls also have no direct references
             # f.write("DLL: " + dll_str + " Address: " + str(dll_symbol.getAddress()) + " Parent Namespace: " + str(dll_symbol.getParentNamespace()) + " References: ")
-            f.write("DLL dll=" + dll_str + " address=" + str(dll_symbol.getAddress()) + " parent:" + str(dll_symbol.getParentNamespace()) + "\n")
+            f.write("DLL dll=" + dll_str + " address=" + str(dll_symbol.getAddress()) + " parent=" + str(dll_symbol.getParentNamespace()) + "\n")
             ref_array = dll_symbol.getReferences()
             print_references(ref_array, f)
 
