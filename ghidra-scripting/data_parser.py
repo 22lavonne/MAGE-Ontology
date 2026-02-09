@@ -152,35 +152,69 @@ def parse_namespaces(filename):
 
 # examample output:
 # PARAMETER var=hResInfo datatype=typedef HRSRC HRSRC__ * parent=LoadResource
-# TODO: fix this parsing, since some parameter lines take up multiple lines of output
 def parse_parameters(filename):
-    param_list = []
-    result_list = []
     with open(filename, 'r') as file:
-        for line in file:
-            param_list.append(line)
-    for line in param_list:
-        parts = line.split()
-        if not parts:
-            break
-        current_key = None
-        result = {}
-        for part in parts:
-            # if = is contained in the current part, then that means it's a key
-            if '=' in part:
-                # then split the key value pair
-                key, value = part.split('=', 1)
-                result[key] = value
-                # then change the key
-                current_key = key
-            # else then the current part is part of a value (where there is a space in a value like in a data type)
-            # (unless the current key is still None, in that case the current part is "PARAMETER" and should be ignored)
-            elif current_key is not None:
-                result[current_key] += ' ' + part
-        result_list.append(result)
-    # print(result_list[3])
+        lines = file.readlines()
+    # gets the parameters into blocks 
+    # since some parameters might take up more than one line in the output file
+    blocks = group_parameter_blocks(lines)
+    
+    result_list = []
+    # iterate through all the parameter blocks, puts each into a dictionary 
+    # and adds it to the result list
+    for block in blocks:
+        # makes the dictionary for the current parameter
+        result_list.append(parse_parameter_block(block))
     return result_list
 
+# helper function for parse parameters, 
+# puts each parameter into blocks that put any instances of multiple lines into one line
+def group_parameter_blocks(lines):
+    blocks = []
+    current_block = []
+    for line in lines:
+        line = line.rstrip()
+        # if it's the start of a new parameter, add the current block into the rest of the blocks
+        # and set the current block to the new block
+        if line.startswith("PARAMETER"):
+            if current_block:
+                blocks.append(" ".join(current_block))
+                current_block = []
+            current_block.append(line)
+        # if the line does not start with PARAMETER and a current block exists,
+        # then the current line is part of the current block
+        elif current_block:
+            current_block.append(line)
+            
+            # since the last part of a parameter is 'parent=', if the current line contains that,
+            # then we want to add it and end the current block
+            if " parent=" in line:
+                blocks.append(" ".join(current_block))
+                current_block = []
+    # then if there is still something in current block at the end of the loop,
+    # add it to blocks and return
+    if current_block:
+        blocks.append(" ".join(current_block))
+    return blocks
+
+# helper method for parse_parameters,
+# takes the blocks made from group_parameter_blocks and parses them and puts it into a dictionary
+def parse_parameter_block(block):
+    result = {}
+    parts = block.split()
+    
+    current_key = None
+    for part in parts:
+        if '=' in part:
+            key, value = part.split('=', 1)
+            result[key] = value
+            current_key = key
+        elif current_key is not None:
+            result[current_key] += ' ' + part
+    
+    return result
+            
+# TODO: figure out if this method needs to change like the parse parameter did
 def parse_local(filename):
     local_list = []
     result_list = []
@@ -210,7 +244,6 @@ def parse_local(filename):
     return result_list
 
 def parse_instructions(filename):
-    # hint: use .getMnemonicString(), which instruction inherits
     instruction_list = []
     current_instruction = None
     with open(filename, 'r') as file:
@@ -240,7 +273,7 @@ def parse_instructions(filename):
 def main():
     parameter_file = "ghidra-scripting/parameter-output.txt"
     l1 = parse_parameters(parameter_file)
-    print(l1[0], "\n")
+    print(l1[633], "\n")
     local_file = "ghidra-scripting/local-variable-output.txt"
     l1 = parse_local(local_file)
     print(l1[0], "\n")

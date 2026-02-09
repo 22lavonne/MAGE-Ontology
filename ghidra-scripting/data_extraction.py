@@ -55,7 +55,6 @@ def main():
                             param_array = s.getObject().getParameters()
                             if param_array:
                                 for param in param_array:
-                                    #TODO: fix the formatting of the data type because it has spaces in between some (for like pointers and stuff)
                                     param_file.write("PARAMETER var=" + param.getName() + " datatype=" + str(param.getDataType()) + " parent=" + str(s) + "\n")
                             
                             file_to_write = func_file

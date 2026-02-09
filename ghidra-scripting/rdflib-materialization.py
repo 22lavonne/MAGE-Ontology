@@ -143,13 +143,13 @@ for l in local_var_list:
 # Parameters:
 # param format: {'var': 'hModule', 'datatype': 'typedef HMODULE HINSTANCE', 'parent': 'GetProcAddress'}
 # TODO: fix the parsing in data_parser.py, since at least one parameter take up multiple lines
-# for p in parameters_list:
-#     param = pfs["mkg"][quote(p['var'])]
-#     data_type = pfs["mkg"][quote(p['datatype'])]
-#     parent_func = pfs["mkg"][quote(l['parent'])]
-#     graph.add((param, a, parameter))
-#     graph.add((param, passesInto, parent_func))
-#     graph.add((param, hasDataType, data_type))
+for p in parameters_list:
+    param = pfs["mkg"][quote(p['var'])]
+    data_type = pfs["mkg"][quote(p['datatype'])]
+    parent_func = pfs["mkg"][quote(l['parent'])]
+    graph.add((param, a, parameter))
+    graph.add((param, passesInto, parent_func))
+    graph.add((param, hasDataType, data_type))
 
 # Namespaces:
 # TODO: Adapt this to the other namespace variables
