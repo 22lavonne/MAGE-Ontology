@@ -128,6 +128,8 @@ instruction_list = parse_instructions(instruction_file)
 
 # Adding Local Variabels to KG
 # local variable format: {'var': 'local_8', 'datatype': 'undefined4', 'parent': 'FUN_00401090'}
+# TODO: change how this works because it says the same named object is defined in multiple functions
+# might have to change the schema to have function defines local variable in this case?
 for l in local_var_list:
     # use the urllib.parse.quote() method to make the variable name work with URI syntax
     local_var = pfs["mkg"][quote(l['var'])]
@@ -140,7 +142,7 @@ for l in local_var_list:
     
 # Parameters:
 # param format: {'var': 'hModule', 'datatype': 'typedef HMODULE HINSTANCE', 'parent': 'GetProcAddress'}
-# TODO: fix the parsing in data_parser.py
+# TODO: fix the parsing in data_parser.py, since at least one parameter take up multiple lines
 # for p in parameters_list:
 #     param = pfs["mkg"][quote(p['var'])]
 #     data_type = pfs["mkg"][quote(p['datatype'])]
@@ -164,7 +166,7 @@ for n in namespace_list:
     graph.add((n_instance, definedIn, n_parent))
     if n['references']:
         for r in n['references']:
-           ref = "ref_" + str(r['source'])
+           ref = pfs["mkg"]["ref_" + str(r['source'])]
            graph.add( (n_instance, hasReference, ref))
     if n['primary_reference']:
         ref = "ref_" + str(n['primary_reference']['source'])
@@ -182,7 +184,7 @@ for c in class_list:
     graph.add((c_instance, definedIn, c_parent))    
     if c['references']:
         for r in c['references']:
-           ref = "ref_" + str(r['source'])
+           ref = pfs["mkg"]["ref_" + str(r['source'])]
            graph.add( (c_instance, hasReference, ref))
     if c['primary_reference']:
         ref = "ref_" + str(c['primary_reference']['source'])
@@ -200,7 +202,7 @@ for l in dll_list:
     graph.add((l_instance, definedIn, l_parent))    
     if l['references']:
         for r in l['references']:
-           ref = "ref_" + str(r['source'])
+           ref = pfs["mkg"]["ref_" + str(r['source'])]
            graph.add( (l_instance, hasReference, ref))
     if l['primary_reference']:
         ref = "ref_" + str(l['primary_reference']['source'])
@@ -212,27 +214,43 @@ for l in dll_list:
 # 'references': [{'source': '00422020', 'destination': 'EXTERNAL:00000007', 'operandindex': '0', 'type': 'DATA'}, 
 # {'source': '00401327', 'destination': 'EXTERNAL:00000007', 'operandindex': '-1', 'type': 'COMPUTED_CALL'}], 
 # 'primary_reference': {'source': '00401327', 'destination': 'EXTERNAL:00000007', 'operandindex': '-1', 'type': 'COMPUTED_CALL'}}
+# TODO: there is a function that looks like this: FUNCTION func=operator= address=0040f152 ...
+# where the function name includes the = sign, which throws off my entire parsing scheme
+
 for f in function_list:
-    f_instance = pfs["mkg"][quote(f['dll'])]
+    print(f["func"])
+    f_instance = pfs["mkg"][quote(f['func'])]
     graph.add( (f_instance, a, function))
     if f['address'] != "NO ADDRESS":
         f_address = pfs["mkg"][quote(f['address'])]
         graph.add( (f_instance, hasAddress, f_address))
     f_parent = pfs["mkg"][quote(f['parent'])]
     graph.add((f_instance, definedIn, f_parent)) 
-    # TODO: add stuff to get the functions called into the graph
+    # Add all the functions called as triples (if any called functions exist)
+    if f['functions_called']:
+        for fc in f['functions_called']:
+            # make the URI of the function since it is seen elsewhere
+            func_called = pfs["mkg"][quote(fc)]
+            graph.add((f_instance, calls, func_called))
+    # return type
     f_return_type = pfs["mkg"][quote(f['returntype'])]
     graph.add((f_instance, hasReturnType, f_return_type))
+    # return value (as a parameter)
     f_return_value = pfs["mkg"][quote(f['returnvalue'])]
     graph.add((f_instance, returns, f_return_value))
+    # if any references exist, add them as triples
     if f['references']:
         for r in f['references']:
-           ref = "ref_" + str(r['source'])
+           ref = pfs["mkg"]["ref_" + str(r['source'])]
+        #    ref = "ref_" + str(r['source'])
            graph.add( (f_instance, hasReference, ref))
+    # then add the primary reference (should run if there are also references)
     if f['primary_reference']:
         ref = "ref_" + str(f['primary_reference']['source'])
         f_primary_ref = pfs["mkg"][quote(ref)]
         graph.add( (f_instance, hasPrimaryReference, f_primary_ref))
+
+# TODO: add triples for labels and instructions
 
 output_file = "ghidra-scripting/output.ttl"
 temp = graph.serialize(format="turtle", encoding="utf-8", destination=output_file)
