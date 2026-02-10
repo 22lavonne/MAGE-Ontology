@@ -24,6 +24,7 @@ pfs = {
 # TODO: do rdflib.Literal for any time you need to add a literal or plain data values for data attributes
 # TODO: Look to see what other relations need to be encoded based on the schema
 # TODO: change the local variable relation in the schema, then update the triples for functions to include local variables
+    # will have to change data extraction and data parser for this
 
 # Initialization shortcut
 def init_kg(prefixes=pfs):
@@ -199,7 +200,7 @@ for l in dll_list:
         ref = pfs["mkg"]["ref_" + str(l['primary_reference']['source'])]
         l_primary_ref = pfs["mkg"][quote(ref)]
         graph.add( (l_instance, hasPrimaryReference, l_primary_ref))
-        
+
 # FUNCTION func=GetTempFileNameW address=EXTERNAL:00000007 returntype=typedef UINT uint returnvalue=[UINT <RETURN>@EAX:4] parent=KERNEL32.DLL
 # REFERENCE source=00422020 destination=EXTERNAL:00000007 operandindex=0 type=DATA
 # REFERENCE source=00401327 destination=EXTERNAL:00000007 operandindex=-1 type=COMPUTED_CALL
@@ -266,13 +267,11 @@ for l in label_list:
         l_primary_ref = pfs["mkg"][quote(ref)]
         graph.add( (l_instance, hasPrimaryReference, l_primary_ref))
         
-# {'opcode': 'MOV', 'numoperands': '2', 
-# 'source_operands': [{'operand': 'ECX', 'type': 'REGISTER'}], 
-# 'destination_operand': [{'operand': '0x42f8a4', 'type': 'ADDRESS'}]}
-# naming the instructions incrementally like this because idk how else to do it
-num = 0
+# {'min_address': '00401090', 'opcode': 'PUSH', 'in_function': 'FUN_00401090', 'numoperands': '1', 
+# 'source_operands': [{'operand': 'EBP', 'type': 'REGISTER'}], 
+# 'destination_operand': {'operand': 'EBP', 'type': 'REGISTER'}}
 for i in instruction_list:
-    i_instance = pfs["mkg"]["ins_" + str(num)]
+    i_instance = pfs["mkg"]["ins_" + str(i["min_address"])]
     graph.add((i_instance, a, instruction))
     # opcode
     opcode = pfs["mkg"][quote(i["opcode"])]
@@ -288,7 +287,12 @@ for i in instruction_list:
         dest_operand = i['destination_operand']
         operand_instance = pfs["mkg"][quote(dest_operand['operand'])]
         graph.add((i_instance, hasDestinationOperand, operand_instance))
-    num += 1
+    # get whatever function has this instruction
+    func = pfs["mkg"][quote(i['in_function'])]
+    # then add the function contains instruction relation with the current instruction
+    graph.add((func, containsInstruction, i_instance))
+    # num += 1
+    
 
 output_file = "ghidra-scripting/output.ttl"
 temp = graph.serialize(format="turtle", encoding="utf-8", destination=output_file)

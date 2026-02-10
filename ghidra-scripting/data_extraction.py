@@ -18,6 +18,56 @@ from ghidra.program.model.lang import OperandType
 # if undefined does not work for a data type, change it to something that can work 
     # (functions can return both void and undefined)
 
+# prints the functions listed into the instruction_output.txt file
+def get_instructions_from_function(func, file):
+    if func is None:
+        return
+    func_entry = func.getAddress()
+    func_obj = currentProgram.getFunctionManager().getFunctionAt(func_entry)
+    
+    instruction_list = []
+    # gets the address set where the function body is
+    body = func_obj.getBody()
+    # get an iterator that iterates over the instructions in the function body
+    instructionIterator = currentProgram.getListing().getInstructions(body, True)
+    
+    for instruction in instructionIterator:
+        file.write("INSTRUCTION min_address=" + str(instruction.getMinAddress()))
+        file.write(" opcode=" + str(instruction.getMnemonicString()))
+        file.write(" in_function=" + str(func.getName()))
+        file.write(" numoperands=" + str(instruction.getNumOperands()) + "\n")
+        
+        num_operands = instruction.getNumOperands()
+        for op_index in range(num_operands):
+            operand_type = instruction.getOperandType(op_index)
+            operand = instruction.getDefaultOperandRepresentation(op_index)
+
+            if (num_operands == 1):
+                # if there is only one operand, then it is considered both the source and destination operand
+                # (for instructions like push and pop)
+                file.write("SOURCEOPERAND operand=" + operand)
+                file.write(" type=" + get_operand_type_string(operand_type) + "\n")
+                file.write("DESTINATIONOPERAND operand=" + operand)
+                file.write(" type=" + get_operand_type_string(operand_type) + "\n")
+            else:
+                if (op_index == num_operands - 1):
+                    file.write("DESTINATIONOPERAND operand=" + operand)
+                    file.write(" type=" + get_operand_type_string(operand_type) + "\n")
+                else:
+                    file.write("SOURCEOPERAND operand=" + operand)
+                    file.write(" type=" + get_operand_type_string(operand_type) + "\n")
+        
+    # count = 0
+    # for instruction in instructionIterator:
+    #     if monitor.isCancelled():
+    #         break
+    #     # TODO: make the dictionary of the instruction here
+    #     # use min address to name the instruction
+    #     print(f"  {instruction.getMinAddress()}: {instruction.toString()}")
+    #     count += 1
+        
+    # print(f"Total instructions: {count}")
+    
 
 def main():
     # gets path of where this script is actually located so any extracted txt files can be put in this directory
@@ -26,47 +76,55 @@ def main():
     # prints all label symbols in label-output.txt
     label_out_path = script_dir / "label-output.txt"
     func_out_path = script_dir / "function-output.txt"
-    # TODO: maybe get rid of local variables and parameters from output.txt and just have them with functions?
-    # but then local variable can't have defined in and shouold be function defines, but then that makes it inconsistent
+    # TODO: maybe get rid of local variables and parameters from output.txt and just have them with functions
     local_var_out_path = script_dir / "local-variable-output.txt"
     param_out_path = script_dir / "parameter-output.txt"
+    ins_out_path = script_dir / "instruction-output.txt"
+    # open label file
     with label_out_path.open("w", encoding="utf-8") as label_file:
+        # open function file
         with func_out_path.open("w", encoding="utf-8") as func_file:
+            # TODO: remove local variable output file
             with local_var_out_path.open("w", encoding="utf-8") as local_file:
+                # open parameter file
                 with param_out_path.open("w", encoding="utf-8") as param_file:
-                    symbol_iterator = currentProgram.getSymbolTable().getSymbolIterator()
-                    for s in symbol_iterator:
-                        file_to_write = label_file
-                        # if current symbol type is a function, print in function file
-                        if (s.getSymbolType() == SymbolType.FUNCTION):
-                            # TODO: change the formatting of the return parameter if necessary 
-                            func_file.write("FUNCTION func=" + s.getName() + " address=" + str(s.getAddress()) + " returntype=" + str(s.getObject().getReturnType()) + " returnvalue=" + str(s.getObject().getReturn()) + " parent=" + str(s.getParentNamespace()) + "\n")
-                            func_array = s.getObject().getCalledFunctions(monitor)
-                            if func_array:
-                                for func in func_array:
-                                    func_file.write("FUNCTIONCALLED func=" + func.getName() + "\n")                        
-                            # then print the corresponding variables from that function
-                            # both the local variables and the parameters
-                            # NOTE: all local variables have the undefined data type
-                            local_array = s.getObject().getLocalVariables()
-                            if local_array:
-                                for local in local_array:
-                                    local_file.write("LOCALVARIABLE var=" + local.getName() + " datatype=" + str(local.getDataType()) + " parent=" + str(s) + "\n")
-                            param_array = s.getObject().getParameters()
-                            if param_array:
-                                for param in param_array:
-                                    param_file.write("PARAMETER var=" + param.getName() + " datatype=" + str(param.getDataType()) + " parent=" + str(s) + "\n")
-                            
-                            file_to_write = func_file
-                        # if it's not a function, then it's a label
-                        else:
-                            label_file.write("LABEL label=" + s.getName() + " address=" + str(s.getAddress()) + " parent=" + str(s.getParentNamespace()) + "\n")
+                    # open instruction file
+                    with ins_out_path.open("w", encoding="utf-8") as ins_file:
+                        symbol_iterator = currentProgram.getSymbolTable().getSymbolIterator()
+                        for s in symbol_iterator:
                             file_to_write = label_file
-                        # then, no matter if it was a function or label, print its references
-                        ref_array = s.getReferences()
-                        # if there is at least one reference, then print the references.
-                        # if there is not, then no references will be printed.
-                        print_references(ref_array, file_to_write)
+                            # if current symbol type is a function, print in function file
+                            if (s.getSymbolType() == SymbolType.FUNCTION):
+                                # get all the instructions contained in this function and put them into the instruction output file
+                                get_instructions_from_function(s, ins_file)
+                                # TODO: change the formatting of the return parameter if necessary 
+                                func_file.write("FUNCTION func=" + s.getName() + " address=" + str(s.getAddress()) + " returntype=" + str(s.getObject().getReturnType()) + " returnvalue=" + str(s.getObject().getReturn()) + " parent=" + str(s.getParentNamespace()) + "\n")
+                                func_array = s.getObject().getCalledFunctions(monitor)
+                                if func_array:
+                                    for func in func_array:
+                                        func_file.write("FUNCTIONCALLED func=" + func.getName() + "\n")                        
+                                # then print the corresponding variables from that function
+                                # both the local variables and the parameters
+                                # NOTE: all local variables have the undefined data type
+                                local_array = s.getObject().getLocalVariables()
+                                if local_array:
+                                    for local in local_array:
+                                        local_file.write("LOCALVARIABLE var=" + local.getName() + " datatype=" + str(local.getDataType()) + " parent=" + str(s) + "\n")
+                                param_array = s.getObject().getParameters()
+                                if param_array:
+                                    for param in param_array:
+                                        param_file.write("PARAMETER var=" + param.getName() + " datatype=" + str(param.getDataType()) + " parent=" + str(s) + "\n")
+                                
+                                file_to_write = func_file
+                            # if it's not a function, then it's a label
+                            else:
+                                label_file.write("LABEL label=" + s.getName() + " address=" + str(s.getAddress()) + " parent=" + str(s.getParentNamespace()) + "\n")
+                                file_to_write = label_file
+                            # then, no matter if it was a function or label, print its references
+                            ref_array = s.getReferences()
+                            # if there is at least one reference, then print the references.
+                            # if there is not, then no references will be printed.
+                            print_references(ref_array, file_to_write)
 
     # test code that just prints all the instructions normally without any formatting
     # ins_out_path = script_dir / "instruction-test-output.txt"
@@ -76,36 +134,36 @@ def main():
     #         f.write("Instruction: " + str(instruction) + "\n")
     #         instruction = getInstructionAfter(instruction)
 
-    # prints all instructions in output.txt
-    ins_out_path = script_dir / "instruction-output.txt"
-    with ins_out_path.open("w", encoding="utf-8") as f:
-        instruction = getFirstInstruction()
-        while instruction is not None:
-            f.write("INSTRUCTION opcode=" + str(instruction.getMnemonicString()))
-            num_operands = instruction.getNumOperands()
-            f.write(" numoperands=" + str(num_operands) + "\n")
-            for op_index in range(num_operands):
-                # FIXME: change the formatting to similar to the reference stuff so multiple operands can be accounted for
-                operand_type = instruction.getOperandType(op_index)
-                operand = instruction.getDefaultOperandRepresentation(op_index)
-                # f.write(" type=" + get_operand_type_string(operand_type))
-                # f.write( "type=" + str(operand_type))
-                if (num_operands == 1):
-                    # if there is only one operand, then it is considered both the source and destination operand
-                    # (for instructions like push and pop)
-                    f.write("SOURCEOPERAND operand=" + operand)
-                    f.write(" type=" + get_operand_type_string(operand_type) + "\n")
-                    f.write("DESTINATIONOPERAND operand=" + operand)
-                    f.write(" type=" + get_operand_type_string(operand_type) + "\n")
-                else:
-                    if (op_index == num_operands - 1):
-                        f.write("DESTINATIONOPERAND operand=" + operand)
-                        f.write(" type=" + get_operand_type_string(operand_type) + "\n")
-                    else:
-                        f.write("SOURCEOPERAND operand=" + operand)
-                        f.write(" type=" + get_operand_type_string(operand_type) + "\n")
-            # f.write("\n")
-            instruction = getInstructionAfter(instruction)
+    # # prints all instructions in output.txt
+    # ins_out_path = script_dir / "instruction-output.txt"
+    # with ins_out_path.open("w", encoding="utf-8") as f:
+    #     instruction = getFirstInstruction()
+    #     while instruction is not None:
+    #         f.write("INSTRUCTION opcode=" + str(instruction.getMnemonicString()))
+    #         num_operands = instruction.getNumOperands()
+    #         f.write(" numoperands=" + str(num_operands) + "\n")
+    #         for op_index in range(num_operands):
+    #             # FIXME: change the formatting to similar to the reference stuff so multiple operands can be accounted for
+    #             operand_type = instruction.getOperandType(op_index)
+    #             operand = instruction.getDefaultOperandRepresentation(op_index)
+    #             # f.write(" type=" + get_operand_type_string(operand_type))
+    #             # f.write( "type=" + str(operand_type))
+    #             if (num_operands == 1):
+    #                 # if there is only one operand, then it is considered both the source and destination operand
+    #                 # (for instructions like push and pop)
+    #                 f.write("SOURCEOPERAND operand=" + operand)
+    #                 f.write(" type=" + get_operand_type_string(operand_type) + "\n")
+    #                 f.write("DESTINATIONOPERAND operand=" + operand)
+    #                 f.write(" type=" + get_operand_type_string(operand_type) + "\n")
+    #             else:
+    #                 if (op_index == num_operands - 1):
+    #                     f.write("DESTINATIONOPERAND operand=" + operand)
+    #                     f.write(" type=" + get_operand_type_string(operand_type) + "\n")
+    #                 else:
+    #                     f.write("SOURCEOPERAND operand=" + operand)
+    #                     f.write(" type=" + get_operand_type_string(operand_type) + "\n")
+    #         # f.write("\n")
+    #         instruction = getInstructionAfter(instruction)
     
     # prints all classes in class-output.txt
     # NOTE: all the classes do not have an associated address in the examples I have seen, 

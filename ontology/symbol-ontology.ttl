@@ -12,6 +12,10 @@
 #    Object Properties
 #################################################################
 
+###  http://www.semanticweb.org/jaspe/ontologies/2026/0/symbol-ontology#defines
+:defines rdf:type owl:ObjectProperty .
+
+
 ###  http://www.semanticweb.org/jaspe/ontologies/2026/0/symbol-ontology/calls
 :calls rdf:type owl:ObjectProperty ;
        rdfs:subPropertyOf owl:topObjectProperty .
@@ -163,6 +167,10 @@
 :Function rdf:type owl:Class ;
           rdfs:subClassOf :NamespaceSymbol ,
                           [ rdf:type owl:Restriction ;
+                            owl:onProperty :defines ;
+                            owl:someValuesFrom :LocalVariable
+                          ] ,
+                          [ rdf:type owl:Restriction ;
                             owl:onProperty :calls ;
                             owl:someValuesFrom :Function
                           ] ,
@@ -223,11 +231,7 @@
 
 ###  http://www.semanticweb.org/jaspe/ontologies/2026/0/symbol-ontology/LocalVariable
 :LocalVariable rdf:type owl:Class ;
-               rdfs:subClassOf :Variable ,
-                               [ rdf:type owl:Restriction ;
-                                 owl:onProperty :definedIn ;
-                                 owl:someValuesFrom :Function
-                               ] .
+               rdfs:subClassOf :Variable .
 
 
 ###  http://www.semanticweb.org/jaspe/ontologies/2026/0/symbol-ontology/Namespace
