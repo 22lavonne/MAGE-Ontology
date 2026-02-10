@@ -12,19 +12,6 @@ from rdflib import OWL, RDF, RDFS, XSD, TIME
 # Prefixes
 name_space = "https://kastle-lab.org/"
 pfs = {
-"kl-res": Namespace(f"{name_space}lod/resource/"),
-"kl-ont": Namespace(f"{name_space}lod/ontology/"),
-"geo": Namespace("http://www.opengis.net/ont/geosparql#"),
-"geof": Namespace("http://www.opengis.net/def/function/geosparql/"),
-"sf": Namespace("http://www.opengis.net/ont/sf#"),
-"wd": Namespace("http://www.wikidata.org/entity/"),
-"wdt": Namespace("http://www.wikidata.org/prop/direct/"),
-"dbo": Namespace("http://dbpedia.org/ontology/"),
-"time": Namespace("http://www.w3.org/2006/time#"),
-"ssn": Namespace("http://www.w3.org/ns/ssn/"),
-"sosa": Namespace("http://www.w3.org/ns/sosa/"),
-"cdt": Namespace("http://w3id.org/lindt/custom_datatypes#"),
-"ex": Namespace("https://example.com/"),
 "mkg": Namespace("https://mkg.com/data#"),
 "ont": Namespace("http://www.semanticweb.org/jaspe/ontologies/2026/0/symbol-ontology"),
 "rdf": RDF,
@@ -33,6 +20,9 @@ pfs = {
 "owl": OWL,
 "time": TIME
 }
+
+# TODO: do rdflib.Literal for any time you need to add a literal or plain data values for data attributes
+
 # Initialization shortcut
 def init_kg(prefixes=pfs):
     kg = Graph()
@@ -44,7 +34,7 @@ a = pfs["rdf"]["type"]
 # definedIn = pfs["ont"]["definedIn"]
 # hasDataType = pfs["ont"]["hasDataType"]
 ONT = Namespace("http://www.semanticweb.org/jaspe/ontologies/2026/0/symbol-ontology/")
-print(ONT.symbol)
+# print(ONT.symbol)
 
 # Object Properties
 definedIn = URIRef("http://www.semanticweb.org/jaspe/ontologies/2026/0/symbol-ontology/definedIn")
@@ -240,16 +230,24 @@ for f in function_list:
     # if any references exist, add them as triples
     if f['references']:
         for r in f['references']:
-           ref = pfs["mkg"]["ref_" + str(r['source'])]
+            # if the reference is an entry point, then hard code it to be Entry_Point
+            # since having a space in a URI is not valid
+            if r['source'] == "Entry Point":
+                ref = pfs["mkg"]["ref_Entry_Point"]
+            else:
+                ref = pfs["mkg"]["ref_" + str(r['source'])]
         #    ref = "ref_" + str(r['source'])
-           graph.add( (f_instance, hasReference, ref))
+            graph.add( (f_instance, hasReference, ref))
     # then add the primary reference (should run if there are also references)
     if f['primary_reference']:
-        ref = pfs["mkg"]["ref_" + str(f['primary_reference']['source'])]
+        if r['source'] == "Entry Point":
+            ref = pfs["mkg"]["ref_Entry_Point"]
+        else:
+            ref = pfs["mkg"]["ref_" + str(f['primary_reference']['source'])]
         f_primary_ref = pfs["mkg"][quote(ref)]
         graph.add( (f_instance, hasPrimaryReference, f_primary_ref))
 
 # TODO: add triples for labels and instructions
-
+print("Finished encoding functions \n")
 output_file = "ghidra-scripting/output.ttl"
 temp = graph.serialize(format="turtle", encoding="utf-8", destination=output_file)
