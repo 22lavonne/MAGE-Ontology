@@ -202,8 +202,8 @@ for l in dll_list:
 # REFERENCE source=00422020 destination=EXTERNAL:00000007 operandindex=0 type=DATA
 # REFERENCE source=00401327 destination=EXTERNAL:00000007 operandindex=-1 type=COMPUTED_CALL
 # PRIMARYREFERENCE source=00401327 destination=EXTERNAL:00000007 operandindex=-1 type=COMPUTED_CALL
-# FIXME: fix the data parsing for function, since there is at least one instance of a data type that 
-# takes up multiple lines (maybe fix it the same way you fixed the multi line parameter issue?)
+# TODO: if possible, get all instructions present in each function
+# would have to modify both data extraction and data parser
 for f in function_list:
     # print(f["func"])
     f_instance = pfs["mkg"][quote(f['func'])]
@@ -247,7 +247,47 @@ for f in function_list:
         f_primary_ref = pfs["mkg"][quote(ref)]
         graph.add( (f_instance, hasPrimaryReference, f_primary_ref))
 
-# TODO: add triples for labels and instructions
-print("Finished encoding functions \n")
+for l in label_list:
+    l_instance = pfs["mkg"][quote(l['label'])]
+    graph.add( (l_instance, a, dll))
+    if l['address'] != "NO ADDRESS":
+        l_address = pfs["mkg"][quote(l['address'])]
+        graph.add( (l_instance, hasAddress, l_address))
+    l_parent = pfs["mkg"][quote(l['parent'])]
+    graph.add((l_instance, definedIn, l_parent))    
+    if l['references']:
+        for r in l['references']:
+           ref = pfs["mkg"]["ref_" + str(r['source'])]
+           graph.add( (l_instance, hasReference, ref))
+    if l['primary_reference']:
+        ref = pfs["mkg"]["ref_" + str(l['primary_reference']['source'])]
+        l_primary_ref = pfs["mkg"][quote(ref)]
+        graph.add( (l_instance, hasPrimaryReference, l_primary_ref))
+        
+# TODO: make triples for instructions
+# {'opcode': 'MOV', 'numoperands': '2', 
+# 'source_operands': [{'operand': 'ECX', 'type': 'REGISTER'}], 
+# 'destination_operand': [{'operand': '0x42f8a4', 'type': 'ADDRESS'}]}
+for i in instruction_list:
+    # naming the instructions incrementally like this because idk how else to do it
+    num = 0
+    i_instance = pfs["mkg"]["ins_" + str(num)]
+    graph.add((i_instance, a, instruction))
+    # opcode
+    opcode = pfs["mkg"][quote(i["opcode"])]
+    graph.add((i_instance, hasOpcode, opcode))
+    if i['source_operands']:
+        for s in i['source_operands']:
+            # TODO: get the type of operand here and add another relation/triple based on that
+            operand = pfs["mkg"][quote(s['operand'])]
+            graph.add((i_instance, hasSourceOperand, operand))
+    # print(i['destination_operand'])
+    if i['destination_operand']:
+        # print(i['destination_operand']["operand"])
+        dest_operand = i['destination_operand']
+        operand_instance = pfs["mkg"][quote(dest_operand['operand'])]
+        graph.add((i_instance, hasDestinationOperand, operand_instance))
+    num += 1
+
 output_file = "ghidra-scripting/output.ttl"
 temp = graph.serialize(format="turtle", encoding="utf-8", destination=output_file)

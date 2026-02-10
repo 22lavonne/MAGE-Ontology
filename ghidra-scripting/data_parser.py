@@ -8,9 +8,53 @@ def key_value_parser(line):
     matches = re.findall(pattern, line)
     return {k: v.strip() for k, v in matches}
 
+def group_by_blocks(lines):
+    blocks = []
+    current_block = []
+    for l in lines:
+        line = l.strip()
+        # get the first word of the line
+        first_word = line.split(' ')[0]
+        # if the word is all in uppercase, meaning it's a tag like PARAMTER or FUNCTION,
+        if first_word.isupper() and len(first_word) > 1:
+            if current_block:
+                blocks.append(" ".join(current_block))
+                current_block = []
+            current_block.append(line)
+        # if the line does not start with a tag and a current block exists,
+        # then the current line is part of the current block
+        elif current_block:
+            current_block.append(line)
+            
+            # since the last part of parameter and the first function line is 'parent=', if the current line contains that,
+            # then we want to add it and end the current block
+            if " parent=" in line:
+                blocks.append(" ".join(current_block))
+                current_block = []
+    # then if there is still something in current block at the end of the loop,
+    # add it to blocks and return
+    if current_block:
+        blocks.append(" ".join(current_block))
+    return blocks
+
+# helper method for parse_parameters,
+# takes the blocks made from group_parameter_blocks and parses them and puts it into a dictionary
+def parse_by_block(block):
+    result = {}
+    parts = block.split()
     
-# FIXME: at least one function has a return type that is multiple lines, so fix this when parsing it
-# (fix it the same way you fixed parameters)
+    current_key = None
+    for part in parts:
+        if '=' in part:
+            key, value = part.split('=', 1)
+            result[key] = value
+            current_key = key
+        elif current_key is not None:
+            result[current_key] += ' ' + part
+    
+    return result
+
+    
 def parse_functions(filename):
     func_list = []
     # current function we are working with (since there are multiple lines for different attributes of a function,
@@ -73,31 +117,6 @@ def parse_functions(filename):
     return func_list
             
             
-    #         # if the current key is function, then create a new function dictionary
-    #         if key == "FUNCTION":
-    #             current_function = key_value_parser(rest)
-    #             current_function["functions_called"] = []
-    #             current_function["references"] = []
-    #             current_function["primary_reference"] = None
-    #             func_list.append(current_function)
-    #         # if the key isn't function and there is no current function, continue to the next line
-    #         elif current_function is None:
-    #             continue
-    #         # else if the key is one of the attributes of function, add it to the current function
-    #         elif key == "FUNCTIONCALLED":
-    #             current_function["functions_called"].append(key_value_parser(rest))
-    #         elif key == "REFERENCE":
-    #             current_function["references"].append(key_value_parser(rest))
-    #         elif key == "PRIMARYREFERENCE":
-    #             current_function["primary_reference"] = key_value_parser(rest)
-    #         else:
-    #             # the key should be one of the above (since all lines should start with one of these names)
-    #             continue
-    # # print(func_list[1025])
-    # return func_list
-
-
-
 def parse_labels(filename):
     label_list = []
     current_label = None
@@ -224,51 +243,6 @@ def parse_parameters(filename):
         result_list.append(parse_by_block(block))
     return result_list
 
-def group_by_blocks(lines):
-    blocks = []
-    current_block = []
-    for l in lines:
-        line = l.strip()
-        # get the first word of the line
-        first_word = line.split(' ')[0]
-        # if the word is all in uppercase, meaning it's a tag like PARAMTER or FUNCTION,
-        if first_word.isupper() and len(first_word) > 1:
-            if current_block:
-                blocks.append(" ".join(current_block))
-                current_block = []
-            current_block.append(line)
-        # if the line does not start with a tag and a current block exists,
-        # then the current line is part of the current block
-        elif current_block:
-            current_block.append(line)
-            
-            # since the last part of parameter and the first function line is 'parent=', if the current line contains that,
-            # then we want to add it and end the current block
-            if " parent=" in line:
-                blocks.append(" ".join(current_block))
-                current_block = []
-    # then if there is still something in current block at the end of the loop,
-    # add it to blocks and return
-    if current_block:
-        blocks.append(" ".join(current_block))
-    return blocks
-
-# helper method for parse_parameters,
-# takes the blocks made from group_parameter_blocks and parses them and puts it into a dictionary
-def parse_by_block(block):
-    result = {}
-    parts = block.split()
-    
-    current_key = None
-    for part in parts:
-        if '=' in part:
-            key, value = part.split('=', 1)
-            result[key] = value
-            current_key = key
-        elif current_key is not None:
-            result[current_key] += ' ' + part
-    
-    return result
             
 # TODO: figure out if this method needs to change like the parse parameter did
 def parse_local(filename):
@@ -313,14 +287,14 @@ def parse_instructions(filename):
             if key == "INSTRUCTION":
                 current_instruction = key_value_parser(rest)
                 current_instruction["source_operands"] = []
-                current_instruction["destination_operand"] = []
+                current_instruction["destination_operand"] = None
                 instruction_list.append(current_instruction)
             elif current_instruction is None:
                 continue
             elif key == "SOURCEOPERAND":
                 current_instruction["source_operands"].append(key_value_parser(rest))
             elif key == "DESTINATIONOPERAND":
-                current_instruction["destination_operand"].append(key_value_parser(rest))
+                current_instruction["destination_operand"] = key_value_parser(rest)
             else:
                 continue
     # print(instruction_list[2])
