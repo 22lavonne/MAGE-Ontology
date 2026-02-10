@@ -22,6 +22,8 @@ pfs = {
 }
 
 # TODO: do rdflib.Literal for any time you need to add a literal or plain data values for data attributes
+# TODO: Look to see what other relations need to be encoded based on the schema
+# TODO: change the local variable relation in the schema, then update the triples for functions to include local variables
 
 # Initialization shortcut
 def init_kg(prefixes=pfs):
@@ -264,13 +266,12 @@ for l in label_list:
         l_primary_ref = pfs["mkg"][quote(ref)]
         graph.add( (l_instance, hasPrimaryReference, l_primary_ref))
         
-# TODO: make triples for instructions
 # {'opcode': 'MOV', 'numoperands': '2', 
 # 'source_operands': [{'operand': 'ECX', 'type': 'REGISTER'}], 
 # 'destination_operand': [{'operand': '0x42f8a4', 'type': 'ADDRESS'}]}
+# naming the instructions incrementally like this because idk how else to do it
+num = 0
 for i in instruction_list:
-    # naming the instructions incrementally like this because idk how else to do it
-    num = 0
     i_instance = pfs["mkg"]["ins_" + str(num)]
     graph.add((i_instance, a, instruction))
     # opcode
