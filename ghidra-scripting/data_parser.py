@@ -1,11 +1,16 @@
 import re
 
 def key_value_parser(line):
-    return {
-        k: v.strip()
-        for k, v in re.findall(r'(\w+)=([^=]+)(?=\s\w+=|$)', line)
-    }
+    # split when we get the first instance of an = for a key
+    # (prevents an = sign in a value from splitting again)
+    parts = re.split(r'\s+(\w+)=', line)
+    pattern = r'(?:^| )(\w+)=(.*?)(?=\s+\w+=|$)'
+    matches = re.findall(pattern, line)
+    return {k: v.strip() for k, v in matches}
 
+    
+# FIXME: at least one function has a return type that is multiple lines, so fix this when parsing it
+# (fix it the same way you fixed parameters)
 def parse_functions(filename):
     func_list = []
     current_function = None
@@ -28,7 +33,7 @@ def parse_functions(filename):
             elif current_function is None:
                 continue
             # else if the key is one of the attributes of function, add it to the current function
-            elif key == "CALLEDFUNCTION":
+            elif key == "FUNCTIONCALLED":
                 current_function["functions_called"].append(key_value_parser(rest))
             elif key == "REFERENCE":
                 current_function["references"].append(key_value_parser(rest))
@@ -279,7 +284,7 @@ def main():
     print(l1[0], "\n")
     function_file = "ghidra-scripting/function-output.txt"
     l1 = parse_functions(function_file)
-    print(l1[6], "\n")
+    print(l1[582], "\n")
     label_file = "ghidra-scripting/label-output.txt"
     l1 = parse_labels(label_file)
     print(l1[0], "\n")

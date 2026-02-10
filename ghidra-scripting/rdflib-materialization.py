@@ -152,7 +152,6 @@ for p in parameters_list:
     graph.add((param, hasDataType, data_type))
 
 # Namespaces:
-# TODO: Adapt this to the other namespace variables
 # format: {'namespace': 'switchD_0040f727', 'address': 'NO ADDRESS', 'parent': 'Global', 'references': [], 'primary_reference': None}
 for n in namespace_list:
     n_instance = pfs["mkg"][quote(n['namespace'])]
@@ -169,7 +168,7 @@ for n in namespace_list:
            ref = pfs["mkg"]["ref_" + str(r['source'])]
            graph.add( (n_instance, hasReference, ref))
     if n['primary_reference']:
-        ref = "ref_" + str(n['primary_reference']['source'])
+        ref = pfs["mkg"]["ref_" + str(n['primary_reference']['source'])]
         n_primary_ref = pfs["mkg"][quote(ref)]
         graph.add( (n_instance, hasPrimaryReference, n_primary_ref))
    
@@ -187,7 +186,7 @@ for c in class_list:
            ref = pfs["mkg"]["ref_" + str(r['source'])]
            graph.add( (c_instance, hasReference, ref))
     if c['primary_reference']:
-        ref = "ref_" + str(c['primary_reference']['source'])
+        ref = pfs["mkg"]["ref_" + str(c['primary_reference']['source'])]
         c_primary_ref = pfs["mkg"][quote(ref)]
         graph.add( (c_instance, hasPrimaryReference, c_primary_ref))         
 
@@ -205,7 +204,7 @@ for l in dll_list:
            ref = pfs["mkg"]["ref_" + str(r['source'])]
            graph.add( (l_instance, hasReference, ref))
     if l['primary_reference']:
-        ref = "ref_" + str(l['primary_reference']['source'])
+        ref = pfs["mkg"]["ref_" + str(l['primary_reference']['source'])]
         l_primary_ref = pfs["mkg"][quote(ref)]
         graph.add( (l_instance, hasPrimaryReference, l_primary_ref))
         
@@ -214,11 +213,10 @@ for l in dll_list:
 # 'references': [{'source': '00422020', 'destination': 'EXTERNAL:00000007', 'operandindex': '0', 'type': 'DATA'}, 
 # {'source': '00401327', 'destination': 'EXTERNAL:00000007', 'operandindex': '-1', 'type': 'COMPUTED_CALL'}], 
 # 'primary_reference': {'source': '00401327', 'destination': 'EXTERNAL:00000007', 'operandindex': '-1', 'type': 'COMPUTED_CALL'}}
-# TODO: there is a function that looks like this: FUNCTION func=operator= address=0040f152 ...
-# where the function name includes the = sign, which throws off my entire parsing scheme
-
+# FIXME: fix the data parsing for function, since there is at least one instance of a data type that 
+# takes up multiple lines (maybe fix it the same way you fixed the multi line parameter issue?)
 for f in function_list:
-    print(f["func"])
+    # print(f["func"])
     f_instance = pfs["mkg"][quote(f['func'])]
     graph.add( (f_instance, a, function))
     if f['address'] != "NO ADDRESS":
@@ -228,14 +226,17 @@ for f in function_list:
     graph.add((f_instance, definedIn, f_parent)) 
     # Add all the functions called as triples (if any called functions exist)
     if f['functions_called']:
+        # print(f["func"], "has functions ")
         for fc in f['functions_called']:
+            # print(quote(fc["func"]))
             # make the URI of the function since it is seen elsewhere
-            func_called = pfs["mkg"][quote(fc)]
+            func_called = pfs["mkg"][quote(fc['func'])]
             graph.add((f_instance, calls, func_called))
     # return type
     f_return_type = pfs["mkg"][quote(f['returntype'])]
     graph.add((f_instance, hasReturnType, f_return_type))
     # return value (as a parameter)
+    print(f['func'])
     f_return_value = pfs["mkg"][quote(f['returnvalue'])]
     graph.add((f_instance, returns, f_return_value))
     # if any references exist, add them as triples
@@ -246,7 +247,7 @@ for f in function_list:
            graph.add( (f_instance, hasReference, ref))
     # then add the primary reference (should run if there are also references)
     if f['primary_reference']:
-        ref = "ref_" + str(f['primary_reference']['source'])
+        ref = pfs["mkg"]["ref_" + str(f['primary_reference']['source'])]
         f_primary_ref = pfs["mkg"][quote(ref)]
         graph.add( (f_instance, hasPrimaryReference, f_primary_ref))
 
