@@ -21,8 +21,24 @@ pfs = {
 "time": TIME
 }
 
-# TODO: do rdflib.Literal for any time you need to add a literal or plain data values for data attributes
+# TODO: change schema and ontology to have hasMinAddress instead of hasAddress
+    # but also check if labels have an address or only a min address
+    # if they have just one address, then labels need to have the relation hasAddress,
+    # while namespace variables need to have the relation hasMinAddress
+
+# TODO: for every instance of a reference, add the following triples:
+    # ref hasSourceAddress *** (address)
+    # ref hasDestinationAddress *** (address)
+    # ref hasReferenceType *** (literal string)
+    # ref operandIndexOf *** (literal int)
 # TODO: Look to see what other relations need to be encoded based on the schema
+    # operand isA *** (address, immediateoperand, etc.)
+    # symbol hasAddress *** (address) DO THIS FOR ALL SYMBOL TYPES, so
+        # label hasAddress *** (address)
+        # class hasAddress *** (address)
+        # dll hasAddress *** (address)
+        # label hasAddress *** (address)
+        # label hasAddress *** (address)
 # TODO: change the local variable relation in the schema, then update the triples for functions to include local variables
     # will have to change data extraction and data parser for this
 

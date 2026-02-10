@@ -106,15 +106,6 @@
 #    Data properties
 #################################################################
 
-###  http://www.semanticweb.org/jaspe/ontologies/2026/0/symbol-ontology/addressOf
-:addressOf rdf:type owl:DatatypeProperty .
-
-
-###  http://www.semanticweb.org/jaspe/ontologies/2026/0/symbol-ontology/hasName
-:hasName rdf:type owl:DatatypeProperty ;
-         rdfs:subPropertyOf owl:topDataProperty .
-
-
 ###  http://www.semanticweb.org/jaspe/ontologies/2026/0/symbol-ontology/hasOperandIndex
 :hasOperandIndex rdf:type owl:DatatypeProperty ;
                  rdfs:subPropertyOf owl:topDataProperty .
@@ -124,21 +115,12 @@
 :hasReferenceType rdf:type owl:DatatypeProperty .
 
 
-###  http://www.semanticweb.org/jaspe/ontologies/2026/0/symbol-ontology/hasType
-:hasType rdf:type owl:DatatypeProperty ;
-         rdfs:subPropertyOf owl:topDataProperty .
-
-
 #################################################################
 #    Classes
 #################################################################
 
 ###  http://www.semanticweb.org/jaspe/ontologies/2026/0/symbol-ontology/Address
-:Address rdf:type owl:Class ;
-         rdfs:subClassOf [ rdf:type owl:Restriction ;
-                           owl:onProperty :addressOf ;
-                           owl:someValuesFrom xsd:string
-                         ] .
+:Address rdf:type owl:Class .
 
 
 ###  http://www.semanticweb.org/jaspe/ontologies/2026/0/symbol-ontology/Class
@@ -156,11 +138,7 @@
 
 
 ###  http://www.semanticweb.org/jaspe/ontologies/2026/0/symbol-ontology/DataType
-:DataType rdf:type owl:Class ;
-          rdfs:subClassOf [ rdf:type owl:Restriction ;
-                            owl:onProperty :hasName ;
-                            owl:someValuesFrom xsd:string
-                          ] .
+:DataType rdf:type owl:Class .
 
 
 ###  http://www.semanticweb.org/jaspe/ontologies/2026/0/symbol-ontology/Function
@@ -222,10 +200,6 @@
                        [ rdf:type owl:Restriction ;
                          owl:onProperty :definedIn ;
                          owl:someValuesFrom :NamespaceSymbol
-                       ] ,
-                       [ rdf:type owl:Restriction ;
-                         owl:onProperty :hasName ;
-                         owl:someValuesFrom xsd:string
                        ] .
 
 
@@ -236,11 +210,7 @@
 
 ###  http://www.semanticweb.org/jaspe/ontologies/2026/0/symbol-ontology/Namespace
 :Namespace rdf:type owl:Class ;
-           rdfs:subClassOf :NamespaceSymbol ,
-                           [ rdf:type owl:Restriction ;
-                             owl:onProperty :hasName ;
-                             owl:someValuesFrom xsd:string
-                           ] .
+           rdfs:subClassOf :NamespaceSymbol .
 
 
 ###  http://www.semanticweb.org/jaspe/ontologies/2026/0/symbol-ontology/NamespaceSymbol
