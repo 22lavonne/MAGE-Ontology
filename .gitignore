@@ -12,3 +12,4 @@ schema/schema-diagram-notes.graphml
 ghidra-scripting/*.txt
 ghidra-scripting/__pycache__/
 ghidra-scripting/data-extraction-old.py
+ghidra-scripting/data_parser_extra.py

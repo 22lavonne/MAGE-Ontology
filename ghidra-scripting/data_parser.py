@@ -13,37 +13,89 @@ def key_value_parser(line):
 # (fix it the same way you fixed parameters)
 def parse_functions(filename):
     func_list = []
+    # current function we are working with (since there are multiple lines for different attributes of a function,
+    # like FUNCTIONCALLED and REFERENCE)
     current_function = None
+    # buffer that will allow to get all information of a certain attribute, even if it goes over multiple lines
+    buffer = []
+    current_tag = None
+    
+    # helper method to help parse the text and update the function dictionary
+    def flush_buffer(tag, text_lines, current_func):
+        combined_text = " ".join(text_lines).replace("\n", " ")
+        data = key_value_parser(combined_text)
+        
+        # start of new function dictionary
+        if tag == "FUNCTION":
+            current_func = data
+            current_func.update({"functions_called": [], "references": [], "primary_reference": None})
+            func_list.append(current_func)
+        # add the current data as a new item in the functions called list
+        elif tag == "FUNCTIONCALLED":
+            current_func["functions_called"].append(data)
+        # add the current data as a new reference in the reference list
+        elif tag == "REFERENCE":
+            current_func["references"].append(data)
+        # add the current data as the primary reference of the current function
+        elif tag == "PRIMARYREFERENCE":
+            current_func["primary_reference"] = data
+        return current_func
+    
     with open(filename, 'r') as file:
         for read_line in file:
             line = read_line.strip()
             if not line: 
                 continue
+            
             parts = line.split(maxsplit=1)
             key = parts[0]
-            rest = parts[1] if len(parts) > 1 else ""
-            # if the current key is function, then create a new function dictionary
-            if key == "FUNCTION":
-                current_function = key_value_parser(rest)
-                current_function["functions_called"] = []
-                current_function["references"] = []
-                current_function["primary_reference"] = None
-                func_list.append(current_function)
-            # if the key isn't function and there is no current function, continue to the next line
-            elif current_function is None:
-                continue
-            # else if the key is one of the attributes of function, add it to the current function
-            elif key == "FUNCTIONCALLED":
-                current_function["functions_called"].append(key_value_parser(rest))
-            elif key == "REFERENCE":
-                current_function["references"].append(key_value_parser(rest))
-            elif key == "PRIMARYREFERENCE":
-                current_function["primary_reference"] = key_value_parser(rest)
+            
+            # rest = parts[1] if len(parts) > 1 else ""
+            
+            if key.isupper() and len(key) > 1:
+                # process the data in the previous buffer before processing the current data
+                # (if the first word in the line is a tag)
+                if current_tag:
+                    # gets the new current function based on the current tag, buffer, and current function
+                    current_function = flush_buffer(current_tag, buffer, current_function)
+                    
+                    # update and reset for the new buffer
+                current_tag = key
+                buffer = [parts[1]] if len(parts) > 1 else [""]
+                # if the first word of the line is not a tag, then it's a continuation of the previous attribute,
+                # so add it to the current buffer
             else:
-                # the key should be one of the above (since all lines should start with one of these names)
-                continue
-    # print(func_list[1025])
+                buffer.append(line)
+        # flush the last block of the file since the loop doesn't get to it (if a current tag exists)
+        if current_tag:
+            flush_buffer(current_tag, buffer, current_function)
+    
     return func_list
+            
+            
+    #         # if the current key is function, then create a new function dictionary
+    #         if key == "FUNCTION":
+    #             current_function = key_value_parser(rest)
+    #             current_function["functions_called"] = []
+    #             current_function["references"] = []
+    #             current_function["primary_reference"] = None
+    #             func_list.append(current_function)
+    #         # if the key isn't function and there is no current function, continue to the next line
+    #         elif current_function is None:
+    #             continue
+    #         # else if the key is one of the attributes of function, add it to the current function
+    #         elif key == "FUNCTIONCALLED":
+    #             current_function["functions_called"].append(key_value_parser(rest))
+    #         elif key == "REFERENCE":
+    #             current_function["references"].append(key_value_parser(rest))
+    #         elif key == "PRIMARYREFERENCE":
+    #             current_function["primary_reference"] = key_value_parser(rest)
+    #         else:
+    #             # the key should be one of the above (since all lines should start with one of these names)
+    #             continue
+    # # print(func_list[1025])
+    # return func_list
+
 
 
 def parse_labels(filename):
@@ -162,36 +214,35 @@ def parse_parameters(filename):
         lines = file.readlines()
     # gets the parameters into blocks 
     # since some parameters might take up more than one line in the output file
-    blocks = group_parameter_blocks(lines)
+    blocks = group_by_blocks(lines)
     
     result_list = []
     # iterate through all the parameter blocks, puts each into a dictionary 
     # and adds it to the result list
     for block in blocks:
         # makes the dictionary for the current parameter
-        result_list.append(parse_parameter_block(block))
+        result_list.append(parse_by_block(block))
     return result_list
 
-# helper function for parse parameters, 
-# puts each parameter into blocks that put any instances of multiple lines into one line
-def group_parameter_blocks(lines):
+def group_by_blocks(lines):
     blocks = []
     current_block = []
-    for line in lines:
-        line = line.rstrip()
-        # if it's the start of a new parameter, add the current block into the rest of the blocks
-        # and set the current block to the new block
-        if line.startswith("PARAMETER"):
+    for l in lines:
+        line = l.strip()
+        # get the first word of the line
+        first_word = line.split(' ')[0]
+        # if the word is all in uppercase, meaning it's a tag like PARAMTER or FUNCTION,
+        if first_word.isupper() and len(first_word) > 1:
             if current_block:
                 blocks.append(" ".join(current_block))
                 current_block = []
             current_block.append(line)
-        # if the line does not start with PARAMETER and a current block exists,
+        # if the line does not start with a tag and a current block exists,
         # then the current line is part of the current block
         elif current_block:
             current_block.append(line)
             
-            # since the last part of a parameter is 'parent=', if the current line contains that,
+            # since the last part of parameter and the first function line is 'parent=', if the current line contains that,
             # then we want to add it and end the current block
             if " parent=" in line:
                 blocks.append(" ".join(current_block))
@@ -204,7 +255,7 @@ def group_parameter_blocks(lines):
 
 # helper method for parse_parameters,
 # takes the blocks made from group_parameter_blocks and parses them and puts it into a dictionary
-def parse_parameter_block(block):
+def parse_by_block(block):
     result = {}
     parts = block.split()
     
@@ -284,7 +335,7 @@ def main():
     print(l1[0], "\n")
     function_file = "ghidra-scripting/function-output.txt"
     l1 = parse_functions(function_file)
-    print(l1[582], "\n")
+    print(l1[839], "\n")
     label_file = "ghidra-scripting/label-output.txt"
     l1 = parse_labels(label_file)
     print(l1[0], "\n")

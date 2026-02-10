@@ -208,11 +208,10 @@ for l in dll_list:
         l_primary_ref = pfs["mkg"][quote(ref)]
         graph.add( (l_instance, hasPrimaryReference, l_primary_ref))
         
-# {'func': 'GetTempFileNameW', 'address': 'EXTERNAL:00000007', 'parent': 'KERNEL32.DLL', 
-# 'returntype': 'typedef UINT uint', 'returnvalue': '[UINT <RETURN>@EAX:4]', 'functions_called': [], 
-# 'references': [{'source': '00422020', 'destination': 'EXTERNAL:00000007', 'operandindex': '0', 'type': 'DATA'}, 
-# {'source': '00401327', 'destination': 'EXTERNAL:00000007', 'operandindex': '-1', 'type': 'COMPUTED_CALL'}], 
-# 'primary_reference': {'source': '00401327', 'destination': 'EXTERNAL:00000007', 'operandindex': '-1', 'type': 'COMPUTED_CALL'}}
+# FUNCTION func=GetTempFileNameW address=EXTERNAL:00000007 returntype=typedef UINT uint returnvalue=[UINT <RETURN>@EAX:4] parent=KERNEL32.DLL
+# REFERENCE source=00422020 destination=EXTERNAL:00000007 operandindex=0 type=DATA
+# REFERENCE source=00401327 destination=EXTERNAL:00000007 operandindex=-1 type=COMPUTED_CALL
+# PRIMARYREFERENCE source=00401327 destination=EXTERNAL:00000007 operandindex=-1 type=COMPUTED_CALL
 # FIXME: fix the data parsing for function, since there is at least one instance of a data type that 
 # takes up multiple lines (maybe fix it the same way you fixed the multi line parameter issue?)
 for f in function_list:
@@ -236,7 +235,6 @@ for f in function_list:
     f_return_type = pfs["mkg"][quote(f['returntype'])]
     graph.add((f_instance, hasReturnType, f_return_type))
     # return value (as a parameter)
-    print(f['func'])
     f_return_value = pfs["mkg"][quote(f['returnvalue'])]
     graph.add((f_instance, returns, f_return_value))
     # if any references exist, add them as triples

@@ -40,7 +40,7 @@ def main():
                         # if current symbol type is a function, print in function file
                         if (s.getSymbolType() == SymbolType.FUNCTION):
                             # TODO: change the formatting of the return parameter if necessary 
-                            func_file.write("FUNCTION func=" + s.getName() + " address=" + str(s.getAddress()) + " parent=" + str(s.getParentNamespace()) + " returntype=" + str(s.getObject().getReturnType()) + " returnvalue=" + str(s.getObject().getReturn()) + "\n")
+                            func_file.write("FUNCTION func=" + s.getName() + " address=" + str(s.getAddress()) + " returntype=" + str(s.getObject().getReturnType()) + " returnvalue=" + str(s.getObject().getReturn()) + " parent=" + str(s.getParentNamespace()) + "\n")
                             func_array = s.getObject().getCalledFunctions(monitor)
                             if func_array:
                                 for func in func_array:
