@@ -25,6 +25,8 @@ pfs = {
 # TODO: make sure the references are stored properly in the triples 
 # TODO: change the local variable relation in the schema, then update the triples for functions to include local variables
     # will have to change data extraction and data parser for this
+# TODO: make sure all the objects used for relations have the "a" relation with something
+    # ex: every instance of address, data type, operand (type), register, etc.
 
 # Initialization shortcut
 def init_kg(prefixes=pfs):
@@ -63,24 +65,24 @@ hasOperandIndex = URIRef("http://www.semanticweb.org/jaspe/ontologies/2026/0/sym
 hasReferenceType = URIRef("http://www.semanticweb.org/jaspe/ontologies/2026/0/symbol-ontology/hasReferenceType")
 
 # Classes
-symbol = URIRef("http://www.semanticweb.org/jaspe/ontologies/2026/0/symbol-ontology/Symbol")
-label = URIRef("http://www.semanticweb.org/jaspe/ontologies/2026/0/symbol-ontology/Label")
-namespace_symbol = URIRef("http://www.semanticweb.org/jaspe/ontologies/2026/0/symbol-ontology/NamespaceSymbol")
-namespace = URIRef("http://www.semanticweb.org/jaspe/ontologies/2026/0/symbol-ontology/Namespace")
-class_ = URIRef("http://www.semanticweb.org/jaspe/ontologies/2026/0/symbol-ontology/Class")
-dll = URIRef("http://www.semanticweb.org/jaspe/ontologies/2026/0/symbol-ontology/DLL")
-function = URIRef("http://www.semanticweb.org/jaspe/ontologies/2026/0/symbol-ontology/Function")
-variable = URIRef("http://www.semanticweb.org/jaspe/ontologies/2026/0/symbol-ontology/Variable")
-local_variable = URIRef("http://www.semanticweb.org/jaspe/ontologies/2026/0/symbol-ontology/LocalVariable")
-parameter = URIRef("http://www.semanticweb.org/jaspe/ontologies/2026/0/symbol-ontology/Parameter")
-data_type = URIRef("http://www.semanticweb.org/jaspe/ontologies/2026/0/symbol-ontology/DataType")
-address = URIRef("http://www.semanticweb.org/jaspe/ontologies/2026/0/symbol-ontology/Address")
+SYMBOL = URIRef("http://www.semanticweb.org/jaspe/ontologies/2026/0/symbol-ontology/Symbol")
+LABEL = URIRef("http://www.semanticweb.org/jaspe/ontologies/2026/0/symbol-ontology/Label")
+NAMESPACE_SYMBOL = URIRef("http://www.semanticweb.org/jaspe/ontologies/2026/0/symbol-ontology/NamespaceSymbol")
+NAMESPACE = URIRef("http://www.semanticweb.org/jaspe/ontologies/2026/0/symbol-ontology/Namespace")
+CLASS_ = URIRef("http://www.semanticweb.org/jaspe/ontologies/2026/0/symbol-ontology/Class")
+DLL = URIRef("http://www.semanticweb.org/jaspe/ontologies/2026/0/symbol-ontology/DLL")
+FUNCTION = URIRef("http://www.semanticweb.org/jaspe/ontologies/2026/0/symbol-ontology/Function")
+VARIABLE = URIRef("http://www.semanticweb.org/jaspe/ontologies/2026/0/symbol-ontology/Variable")
+LOCAL_VARIABLE = URIRef("http://www.semanticweb.org/jaspe/ontologies/2026/0/symbol-ontology/LocalVariable")
+PARAMETER = URIRef("http://www.semanticweb.org/jaspe/ontologies/2026/0/symbol-ontology/Parameter")
+DATA_TYPE = URIRef("http://www.semanticweb.org/jaspe/ontologies/2026/0/symbol-ontology/DataType")
+ADDRESS = URIRef("http://www.semanticweb.org/jaspe/ontologies/2026/0/symbol-ontology/Address")
 REFERENCE = URIRef("http://www.semanticweb.org/jaspe/ontologies/2026/0/symbol-ontology/Reference")
-instruction = URIRef("http://www.semanticweb.org/jaspe/ontologies/2026/0/symbol-ontology/Instruction")
-immediate_operand = URIRef("http://www.semanticweb.org/jaspe/ontologies/2026/0/symbol-ontology/ImmediateOperand")
-register = URIRef("http://www.semanticweb.org/jaspe/ontologies/2026/0/symbol-ontology/Register")
-opcode = URIRef("http://www.semanticweb.org/jaspe/ontologies/2026/0/symbol-ontology/Opcode")
-operand = URIRef("http://www.semanticweb.org/jaspe/ontologies/2026/0/symbol-ontology/Operand")
+INSTRUCTION = URIRef("http://www.semanticweb.org/jaspe/ontologies/2026/0/symbol-ontology/Instruction")
+IMMEDIATE_OPERAND = URIRef("http://www.semanticweb.org/jaspe/ontologies/2026/0/symbol-ontology/ImmediateOperand")
+REGISTER = URIRef("http://www.semanticweb.org/jaspe/ontologies/2026/0/symbol-ontology/Register")
+OPCODE = URIRef("http://www.semanticweb.org/jaspe/ontologies/2026/0/symbol-ontology/Opcode")
+OPERAND = URIRef("http://www.semanticweb.org/jaspe/ontologies/2026/0/symbol-ontology/Operand")
 
 
 # Initialize an empty graph
@@ -148,11 +150,11 @@ def add_reference(object_instance, reference, isPrimary):
 for l in local_var_list:
     # use the urllib.parse.quote() method to make the variable name work with URI syntax
     local_var = pfs["mkg"][quote(l['var'])]
-    data_type = pfs["mkg"][quote(l['datatype'])]
+    DATA_TYPE = pfs["mkg"][quote(l['datatype'])]
     parent_func = pfs["mkg"][quote(l['parent'])]
-    graph.add((local_var, a, local_variable))
+    graph.add((local_var, a, LOCAL_VARIABLE))
     graph.add((local_var, definedIn, parent_func))
-    graph.add((local_var, hasDataType, data_type))
+    graph.add((local_var, hasDataType, DATA_TYPE))
     
     
 # Parameters:
@@ -160,17 +162,18 @@ for l in local_var_list:
 # TODO: fix the parsing in data_parser.py, since at least one parameter take up multiple lines
 for p in parameters_list:
     param = pfs["mkg"][quote(p['var'])]
-    data_type = pfs["mkg"][quote(p['datatype'])]
+    DATA_TYPE = pfs["mkg"][quote(p['datatype'])]
     parent_func = pfs["mkg"][quote(l['parent'])]
-    graph.add((param, a, parameter))
+    graph.add((param, a, PARAMETER))
+    graph.add((parent_func, a, FUNCTION))
     graph.add((param, passesInto, parent_func))
-    graph.add((param, hasDataType, data_type))
+    graph.add((param, hasDataType, DATA_TYPE))
 
 # Namespaces:
 # format: {'namespace': 'switchD_0040f727', 'address': 'NO ADDRESS', 'parent': 'Global', 'references': [], 'primary_reference': None}
 for n in namespace_list:
     n_instance = pfs["mkg"][quote(n['namespace'])]
-    graph.add( (n_instance, a, namespace))
+    graph.add( (n_instance, a, NAMESPACE))
     if n['address'] != "NO ADDRESS":
         n_address = pfs["mkg"][quote(n['address'])]
         graph.add( (n_instance, hasAddress, n_address))
@@ -192,7 +195,7 @@ for n in namespace_list:
 # {'class': 'type_info (GhidraClass)', 'address': 'NO ADDRESS', 'parent': 'Global', 'references': [], 'primary_reference': None} 
 for c in class_list:
     c_instance = pfs["mkg"][quote(c['class'])]
-    graph.add( (c_instance, a, class_))
+    graph.add( (c_instance, a, CLASS_))
     if c['address'] != "NO ADDRESS":
         c_address = pfs["mkg"][quote(c['address'])]
         graph.add( (c_instance, hasAddress, c_address))
@@ -210,7 +213,7 @@ for c in class_list:
 # {'dll': 'KERNEL32.DLL', 'address': 'NO ADDRESS parent:Global', 'references': [], 'primary_reference': None}
 for l in dll_list:
     l_instance = pfs["mkg"][quote(l['dll'])]
-    graph.add( (l_instance, a, dll))
+    graph.add( (l_instance, a, DLL))
     if l['address'] != "NO ADDRESS":
         l_address = pfs["mkg"][quote(l['address'])]
         graph.add( (l_instance, hasAddress, l_address))
@@ -236,7 +239,7 @@ for l in dll_list:
 for f in function_list:
     # print(f["func"])
     f_instance = pfs["mkg"][quote(f['func'])]
-    graph.add( (f_instance, a, function))
+    graph.add( (f_instance, a, FUNCTION))
     if f['address'] != "NO ADDRESS":
         f_address = pfs["mkg"][quote(f['address'])]
         graph.add( (f_instance, hasAddress, f_address))
@@ -280,7 +283,7 @@ for f in function_list:
 
 for l in label_list:
     l_instance = pfs["mkg"][quote(l['label'])]
-    graph.add( (l_instance, a, label))
+    graph.add( (l_instance, a, LABEL))
     if l['address'] != "NO ADDRESS":
         l_address = pfs["mkg"][quote(l['address'])]
         graph.add( (l_instance, hasAddress, l_address))
@@ -302,15 +305,15 @@ for l in label_list:
 # 'destination_operand': {'operand': 'EBP', 'type': 'REGISTER'}}
 for i in instruction_list:
     i_instance = pfs["mkg"]["ins_" + str(i["min_address"])]
-    graph.add((i_instance, a, instruction))
+    graph.add((i_instance, a, INSTRUCTION))
     # opcode
-    opcode = pfs["mkg"][quote(i["opcode"])]
-    graph.add((i_instance, hasOpcode, opcode))
+    OPCODE = pfs["mkg"][quote(i["opcode"])]
+    graph.add((i_instance, hasOpcode, OPCODE))
     if i['source_operands']:
         for s in i['source_operands']:
             # TODO: get the type of operand here and add another relation/triple based on that
-            operand = pfs["mkg"][quote(s['operand'])]
-            graph.add((i_instance, hasSourceOperand, operand))
+            OPERAND = pfs["mkg"][quote(s['operand'])]
+            graph.add((i_instance, hasSourceOperand, OPERAND))
     # print(i['destination_operand'])
     if i['destination_operand']:
         # print(i['destination_operand']["operand"])
