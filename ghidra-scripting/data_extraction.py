@@ -133,37 +133,6 @@ def main():
     #     while instruction is not None:
     #         f.write("Instruction: " + str(instruction) + "\n")
     #         instruction = getInstructionAfter(instruction)
-
-    # # prints all instructions in output.txt
-    # ins_out_path = script_dir / "instruction-output.txt"
-    # with ins_out_path.open("w", encoding="utf-8") as f:
-    #     instruction = getFirstInstruction()
-    #     while instruction is not None:
-    #         f.write("INSTRUCTION opcode=" + str(instruction.getMnemonicString()))
-    #         num_operands = instruction.getNumOperands()
-    #         f.write(" numoperands=" + str(num_operands) + "\n")
-    #         for op_index in range(num_operands):
-    #             # FIXME: change the formatting to similar to the reference stuff so multiple operands can be accounted for
-    #             operand_type = instruction.getOperandType(op_index)
-    #             operand = instruction.getDefaultOperandRepresentation(op_index)
-    #             # f.write(" type=" + get_operand_type_string(operand_type))
-    #             # f.write( "type=" + str(operand_type))
-    #             if (num_operands == 1):
-    #                 # if there is only one operand, then it is considered both the source and destination operand
-    #                 # (for instructions like push and pop)
-    #                 f.write("SOURCEOPERAND operand=" + operand)
-    #                 f.write(" type=" + get_operand_type_string(operand_type) + "\n")
-    #                 f.write("DESTINATIONOPERAND operand=" + operand)
-    #                 f.write(" type=" + get_operand_type_string(operand_type) + "\n")
-    #             else:
-    #                 if (op_index == num_operands - 1):
-    #                     f.write("DESTINATIONOPERAND operand=" + operand)
-    #                     f.write(" type=" + get_operand_type_string(operand_type) + "\n")
-    #                 else:
-    #                     f.write("SOURCEOPERAND operand=" + operand)
-    #                     f.write(" type=" + get_operand_type_string(operand_type) + "\n")
-    #         # f.write("\n")
-    #         instruction = getInstructionAfter(instruction)
     
     # prints all classes in class-output.txt
     # NOTE: all the classes do not have an associated address in the examples I have seen, 

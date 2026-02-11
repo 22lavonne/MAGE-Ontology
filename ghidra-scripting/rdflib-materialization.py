@@ -21,24 +21,8 @@ pfs = {
 "time": TIME
 }
 
-# TODO: change schema and ontology to have hasMinAddress instead of hasAddress
-    # but also check if labels have an address or only a min address
-    # if they have just one address, then labels need to have the relation hasAddress,
-    # while namespace variables need to have the relation hasMinAddress
 
-# TODO: for every instance of a reference, add the following triples:
-    # ref hasSourceAddress *** (address)
-    # ref hasDestinationAddress *** (address)
-    # ref hasReferenceType *** (literal string)
-    # ref operandIndexOf *** (literal int)
-# TODO: Look to see what other relations need to be encoded based on the schema
-    # operand isA *** (address, immediateoperand, etc.)
-    # symbol hasAddress *** (address) DO THIS FOR ALL SYMBOL TYPES, so
-        # label hasAddress *** (address)
-        # class hasAddress *** (address)
-        # dll hasAddress *** (address)
-        # label hasAddress *** (address)
-        # label hasAddress *** (address)
+# TODO: make sure the references are stored properly in the triples 
 # TODO: change the local variable relation in the schema, then update the triples for functions to include local variables
     # will have to change data extraction and data parser for this
 
@@ -75,11 +59,8 @@ hasDestinationOperand = URIRef("http://www.semanticweb.org/jaspe/ontologies/2026
 performsRole = URIRef("http://www.semanticweb.org/jaspe/ontologies/2026/0/symbol-ontology/performsRole")
 
 # Data Properties
-addressOf = URIRef("http://www.semanticweb.org/jaspe/ontologies/2026/0/symbol-ontology/addressOf")
-hasName = URIRef("http://www.semanticweb.org/jaspe/ontologies/2026/0/symbol-ontology/hasName")
 hasOperandIndex = URIRef("http://www.semanticweb.org/jaspe/ontologies/2026/0/symbol-ontology/hasOperandIndex")
 hasReferenceType = URIRef("http://www.semanticweb.org/jaspe/ontologies/2026/0/symbol-ontology/hasReferenceType")
-hasType = URIRef("http://www.semanticweb.org/jaspe/ontologies/2026/0/symbol-ontology/addressOf")
 
 # Classes
 symbol = URIRef("http://www.semanticweb.org/jaspe/ontologies/2026/0/symbol-ontology/Symbol")
@@ -94,7 +75,7 @@ local_variable = URIRef("http://www.semanticweb.org/jaspe/ontologies/2026/0/symb
 parameter = URIRef("http://www.semanticweb.org/jaspe/ontologies/2026/0/symbol-ontology/Parameter")
 data_type = URIRef("http://www.semanticweb.org/jaspe/ontologies/2026/0/symbol-ontology/DataType")
 address = URIRef("http://www.semanticweb.org/jaspe/ontologies/2026/0/symbol-ontology/Address")
-reference = URIRef("http://www.semanticweb.org/jaspe/ontologies/2026/0/symbol-ontology/Reference")
+REFERENCE = URIRef("http://www.semanticweb.org/jaspe/ontologies/2026/0/symbol-ontology/Reference")
 instruction = URIRef("http://www.semanticweb.org/jaspe/ontologies/2026/0/symbol-ontology/Instruction")
 immediate_operand = URIRef("http://www.semanticweb.org/jaspe/ontologies/2026/0/symbol-ontology/ImmediateOperand")
 register = URIRef("http://www.semanticweb.org/jaspe/ontologies/2026/0/symbol-ontology/Register")
@@ -129,6 +110,31 @@ namespace_file = "ghidra-scripting/namespace-output.txt"
 namespace_list = parse_namespaces(namespace_file)
 instruction_file = "ghidra-scripting/instruction-output.txt"
 instruction_list = parse_instructions(instruction_file)
+
+def add_reference(object_instance, reference, isPrimary):
+    # add hasReference triple
+    ref = pfs["mkg"]["ref_" + quote(str(reference['source']))]
+    graph.add((ref, a, REFERENCE))
+    if isPrimary:
+        graph.add((object_instance, hasPrimaryReference, ref))
+    else:
+        graph.add((object_instance, hasReference, ref))
+    
+    # add other information about reference
+    src_add = pfs["mkg"][quote(str(reference['source']))]
+    dest_add = pfs["mkg"][quote(str(reference['destination']))]
+    op_index = Literal(reference['operandindex'])
+    ref_type = Literal(reference['type'])
+    
+    graph.add((ref, hasSourceAddress, src_add))
+    graph.add((ref, hasDestinationAddress, dest_add))
+    graph.add((ref, hasOperandIndex, op_index))
+    graph.add((ref, hasReferenceType, ref_type))
+# ref hasSourceAddress *** (address)
+# ref hasDestinationAddress *** (address)
+# ref hasReferenceType *** (literal string)
+# ref operandIndexOf *** (literal int)
+        
 
 # this seems to work to get all the local variables into the triples
 # TODO: make sure the output for this is actually correct, although idk how to even check that
@@ -174,12 +180,14 @@ for n in namespace_list:
     graph.add((n_instance, definedIn, n_parent))
     if n['references']:
         for r in n['references']:
-           ref = pfs["mkg"]["ref_" + str(r['source'])]
-           graph.add( (n_instance, hasReference, ref))
+            add_reference(n_instance, r, False)
+            # ref = pfs["mkg"]["ref_" + str(r['source'])]
+            # graph.add( (n_instance, hasReference, ref))
     if n['primary_reference']:
-        ref = pfs["mkg"]["ref_" + str(n['primary_reference']['source'])]
-        n_primary_ref = pfs["mkg"][quote(ref)]
-        graph.add( (n_instance, hasPrimaryReference, n_primary_ref))
+            add_reference(n_instance, n['primary_reference'], True)
+        # ref = pfs["mkg"]["ref_" + str(n['primary_reference']['source'])]
+        # n_primary_ref = pfs["mkg"][quote(ref)]
+        # graph.add( (n_instance, hasPrimaryReference, n_primary_ref))
    
 # {'class': 'type_info (GhidraClass)', 'address': 'NO ADDRESS', 'parent': 'Global', 'references': [], 'primary_reference': None} 
 for c in class_list:
@@ -210,12 +218,14 @@ for l in dll_list:
     graph.add((l_instance, definedIn, l_parent))    
     if l['references']:
         for r in l['references']:
-           ref = pfs["mkg"]["ref_" + str(r['source'])]
-           graph.add( (l_instance, hasReference, ref))
+        #    ref = pfs["mkg"]["ref_" + str(r['source'])]
+        #    graph.add( (l_instance, hasReference, ref))
+            add_reference(l_instance, r, False)
     if l['primary_reference']:
-        ref = pfs["mkg"]["ref_" + str(l['primary_reference']['source'])]
-        l_primary_ref = pfs["mkg"][quote(ref)]
-        graph.add( (l_instance, hasPrimaryReference, l_primary_ref))
+        # ref = pfs["mkg"]["ref_" + str(l['primary_reference']['source'])]
+        # l_primary_ref = pfs["mkg"][quote(ref)]
+        # graph.add( (l_instance, hasPrimaryReference, l_primary_ref))
+        add_reference(l_instance, l['primary_reference'], True)
 
 # FUNCTION func=GetTempFileNameW address=EXTERNAL:00000007 returntype=typedef UINT uint returnvalue=[UINT <RETURN>@EAX:4] parent=KERNEL32.DLL
 # REFERENCE source=00422020 destination=EXTERNAL:00000007 operandindex=0 type=DATA
@@ -251,24 +261,26 @@ for f in function_list:
         for r in f['references']:
             # if the reference is an entry point, then hard code it to be Entry_Point
             # since having a space in a URI is not valid
-            if r['source'] == "Entry Point":
-                ref = pfs["mkg"]["ref_Entry_Point"]
-            else:
-                ref = pfs["mkg"]["ref_" + str(r['source'])]
-        #    ref = "ref_" + str(r['source'])
-            graph.add( (f_instance, hasReference, ref))
+        #     if r['source'] == "Entry Point":
+        #         ref = pfs["mkg"]["ref_Entry_Point"]
+        #     else:
+        #         ref = pfs["mkg"]["ref_" + str(r['source'])]
+        # #    ref = "ref_" + str(r['source'])
+        #     graph.add( (f_instance, hasReference, ref))
+            add_reference(f_instance, r, False)
     # then add the primary reference (should run if there are also references)
     if f['primary_reference']:
-        if r['source'] == "Entry Point":
-            ref = pfs["mkg"]["ref_Entry_Point"]
-        else:
-            ref = pfs["mkg"]["ref_" + str(f['primary_reference']['source'])]
-        f_primary_ref = pfs["mkg"][quote(ref)]
-        graph.add( (f_instance, hasPrimaryReference, f_primary_ref))
+        # if r['source'] == "Entry Point":
+        #     ref = pfs["mkg"]["ref_Entry_Point"]
+        # else:
+        #     ref = pfs["mkg"]["ref_" + str(f['primary_reference']['source'])]
+        # f_primary_ref = pfs["mkg"][quote(ref)]
+        # graph.add( (f_instance, hasPrimaryReference, f_primary_ref))
+        add_reference(f_instance, f['primary_reference'], True)
 
 for l in label_list:
     l_instance = pfs["mkg"][quote(l['label'])]
-    graph.add( (l_instance, a, dll))
+    graph.add( (l_instance, a, label))
     if l['address'] != "NO ADDRESS":
         l_address = pfs["mkg"][quote(l['address'])]
         graph.add( (l_instance, hasAddress, l_address))
@@ -276,12 +288,14 @@ for l in label_list:
     graph.add((l_instance, definedIn, l_parent))    
     if l['references']:
         for r in l['references']:
-           ref = pfs["mkg"]["ref_" + str(r['source'])]
-           graph.add( (l_instance, hasReference, ref))
+        #    ref = pfs["mkg"]["ref_" + str(r['source'])]
+        #    graph.add( (l_instance, hasReference, ref))
+            add_reference(l_instance, r, False)
     if l['primary_reference']:
-        ref = pfs["mkg"]["ref_" + str(l['primary_reference']['source'])]
-        l_primary_ref = pfs["mkg"][quote(ref)]
-        graph.add( (l_instance, hasPrimaryReference, l_primary_ref))
+        # ref = pfs["mkg"]["ref_" + str(l['primary_reference']['source'])]
+        # l_primary_ref = pfs["mkg"][quote(ref)]
+        # graph.add( (l_instance, hasPrimaryReference, l_primary_ref))
+            add_reference(l_instance, l["primary_reference"], True)
         
 # {'min_address': '00401090', 'opcode': 'PUSH', 'in_function': 'FUN_00401090', 'numoperands': '1', 
 # 'source_operands': [{'operand': 'EBP', 'type': 'REGISTER'}], 
