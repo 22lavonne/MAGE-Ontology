@@ -21,12 +21,6 @@ pfs = {
 "time": TIME
 }
 
-
-# Current TODO: 
-# change instances of isA back to performsRole
-# change the local variable relation in the schema, then update the triples for functions to include local variables
-    # will have to change data extraction and data parser for this
-
 # Future TODO:
 # get the exact type of symbol the parent is for each instance of this line
     # n_parent = pfs["mkg"][quote(n['parent'])]
@@ -40,6 +34,7 @@ pfs = {
     # could be a simple method that loops through and checks for stuff like ADDRESS, REGISTER, DYNAMIC, etc
     # and if there is a type that does not fit as one of the objects in my schema,
     # just do what I am currently doing and don't add an object for it
+# organize files so they have consistent formatting
 
 # Initialization shortcut
 def init_kg(prefixes=pfs):
@@ -72,7 +67,7 @@ hasOpcode = URIRef("http://www.semanticweb.org/jaspe/ontologies/2026/0/symbol-on
 hasSourceOperand = URIRef("http://www.semanticweb.org/jaspe/ontologies/2026/0/symbol-ontology/hasSourceOperand")
 hasDestinationOperand = URIRef("http://www.semanticweb.org/jaspe/ontologies/2026/0/symbol-ontology/hasDestinationOperand")
 performsRole = URIRef("http://www.semanticweb.org/jaspe/ontologies/2026/0/symbol-ontology/performsRole")
-# isA = URIRef("http://www.semanticweb.org/jaspe/ontologies/2026/0/symbol-ontology/isA")
+defines = URIRef("http://www.semanticweb.org/jaspe/ontologies/2026/0/symbol-ontology/defines")
 
 # Data Properties
 hasOperandIndex = URIRef("http://www.semanticweb.org/jaspe/ontologies/2026/0/symbol-ontology/hasOperandIndex")
@@ -105,9 +100,6 @@ graph = init_kg()
 ontology = "ontology/symbol-ontology.ttl"
 with open(ontology, "r") as f:
     graph.parse(f)
-
-# for individual_class in set(graph.subjects(RDF.type, RDFS.Class)) | set(graph.subjects(RDF.type, OWL.Class)):
-#     print(individual_class)
 
 # Data files, and lists of dictionaries containing the data
 parameter_file = "ghidra-scripting/parameter-output.txt"
@@ -150,15 +142,17 @@ def add_reference(object_instance, reference, isPrimary):
 
 # Adding Local Variabels to KG
 # local variable format: {'var': 'local_8', 'datatype': 'undefined4', 'parent': 'FUN_00401090'}
-# TODO: change how this works because it says the same named object is defined in multiple functions
-# might have to change the schema to have function defines local variable in this case?
 for l in local_var_list:
     # use the urllib.parse.quote() method to make the variable name work with URI syntax
     local_var = pfs["mkg"][quote(l['var'])]
-    DATA_TYPE = pfs["mkg"][quote(l['datatype'])]
-    parent_func = pfs["mkg"][quote(l['parent'])]
+    data_type = pfs["mkg"][quote(l['datatype'])]
+    parent_func = pfs["mkg"][quote(l['parent'])
+                             ]
     graph.add((local_var, a, LOCAL_VARIABLE))
-    graph.add((local_var, definedIn, parent_func))
+    graph.add((data_type, a, DATA_TYPE))
+    graph.add((parent_func, a, FUNCTION))
+    
+    graph.add((parent_func, defines, local_var))
     graph.add((local_var, hasDataType, DATA_TYPE))
     
     
