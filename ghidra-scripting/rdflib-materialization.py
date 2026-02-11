@@ -23,6 +23,7 @@ pfs = {
 
 
 # Current TODO: 
+# change instances of isA back to performsRole
 # change the local variable relation in the schema, then update the triples for functions to include local variables
     # will have to change data extraction and data parser for this
 
@@ -71,7 +72,7 @@ hasOpcode = URIRef("http://www.semanticweb.org/jaspe/ontologies/2026/0/symbol-on
 hasSourceOperand = URIRef("http://www.semanticweb.org/jaspe/ontologies/2026/0/symbol-ontology/hasSourceOperand")
 hasDestinationOperand = URIRef("http://www.semanticweb.org/jaspe/ontologies/2026/0/symbol-ontology/hasDestinationOperand")
 performsRole = URIRef("http://www.semanticweb.org/jaspe/ontologies/2026/0/symbol-ontology/performsRole")
-isA = URIRef("http://www.semanticweb.org/jaspe/ontologies/2026/0/symbol-ontology/isA")
+# isA = URIRef("http://www.semanticweb.org/jaspe/ontologies/2026/0/symbol-ontology/isA")
 
 # Data Properties
 hasOperandIndex = URIRef("http://www.semanticweb.org/jaspe/ontologies/2026/0/symbol-ontology/hasOperandIndex")
@@ -333,9 +334,10 @@ for i in instruction_list:
             graph.add((operand, a, OPERAND))
             
             operand_type = pfs["mkg"][quote(s["type"])]
-            # TODO: see if you can figure out what type of object the operan_type should be, and then add that as another triple
+            # TODO: see if you can figure out what type of object the operand_type should be, and then add that as another triple
             # might have to rework schema to make the isA relation work
-            graph.add((operand, isA, operand_type))
+            # graph.add((operand, isA, operand_type))
+            graph.add((operand_type, performsRole, operand))
 
             graph.add((i_instance, hasSourceOperand, operand))
             
@@ -345,7 +347,8 @@ for i in instruction_list:
         
         operand_type = pfs["mkg"][quote(s["type"])]
         # TODO: change this like above
-        graph.add((operand, isA, operand_type))
+        # graph.add((operand, isA, operand_type))
+        graph.add((operand_type, performsRole, operand))
         
         graph.add((i_instance, hasDestinationOperand, operand))
         
