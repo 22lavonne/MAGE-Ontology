@@ -22,11 +22,23 @@ pfs = {
 }
 
 
-# TODO: make sure the references are stored properly in the triples 
-# TODO: change the local variable relation in the schema, then update the triples for functions to include local variables
+# Current TODO: 
+# change the local variable relation in the schema, then update the triples for functions to include local variables
     # will have to change data extraction and data parser for this
-# TODO: make sure all the objects used for relations have the "a" relation with something
-    # ex: every instance of address, data type, operand (type), register, etc.
+
+# Future TODO:
+# get the exact type of symbol the parent is for each instance of this line
+    # n_parent = pfs["mkg"][quote(n['parent'])]
+    # graph.add((n_instance, definedIn, n_parent))
+    # right now I'm just going to say it's of type namespace symbol, but this should be changed to be more specific later
+# find a way to figure out what object type each operand should be 
+    # like for something like this,
+        # operand_type = pfs["mkg"][quote(s["type"])]
+        # graph.add((operand, isA, operand_type))
+    # figure out what kind of object the operand type should be, and add a triple based on that
+    # could be a simple method that loops through and checks for stuff like ADDRESS, REGISTER, DYNAMIC, etc
+    # and if there is a type that does not fit as one of the objects in my schema,
+    # just do what I am currently doing and don't add an object for it
 
 # Initialization shortcut
 def init_kg(prefixes=pfs):
@@ -59,6 +71,7 @@ hasOpcode = URIRef("http://www.semanticweb.org/jaspe/ontologies/2026/0/symbol-on
 hasSourceOperand = URIRef("http://www.semanticweb.org/jaspe/ontologies/2026/0/symbol-ontology/hasSourceOperand")
 hasDestinationOperand = URIRef("http://www.semanticweb.org/jaspe/ontologies/2026/0/symbol-ontology/hasDestinationOperand")
 performsRole = URIRef("http://www.semanticweb.org/jaspe/ontologies/2026/0/symbol-ontology/performsRole")
+isA = URIRef("http://www.semanticweb.org/jaspe/ontologies/2026/0/symbol-ontology/isA")
 
 # Data Properties
 hasOperandIndex = URIRef("http://www.semanticweb.org/jaspe/ontologies/2026/0/symbol-ontology/hasOperandIndex")
@@ -132,16 +145,7 @@ def add_reference(object_instance, reference, isPrimary):
     graph.add((ref, hasDestinationAddress, dest_add))
     graph.add((ref, hasOperandIndex, op_index))
     graph.add((ref, hasReferenceType, ref_type))
-# ref hasSourceAddress *** (address)
-# ref hasDestinationAddress *** (address)
-# ref hasReferenceType *** (literal string)
-# ref operandIndexOf *** (literal int)
         
-
-# this seems to work to get all the local variables into the triples
-# TODO: make sure the output for this is actually correct, although idk how to even check that
-# Is it supposed to be a subclass relation thing? I currently have the relations defined above in this file and that's probably incorrect
-# check if this correctly makes local variables a subclass of variable
 
 # Adding Local Variabels to KG
 # local variable format: {'var': 'local_8', 'datatype': 'undefined4', 'parent': 'FUN_00401090'}
@@ -159,11 +163,11 @@ for l in local_var_list:
     
 # Parameters:
 # param format: {'var': 'hModule', 'datatype': 'typedef HMODULE HINSTANCE', 'parent': 'GetProcAddress'}
-# TODO: fix the parsing in data_parser.py, since at least one parameter take up multiple lines
 for p in parameters_list:
     param = pfs["mkg"][quote(p['var'])]
     DATA_TYPE = pfs["mkg"][quote(p['datatype'])]
     parent_func = pfs["mkg"][quote(l['parent'])]
+    
     graph.add((param, a, PARAMETER))
     graph.add((parent_func, a, FUNCTION))
     graph.add((param, passesInto, parent_func))
@@ -174,37 +178,48 @@ for p in parameters_list:
 for n in namespace_list:
     n_instance = pfs["mkg"][quote(n['namespace'])]
     graph.add( (n_instance, a, NAMESPACE))
+    
     if n['address'] != "NO ADDRESS":
         n_address = pfs["mkg"][quote(n['address'])]
+        graph.add((n_address, a, ADDRESS))
         graph.add( (n_instance, hasAddress, n_address))
-    # in the KG, naming the references based on the source address
-    # TODO: getting this error: Object Global must be an rdflib term
+        
+    # FIXME: get the exact type of symbol the parent is for each instance of this line
     n_parent = pfs["mkg"][quote(n['parent'])]
+    graph.add((n_parent, a, NAMESPACE_SYMBOL))
     graph.add((n_instance, definedIn, n_parent))
+    
     if n['references']:
         for r in n['references']:
+            # method that will add a reference to the given object instance
+            # false indicates that it's not a primary reference
             add_reference(n_instance, r, False)
-            # ref = pfs["mkg"]["ref_" + str(r['source'])]
-            # graph.add( (n_instance, hasReference, ref))
+
     if n['primary_reference']:
+            # same as previous, except now it's a parimary reference so the third value is True
             add_reference(n_instance, n['primary_reference'], True)
-        # ref = pfs["mkg"]["ref_" + str(n['primary_reference']['source'])]
-        # n_primary_ref = pfs["mkg"][quote(ref)]
-        # graph.add( (n_instance, hasPrimaryReference, n_primary_ref))
+
    
 # {'class': 'type_info (GhidraClass)', 'address': 'NO ADDRESS', 'parent': 'Global', 'references': [], 'primary_reference': None} 
 for c in class_list:
     c_instance = pfs["mkg"][quote(c['class'])]
     graph.add( (c_instance, a, CLASS_))
+    
     if c['address'] != "NO ADDRESS":
         c_address = pfs["mkg"][quote(c['address'])]
+        graph.add((c_address, a, ADDRESS))
         graph.add( (c_instance, hasAddress, c_address))
+        
     c_parent = pfs["mkg"][quote(c['parent'])]
-    graph.add((c_instance, definedIn, c_parent))    
+    # FIXME: change from namespace symbol to more specific
+    graph.add((c_parent, a, NAMESPACE_SYMBOL))
+    graph.add((c_instance, definedIn, c_parent)) 
+       
     if c['references']:
         for r in c['references']:
            ref = pfs["mkg"]["ref_" + str(r['source'])]
            graph.add( (c_instance, hasReference, ref))
+           
     if c['primary_reference']:
         ref = pfs["mkg"]["ref_" + str(c['primary_reference']['source'])]
         c_primary_ref = pfs["mkg"][quote(ref)]
@@ -214,90 +229,89 @@ for c in class_list:
 for l in dll_list:
     l_instance = pfs["mkg"][quote(l['dll'])]
     graph.add( (l_instance, a, DLL))
+    
     if l['address'] != "NO ADDRESS":
         l_address = pfs["mkg"][quote(l['address'])]
+        graph.add((l_address, a, ADDRESS))
         graph.add( (l_instance, hasAddress, l_address))
+        
     l_parent = pfs["mkg"][quote(l['parent'])]
+    # FIXME: make more specific than namespace symbol
+    graph.add((l_parent, a, NAMESPACE_SYMBOL))
     graph.add((l_instance, definedIn, l_parent))    
+    
     if l['references']:
         for r in l['references']:
-        #    ref = pfs["mkg"]["ref_" + str(r['source'])]
-        #    graph.add( (l_instance, hasReference, ref))
             add_reference(l_instance, r, False)
     if l['primary_reference']:
-        # ref = pfs["mkg"]["ref_" + str(l['primary_reference']['source'])]
-        # l_primary_ref = pfs["mkg"][quote(ref)]
-        # graph.add( (l_instance, hasPrimaryReference, l_primary_ref))
         add_reference(l_instance, l['primary_reference'], True)
 
-# FUNCTION func=GetTempFileNameW address=EXTERNAL:00000007 returntype=typedef UINT uint returnvalue=[UINT <RETURN>@EAX:4] parent=KERNEL32.DLL
-# REFERENCE source=00422020 destination=EXTERNAL:00000007 operandindex=0 type=DATA
-# REFERENCE source=00401327 destination=EXTERNAL:00000007 operandindex=-1 type=COMPUTED_CALL
-# PRIMARYREFERENCE source=00401327 destination=EXTERNAL:00000007 operandindex=-1 type=COMPUTED_CALL
+# {'func': 'GetTempPathW', 'address': 'EXTERNAL:00000005', 'returntype': 'typedef DWORD ulong', 'returnvalue': '[DWORD <RETURN>@EAX:4]', 
+# 'parent': 'KERNEL32.DLL', 'functions_called': [], 
+# 'references': [{'source': '00422018', 'destination': 'EXTERNAL:00000005', 'operandindex': '0', 'type': 'DATA'}, 
+# {'source': '004012f0', 'destination': 'EXTERNAL:00000005', 'operandindex': '-1', 'type': 'COMPUTED_CALL'}], 
+# 'primary_reference': {'source': '004012f0', 'destination': 'EXTERNAL:00000005', 'operandindex': '-1', 'type': 'COMPUTED_CALL'}} 
 # TODO: if possible, get all instructions present in each function
 # would have to modify both data extraction and data parser
 for f in function_list:
-    # print(f["func"])
     f_instance = pfs["mkg"][quote(f['func'])]
     graph.add( (f_instance, a, FUNCTION))
+    
     if f['address'] != "NO ADDRESS":
         f_address = pfs["mkg"][quote(f['address'])]
+        graph.add((f_address, a, ADDRESS))
         graph.add( (f_instance, hasAddress, f_address))
+        
     f_parent = pfs["mkg"][quote(f['parent'])]
-    graph.add((f_instance, definedIn, f_parent)) 
-    # Add all the functions called as triples (if any called functions exist)
+    # FIXME: make more specific
+    graph.add((f_parent, a, NAMESPACE_SYMBOL))
+    graph.add((f_instance, definedIn, f_parent))
+     
+    # get all the functions called from this function
     if f['functions_called']:
-        # print(f["func"], "has functions ")
         for fc in f['functions_called']:
-            # print(quote(fc["func"]))
             # make the URI of the function since it is seen elsewhere
             func_called = pfs["mkg"][quote(fc['func'])]
+            graph.add((func_called, a, FUNCTION))
             graph.add((f_instance, calls, func_called))
+            
     # return type
     f_return_type = pfs["mkg"][quote(f['returntype'])]
+    graph.add((f_return_type, a, DATA_TYPE))
     graph.add((f_instance, hasReturnType, f_return_type))
+    
     # return value (as a parameter)
     f_return_value = pfs["mkg"][quote(f['returnvalue'])]
+    graph.add((f_return_type, a, PARAMETER))
     graph.add((f_instance, returns, f_return_value))
+    
+    
     # if any references exist, add them as triples
     if f['references']:
         for r in f['references']:
-            # if the reference is an entry point, then hard code it to be Entry_Point
-            # since having a space in a URI is not valid
-        #     if r['source'] == "Entry Point":
-        #         ref = pfs["mkg"]["ref_Entry_Point"]
-        #     else:
-        #         ref = pfs["mkg"]["ref_" + str(r['source'])]
-        # #    ref = "ref_" + str(r['source'])
-        #     graph.add( (f_instance, hasReference, ref))
             add_reference(f_instance, r, False)
-    # then add the primary reference (should run if there are also references)
+            
     if f['primary_reference']:
-        # if r['source'] == "Entry Point":
-        #     ref = pfs["mkg"]["ref_Entry_Point"]
-        # else:
-        #     ref = pfs["mkg"]["ref_" + str(f['primary_reference']['source'])]
-        # f_primary_ref = pfs["mkg"][quote(ref)]
-        # graph.add( (f_instance, hasPrimaryReference, f_primary_ref))
         add_reference(f_instance, f['primary_reference'], True)
+
 
 for l in label_list:
     l_instance = pfs["mkg"][quote(l['label'])]
     graph.add( (l_instance, a, LABEL))
+    
     if l['address'] != "NO ADDRESS":
         l_address = pfs["mkg"][quote(l['address'])]
+        graph.add((l_address, a, ADDRESS))
         graph.add( (l_instance, hasAddress, l_address))
+        
     l_parent = pfs["mkg"][quote(l['parent'])]
-    graph.add((l_instance, definedIn, l_parent))    
+    graph.add((l_parent, a, NAMESPACE_SYMBOL))
+    graph.add((l_instance, definedIn, l_parent)) 
+       
     if l['references']:
         for r in l['references']:
-        #    ref = pfs["mkg"]["ref_" + str(r['source'])]
-        #    graph.add( (l_instance, hasReference, ref))
             add_reference(l_instance, r, False)
     if l['primary_reference']:
-        # ref = pfs["mkg"]["ref_" + str(l['primary_reference']['source'])]
-        # l_primary_ref = pfs["mkg"][quote(ref)]
-        # graph.add( (l_instance, hasPrimaryReference, l_primary_ref))
             add_reference(l_instance, l["primary_reference"], True)
         
 # {'min_address': '00401090', 'opcode': 'PUSH', 'in_function': 'FUN_00401090', 'numoperands': '1', 
@@ -306,26 +320,41 @@ for l in label_list:
 for i in instruction_list:
     i_instance = pfs["mkg"]["ins_" + str(i["min_address"])]
     graph.add((i_instance, a, INSTRUCTION))
+    
     # opcode
-    OPCODE = pfs["mkg"][quote(i["opcode"])]
+    opcode = pfs["mkg"][quote(i["opcode"])]
+    graph.add((opcode, a, OPCODE))
     graph.add((i_instance, hasOpcode, OPCODE))
+    
     if i['source_operands']:
         for s in i['source_operands']:
             # TODO: get the type of operand here and add another relation/triple based on that
-            OPERAND = pfs["mkg"][quote(s['operand'])]
-            graph.add((i_instance, hasSourceOperand, OPERAND))
-    # print(i['destination_operand'])
+            operand = pfs["mkg"][quote(s['operand'])]
+            graph.add((operand, a, OPERAND))
+            
+            operand_type = pfs["mkg"][quote(s["type"])]
+            # TODO: see if you can figure out what type of object the operan_type should be, and then add that as another triple
+            # might have to rework schema to make the isA relation work
+            graph.add((operand, isA, operand_type))
+
+            graph.add((i_instance, hasSourceOperand, operand))
+            
     if i['destination_operand']:
-        # print(i['destination_operand']["operand"])
-        dest_operand = i['destination_operand']
-        operand_instance = pfs["mkg"][quote(dest_operand['operand'])]
-        graph.add((i_instance, hasDestinationOperand, operand_instance))
+        operand = pfs["mkg"][quote(i['destination_operand']['operand'])]
+        graph.add((operand, a, OPERAND))
+        
+        operand_type = pfs["mkg"][quote(s["type"])]
+        # TODO: change this like above
+        graph.add((operand, isA, operand_type))
+        
+        graph.add((i_instance, hasDestinationOperand, operand))
+        
     # get whatever function has this instruction
     func = pfs["mkg"][quote(i['in_function'])]
     # then add the function contains instruction relation with the current instruction
-    graph.add((func, containsInstruction, i_instance))
-    # num += 1
-    
+    graph.add((func, a, FUNCTION))
+    graph.add((func, containsInstruction, i_instance))    
 
+# then serialize the graph
 output_file = "ghidra-scripting/output.ttl"
 temp = graph.serialize(format="turtle", encoding="utf-8", destination=output_file)
