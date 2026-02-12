@@ -21,6 +21,10 @@ pfs = {
 "time": TIME
 }
 
+# Current TODO:
+# maybe don't make address a type of object and instead a literal
+# see if there are other objects that don't necessarily need to be objects and can be literals instead
+
 # Future TODO:
 # get the exact type of symbol the parent is for each instance of this line
     # n_parent = pfs["mkg"][quote(n['parent'])]
@@ -121,7 +125,7 @@ instruction_list = parse_instructions(instruction_file)
 
 def add_reference(object_instance, reference, isPrimary):
     # add hasReference triple
-    ref = pfs["mkg"]["ref_" + quote(str(reference['source']))]
+    ref = pfs["mkg"]["ref_" + quote(str(reference['source'])) + "_to_" + quote(str(reference['destination']))]
     graph.add((ref, a, REFERENCE))
     if isPrimary:
         graph.add((object_instance, hasPrimaryReference, ref))
@@ -161,7 +165,7 @@ for l in local_var_list:
 for p in parameters_list:
     param = pfs["mkg"][quote(p['var'])]
     DATA_TYPE = pfs["mkg"][quote(p['datatype'])]
-    parent_func = pfs["mkg"][quote(l['parent'])]
+    parent_func = pfs["mkg"][quote(p['parent'])]
     
     graph.add((param, a, PARAMETER))
     graph.add((parent_func, a, FUNCTION))

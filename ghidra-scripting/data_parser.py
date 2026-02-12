@@ -303,7 +303,7 @@ def parse_instructions(filename):
 def main():
     parameter_file = "ghidra-scripting/parameter-output.txt"
     l1 = parse_parameters(parameter_file)
-    print(l1[633], "\n")
+    print(l1[0], "\n")
     local_file = "ghidra-scripting/local-variable-output.txt"
     l1 = parse_local(local_file)
     print(l1[0], "\n")
@@ -316,7 +316,8 @@ def main():
     print(l1[0], "\n")
     class_file = "ghidra-scripting/class-output.txt"
     l1 = parse_classes(class_file)
-    print(l1[0], "\n")
+    if l1: 
+        print(l1[0], "\n")
     dll_file = "ghidra-scripting/dll-output.txt"
     l1 = parse_dlls(dll_file)
     print(l1[0], "\n")
