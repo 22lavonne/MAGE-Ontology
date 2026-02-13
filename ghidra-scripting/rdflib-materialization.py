@@ -22,8 +22,7 @@ pfs = {
 }
 
 # Current TODO:
-# maybe don't make address a type of object and instead a literal
-# see if there are other objects that don't necessarily need to be objects and can be literals instead
+# break down KGs to have triples in multiple ttl files so they can be added to a triple store without worrying about 
 
 # Future TODO:
 # get the exact type of symbol the parent is for each instance of this line
@@ -39,6 +38,7 @@ pfs = {
     # and if there is a type that does not fit as one of the objects in my schema,
     # just do what I am currently doing and don't add an object for it
 # organize files so they have consistent formatting
+# update all the documentation on github repo
 
 # Initialization shortcut
 def init_kg(prefixes=pfs):
@@ -150,8 +150,7 @@ for l in local_var_list:
     # use the urllib.parse.quote() method to make the variable name work with URI syntax
     local_var = pfs["mkg"][quote(l['var'])]
     data_type = pfs["mkg"][quote(l['datatype'])]
-    parent_func = pfs["mkg"][quote(l['parent'])
-                             ]
+    parent_func = pfs["mkg"][quote(l['parent'])]
     graph.add((local_var, a, LOCAL_VARIABLE))
     graph.add((data_type, a, DATA_TYPE))
     graph.add((parent_func, a, FUNCTION))
