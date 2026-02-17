@@ -12,6 +12,8 @@ from ghidra.program.model.lang import OperandType
 # NOTE: the decompilation is in C, meaning there are not classes in the traditional sense, 
 # so functions are only defined in DLLs or Namespaces
 
+# TODO: some functions seem to not have a primary reference in the output file, so fix that
+
 # update key notions and axiomization with new schema
 # if undefined does not work for a data type, change it to something that can work 
     # (functions can return both void and undefined)
@@ -66,70 +68,72 @@ def main():
     local_var_out_path = script_dir / "local-variable-output.txt"
     param_out_path = script_dir / "parameter-output.txt"
     ins_out_path = script_dir / "instruction-output.txt"
-    # open label file
-    with label_out_path.open("w", encoding="utf-8") as label_file:
-        # open function file
-        with func_out_path.open("w", encoding="utf-8") as func_file:
-            # TODO: remove local variable output file
-            with local_var_out_path.open("w", encoding="utf-8") as local_file:
-                # open parameter file
-                with param_out_path.open("w", encoding="utf-8") as param_file:
-                    # open instruction file
-                    with ins_out_path.open("w", encoding="utf-8") as ins_file:
-                        symbol_iterator = currentProgram.getSymbolTable().getSymbolIterator()
-                        for s in symbol_iterator:
-                            file_to_write = label_file
-                            # if current symbol type is a function, print in function file
-                            if (s.getSymbolType() == SymbolType.FUNCTION):
-                                # get all the instructions contained in this function and put them into the instruction output file
-                                get_instructions_from_function(s, ins_file)
-                                # TODO: change the formatting of the return parameter if necessary 
-                                func_file.write("FUNCTION func=" + s.getName() + " address=" + str(s.getAddress()) + 
-                                                " returntype=" + str(s.getObject().getReturnType()) + 
-                                                " returnvalue=" + str(s.getObject().getReturn()) + 
-                                                " parent=" + str(s.getParentNamespace()) + 
-                                                " parenttype=" + str(get_symbol_type_string(s.getParentNamespace().getSymbol())) + "\n")
-                                func_array = s.getObject().getCalledFunctions(monitor)
-                                if func_array:
-                                    for func in func_array:
-                                        func_file.write("FUNCTIONCALLED func=" + func.getName() + "\n")                        
-                                # then print the corresponding variables from that function
-                                # both the local variables and the parameters
-                                # NOTE: all local variables have the undefined data type
-                                local_array = s.getObject().getLocalVariables()
-                                if local_array:
-                                    for local in local_array:
-                                        local_file.write("LOCALVARIABLE var=" + local.getName() + " datatype=" + str(local.getDataType()) + 
-                                                         " parent=" + str(s) + 
-                                                         " parenttype=FUNCTION\n") # parent type will always be function
-                                param_array = s.getObject().getParameters()
-                                if param_array:
-                                    for param in param_array:
-                                        param_file.write("PARAMETER var=" + param.getName() + " datatype=" + str(param.getDataType()) + 
-                                                         " parent=" + str(s) + 
-                                                         " parenttype=FUNCTION\n") # parent type will always be function
-                                
-                                file_to_write = func_file
-                            # if it's not a function, then it's a label
-                            else:
-                                label_file.write("LABEL label=" + s.getName() + " address=" + str(s.getAddress()) + 
-                                                 " parent=" + str(s.getParentNamespace()) +
-                                                 " parenttype=" + str(get_symbol_type_string(s.getParentNamespace().getSymbol())) + "\n")
-                                file_to_write = label_file
-                            # then, no matter if it was a function or label, print its references
-                            ref_array = s.getReferences()
-                            # if there is at least one reference, then print the references.
-                            # if there is not, then no references will be printed.
-                            print_references(ref_array, file_to_write)
-
-    # test code that just prints all the instructions normally without any formatting
-    # ins_out_path = script_dir / "instruction-test-output.txt"
-    # with ins_out_path.open("w", encoding="utf-8") as f:
-    #     instruction = getFirstInstruction()
-    #     while instruction is not None:
-    #         f.write("Instruction: " + str(instruction) + "\n")
-    #         instruction = getInstructionAfter(instruction)
     
+    # open multiple files here since we will be iterating through all the label and function symbols,
+    # and need to get any local variables, parameters, and instructions associated with those (specifically for functions)
+    label_file = label_out_path.open("w", encoding="utf-8")
+    func_file = func_out_path.open("w", encoding="utf-8")
+    local_file = local_var_out_path.open("w", encoding="utf-8")
+    param_file = param_out_path.open("w", encoding="utf-8")
+    ins_file = ins_out_path.open("w", encoding="utf-8")
+    
+    try:
+        symbol_iterator = currentProgram.getSymbolTable().getSymbolIterator()
+        for s in symbol_iterator:
+            file_to_write = label_file
+            # if current symbol type is a function, print in function file
+            if (s.getSymbolType() == SymbolType.FUNCTION):
+                # get all the instructions contained in this function and put them into the instruction output file
+                get_instructions_from_function(s, ins_file)
+                # TODO: change the formatting of the return parameter if necessary 
+                func_file.write("FUNCTION func=" + s.getName() + " address=" + str(s.getAddress()) + 
+                                " returntype=" + str(s.getObject().getReturnType()) + 
+                                " returnvalue=" + str(s.getObject().getReturn()) + 
+                                " parent=" + str(s.getParentNamespace()) + 
+                                " parenttype=" + str(get_symbol_type_string(s.getParentNamespace().getSymbol())) + "\n")
+                func_array = s.getObject().getCalledFunctions(monitor)
+                if func_array:
+                    for func in func_array:
+                        func_file.write("FUNCTIONCALLED func=" + func.getName() + "\n")                        
+                # then print the corresponding variables from that function
+                # both the local variables and the parameters
+                # NOTE: all local variables have the undefined data type
+                local_array = s.getObject().getLocalVariables()
+                if local_array:
+                    for local in local_array:
+                        local_file.write("LOCALVARIABLE var=" + local.getName() + " datatype=" + str(local.getDataType()) + 
+                                            " parent=" + str(s) + 
+                                            " parenttype=FUNCTION\n") # parent type will always be function
+                param_array = s.getObject().getParameters()
+                if param_array:
+                    for param in param_array:
+                        param_file.write("PARAMETER var=" + param.getName() + " datatype=" + str(param.getDataType()) + 
+                                            " parent=" + str(s) + 
+                                            " parenttype=FUNCTION\n") # parent type will always be function
+                
+                file_to_write = func_file
+            # if it's not a function, then it's a label
+            else:
+                label_file.write("LABEL label=" + s.getName() + " address=" + str(s.getAddress()) + 
+                                    " parent=" + str(s.getParentNamespace()) +
+                                    " parenttype=" + str(get_symbol_type_string(s.getParentNamespace().getSymbol())) + "\n")
+                file_to_write = label_file
+            # then, no matter if it was a function or label, print its references
+            ref_array = s.getReferences()
+            # if there is at least one reference, then print the references.
+            # if there is not, then no references will be printed.
+            print_references(ref_array, file_to_write)
+    
+    except Exception as e:
+        print("Error occurred while writing to files")
+    
+    finally:
+        label_file.close()
+        func_file.close()
+        local_file.close()
+        param_file.close()
+        ins_file.close()
+        
     # prints all classes in class-output.txt
     # NOTE: all the classes do not have an associated address in the examples I have seen, 
     # which is the case for class and namespace definitions

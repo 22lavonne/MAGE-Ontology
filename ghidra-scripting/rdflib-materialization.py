@@ -25,10 +25,6 @@ pfs = {
 # break down KGs to have triples in multiple ttl files so they can be added to a triple store without worrying about 
 
 # Future TODO:
-# get the exact type of symbol the parent is for each instance of this line
-    # n_parent = pfs["mkg"][quote(n['parent'])]
-    # graph.add((n_instance, definedIn, n_parent))
-    # right now I'm just going to say it's of type namespace symbol, but this should be changed to be more specific later
 # find a way to figure out what object type each operand should be 
     # like for something like this,
         # operand_type = pfs["mkg"][quote(s["type"])]
