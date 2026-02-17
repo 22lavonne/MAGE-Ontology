@@ -119,6 +119,22 @@
 #    Classes
 #################################################################
 
+###  http://www.semanticweb.org/jaspe/ontologies/2026/0/symbol-ontology#Dynamic
+:Dynamic rdf:type owl:Class ;
+         rdfs:subClassOf [ rdf:type owl:Restriction ;
+                           owl:onProperty :performsRole ;
+                           owl:someValuesFrom :Operand
+                         ] .
+
+
+###  http://www.semanticweb.org/jaspe/ontologies/2026/0/symbol-ontology#Scalar
+:Scalar rdf:type owl:Class ;
+        rdfs:subClassOf [ rdf:type owl:Restriction ;
+                          owl:onProperty :performsRole ;
+                          owl:someValuesFrom :Operand
+                        ] .
+
+
 ###  http://www.semanticweb.org/jaspe/ontologies/2026/0/symbol-ontology/Address
 :Address rdf:type owl:Class ;
          rdfs:subClassOf [ rdf:type owl:Restriction ;

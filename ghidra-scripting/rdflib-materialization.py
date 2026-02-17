@@ -92,6 +92,8 @@ IMMEDIATE_OPERAND = URIRef("http://www.semanticweb.org/jaspe/ontologies/2026/0/s
 REGISTER = URIRef("http://www.semanticweb.org/jaspe/ontologies/2026/0/symbol-ontology/Register")
 OPCODE = URIRef("http://www.semanticweb.org/jaspe/ontologies/2026/0/symbol-ontology/Opcode")
 OPERAND = URIRef("http://www.semanticweb.org/jaspe/ontologies/2026/0/symbol-ontology/Operand")
+DYNAMIC = URIRef("http://www.semanticweb.org/jaspe/ontologies/2026/0/symbol-ontology/Dynamic")
+SCALAR = URIRef("http://www.semanticweb.org/jaspe/ontologies/2026/0/symbol-ontology/Scalar")
 
 # used to map the string version of a symbol name to the URIRef variable for that object
 class_dict = {
@@ -112,7 +114,9 @@ class_dict = {
     "IMMEDIATE_OPERAND": IMMEDIATE_OPERAND,
     "REGISTER": REGISTER,
     "OPCODE": OPCODE,
-    "OPERAND": OPERAND
+    "OPERAND": OPERAND,
+    "DYNAMIC": DYNAMIC,
+    "SCALAR": SCALAR
 }
 
 # Initialize an empty graph
@@ -365,26 +369,30 @@ for i in instruction_list:
     
     if i['source_operands']:
         for s in i['source_operands']:
-            # TODO: get the type of operand here and add another relation/triple based on that
             operand = pfs["mkg"][quote(s['operand'])]
             graph.add((operand, a, OPERAND))
             
-            operand_type = pfs["mkg"][quote(s["type"])]
-            # TODO: see if you can figure out what type of object the operand_type should be, and then add that as another triple
-            # might have to rework schema to make the isA relation work
-            # graph.add((operand, isA, operand_type))
-            graph.add((operand_type, performsRole, operand))
-
+            op_type = s["type"]
+            operand_type_instance = pfs["mkg"][quote(op_type)]
+            # if the type of operand object is in the class list, then add that triple
+            # if the operand type is in the class dictionary, then add that as a triple
+            if (op_type in class_dict):
+                graph.add((operand_type_instance, a, class_dict[op_type]))
+            # then say that that instance performs the role of the current operand
+            graph.add((operand_type_instance, performsRole, operand))
+            # then give the instrution instance a source operand of this operand
             graph.add((i_instance, hasSourceOperand, operand))
             
     if i['destination_operand']:
         operand = pfs["mkg"][quote(i['destination_operand']['operand'])]
         graph.add((operand, a, OPERAND))
         
-        operand_type = pfs["mkg"][quote(s["type"])]
-        # TODO: change this like above
-        # graph.add((operand, isA, operand_type))
-        graph.add((operand_type, performsRole, operand))
+        op_type = s["type"]
+        operand_type_instance = pfs["mkg"][quote(op_type)]
+
+        if (op_type in class_dict):
+            graph.add((operand_type_instance, a, class_dict[op_type]))
+        graph.add((operand_type_instance, performsRole, operand))
         
         graph.add((i_instance, hasDestinationOperand, operand))
         
