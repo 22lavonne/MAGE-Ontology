@@ -1,8 +1,5 @@
 import re
 
-# TODO:
-# make the file opening code more readable (instead of super indented)
-
 def key_value_parser(line):
     # split when we get the first instance of an = for a key
     # (prevents an = sign in a value from splitting again)

@@ -6,7 +6,6 @@ from data_parser import *
 from urllib.parse import quote
 
 ##### Graph stuff
-import rdflib
 from rdflib import URIRef, Graph, Namespace, Literal
 from rdflib import OWL, RDF, RDFS, XSD, TIME
 # Prefixes
@@ -25,15 +24,7 @@ pfs = {
 # break down KGs to have triples in multiple ttl files so they can be added to a triple store without worrying about 
 
 # Future TODO:
-# find a way to figure out what object type each operand should be 
-    # like for something like this,
-        # operand_type = pfs["mkg"][quote(s["type"])]
-        # graph.add((operand, isA, operand_type))
-    # figure out what kind of object the operand type should be, and add a triple based on that
-    # could be a simple method that loops through and checks for stuff like ADDRESS, REGISTER, DYNAMIC, etc
-    # and if there is a type that does not fit as one of the objects in my schema,
-    # just do what I am currently doing and don't add an object for it
-# organize files so they have consistent formatting
+# maybe change the name of DLL to library since it's called library in the ghidra api
 # update all the documentation on github repo
 
 # Initialization shortcut
@@ -44,10 +35,6 @@ def init_kg(prefixes=pfs):
     return kg
 # rdf:type shortcut
 a = pfs["rdf"]["type"]
-# definedIn = pfs["ont"]["definedIn"]
-# hasDataType = pfs["ont"]["hasDataType"]
-ONT = Namespace("http://www.semanticweb.org/jaspe/ontologies/2026/0/symbol-ontology/")
-# print(ONT.symbol)
 
 # Object Properties
 definedIn = URIRef("http://www.semanticweb.org/jaspe/ontologies/2026/0/symbol-ontology/definedIn")
@@ -122,6 +109,7 @@ class_dict = {
 # Initialize an empty graph
 graph = init_kg()
 
+# parse the ontology file
 ontology = "ontology/symbol-ontology.ttl"
 with open(ontology, "r") as f:
     graph.parse(f)
@@ -142,17 +130,17 @@ dll_list = parse_dlls(dll_file)
 namespace_file = "ghidra-scripting/namespace-output.txt"
 namespace_list = parse_namespaces(namespace_file)
 instruction_file = "ghidra-scripting/instruction-output.txt"
-instruction_list = parse_instructions(instruction_file)
+instruction_list = parse_instructions(instruction_file)    
 
-def get_object_type(object_name):
-    if (object_name == "NAMESPACE"):
-        return NAMESPACE
-    
-
+# method to add references triples for multiple kinds of objects
+# takes in the object instance URI, the reference object,
+# and a boolean for if the current reference is considered primary
 def add_reference(object_instance, reference, isPrimary):
-    # add hasReference triple
+    # name the reference based on both the source and destination addresses
     ref = pfs["mkg"]["ref_" + quote(str(reference['source'])) + "_to_" + quote(str(reference['destination']))]
     graph.add((ref, a, REFERENCE))
+    
+    # make a slightly different triple based on if the current reference is primary
     if isPrimary:
         graph.add((object_instance, hasPrimaryReference, ref))
     else:
@@ -169,11 +157,11 @@ def add_reference(object_instance, reference, isPrimary):
     graph.add((ref, hasOperandIndex, op_index))
     graph.add((ref, hasReferenceType, ref_type))
         
-    
-# Adding Local Variabels to KG
-# local variable format: {'var': 'local_8', 'datatype': 'undefined4', 'parent': 'FUN_00401090'}
+
+# Local variable format example: 
+# {'var': 'local_8', 'datatype': 'undefined4', 'parent': 'FUN_00401090'}
 for l in local_var_list:
-    # use the urllib.parse.quote() method to make the variable name work with URI syntax
+    
     local_var = pfs["mkg"][quote(l['var'])]
     data_type = pfs["mkg"][quote(l['datatype'])]
     parent_func = pfs["mkg"][quote(l['parent'])]
@@ -183,10 +171,11 @@ for l in local_var_list:
     graph.add((parent_func, a, FUNCTION))
     
     graph.add((parent_func, defines, local_var))
-    graph.add((local_var, hasDataType, DATA_TYPE))
+    graph.add((local_var, hasDataType, data_type))
     
-# Parameters:
-# param format: {'var': 'hModule', 'datatype': 'typedef HMODULE HINSTANCE', 'parent': 'GetProcAddress'}
+    
+# Parameter format example:
+# {'var': 'hModule', 'datatype': 'typedef HMODULE HINSTANCE', 'parent': 'GetProcAddress'}
 for p in parameters_list:
     param = pfs["mkg"][quote(p['var'])]
     DATA_TYPE = pfs["mkg"][quote(p['datatype'])]
@@ -196,16 +185,16 @@ for p in parameters_list:
     graph.add((parent_func, a, FUNCTION))
     
     graph.add((param, passesInto, parent_func))
-    graph.add((param, hasDataType, DATA_TYPE))
+    graph.add((param, hasDataType, data_type))
 
-# Namespaces:
-# format: {'namespace': 'switchD_0040f727', 'address': 'NO ADDRESS', 'parent': 'Global', 'references': [], 'primary_reference': None}
+
+# Namespace format example:
+# {'namespace': 'switchD_0040f727', 'address': 'NO ADDRESS', 'parent': 'Global', 'references': [], 'primary_reference': None}
 for n in namespace_list:
-    # make a URI for namespace and add it to KG
     n_instance = pfs["mkg"][quote(n['namespace'])]
     graph.add( (n_instance, a, NAMESPACE))
     
-    # add the address of namespace KG (both the address as ADDRESS object and the hasAddress relation)
+    # add the address of namespace KG (both the address as an ADDRESS object, and the hasAddress relation)
     if n['address'] != "NO ADDRESS":
         n_address = pfs["mkg"][quote(n['address'])]
         graph.add((n_address, a, ADDRESS))
@@ -213,7 +202,7 @@ for n in namespace_list:
         
     # get the parent namespace of the current object
     n_parent = pfs["mkg"][quote(n['parent'])]
-    # get the namespace type
+    # get the parent namespace type
     parent_type = n['parenttype']
     # if the given parent type is a type of symbol defined in the symbol class dictionary
     if(parent_type in class_dict):
@@ -235,6 +224,7 @@ for n in namespace_list:
             add_reference(n_instance, n['primary_reference'], True)
 
    
+# Class format example:
 # {'class': 'type_info (GhidraClass)', 'address': 'NO ADDRESS', 'parent': 'Global', 'references': [], 'primary_reference': None} 
 for c in class_list:
     c_instance = pfs["mkg"][quote(c['class'])]
@@ -245,9 +235,7 @@ for c in class_list:
         graph.add((c_address, a, ADDRESS))
         graph.add( (c_instance, hasAddress, c_address))
         
-    c_parent = pfs["mkg"][quote(c['parent'])]
-    # FIXME: change from namespace symbol to more specific
-    
+    c_parent = pfs["mkg"][quote(c['parent'])]    
     parent_type = c['parenttype']
     if(parent_type in class_dict):
         graph.add((n_parent, a, class_dict[parent_type]))
@@ -263,6 +251,7 @@ for c in class_list:
         c_primary_ref = pfs["mkg"][quote(ref)]
         graph.add( (c_instance, hasPrimaryReference, c_primary_ref))         
 
+# DLL format example:
 # {'dll': 'KERNEL32.DLL', 'address': 'NO ADDRESS parent:Global', 'references': [], 'primary_reference': None}
 for l in dll_list:
     l_instance = pfs["mkg"][quote(l['dll'])]
@@ -276,8 +265,7 @@ for l in dll_list:
     l_parent = pfs["mkg"][quote(l['parent'])]
     parent_type = l['parenttype']
     if(parent_type in class_dict):
-        graph.add((l_parent, a, class_dict[parent_type]))
-        
+        graph.add((l_parent, a, class_dict[parent_type])) 
     graph.add((l_instance, definedIn, l_parent))    
     
     if l['references']:
@@ -286,6 +274,7 @@ for l in dll_list:
     if l['primary_reference']:
         add_reference(l_instance, l['primary_reference'], True)
 
+# Function format example:
 # {'func': 'GetTempPathW', 'address': 'EXTERNAL:00000005', 'returntype': 'typedef DWORD ulong', 'returnvalue': '[DWORD <RETURN>@EAX:4]', 
 # 'parent': 'KERNEL32.DLL', 'functions_called': [], 
 # 'references': [{'source': '00422018', 'destination': 'EXTERNAL:00000005', 'operandindex': '0', 'type': 'DATA'}, 
@@ -333,6 +322,7 @@ for f in function_list:
     if f['primary_reference']:
         add_reference(f_instance, f['primary_reference'], True)
 
+# Label format example:
 # {'label': 'shift', 'address': '00000000', 'parent': 'Global', 'parenttype': 'NAMESPACE', 'references': [], 'primary_reference': None}
 for l in label_list:
     l_instance = pfs["mkg"][quote(l['label'])]
@@ -355,6 +345,7 @@ for l in label_list:
     if l['primary_reference']:
             add_reference(l_instance, l["primary_reference"], True)
         
+# Instruction format example:
 # {'min_address': '00401090', 'opcode': 'PUSH', 'in_function': 'FUN_00401090', 'numoperands': '1', 
 # 'source_operands': [{'operand': 'EBP', 'type': 'REGISTER'}], 
 # 'destination_operand': {'operand': 'EBP', 'type': 'REGISTER'}}
@@ -365,7 +356,7 @@ for i in instruction_list:
     # opcode
     opcode = pfs["mkg"][quote(i["opcode"])]
     graph.add((opcode, a, OPCODE))
-    graph.add((i_instance, hasOpcode, OPCODE))
+    graph.add((i_instance, hasOpcode, opcode))
     
     if i['source_operands']:
         for s in i['source_operands']:
