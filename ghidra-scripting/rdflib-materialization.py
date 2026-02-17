@@ -97,6 +97,27 @@ REGISTER = URIRef("http://www.semanticweb.org/jaspe/ontologies/2026/0/symbol-ont
 OPCODE = URIRef("http://www.semanticweb.org/jaspe/ontologies/2026/0/symbol-ontology/Opcode")
 OPERAND = URIRef("http://www.semanticweb.org/jaspe/ontologies/2026/0/symbol-ontology/Operand")
 
+# used to map the string version of a symbol name to the URIRef variable for that object
+class_dict = {
+    "SYMBOL": SYMBOL,
+    "LABEL": LABEL,
+    "NAMESPACE_SYMBOL": NAMESPACE_SYMBOL,
+    "NAMESPACE": NAMESPACE,
+    "CLASS_": CLASS_,
+    "DLL": DLL,
+    "FUNCTION": FUNCTION,
+    "VARIABLE": VARIABLE,
+    "LOCAL_VARIABLE": LOCAL_VARIABLE,
+    "PARAMETER": PARAMETER,
+    "DATA_TYPE": DATA_TYPE,
+    "ADDRESS": ADDRESS,
+    "REFERENCE": REFERENCE,
+    "INSTRUCTION": INSTRUCTION,
+    "IMMEDIATE_OPERAND": IMMEDIATE_OPERAND,
+    "REGISTER": REGISTER,
+    "OPCODE": OPCODE,
+    "OPERAND": OPERAND
+}
 
 # Initialize an empty graph
 graph = init_kg()
@@ -123,6 +144,11 @@ namespace_list = parse_namespaces(namespace_file)
 instruction_file = "ghidra-scripting/instruction-output.txt"
 instruction_list = parse_instructions(instruction_file)
 
+def get_object_type(object_name):
+    if (object_name == "NAMESPACE"):
+        return NAMESPACE
+    
+
 def add_reference(object_instance, reference, isPrimary):
     # add hasReference triple
     ref = pfs["mkg"]["ref_" + quote(str(reference['source'])) + "_to_" + quote(str(reference['destination']))]
@@ -143,7 +169,7 @@ def add_reference(object_instance, reference, isPrimary):
     graph.add((ref, hasOperandIndex, op_index))
     graph.add((ref, hasReferenceType, ref_type))
         
-
+    
 # Adding Local Variabels to KG
 # local variable format: {'var': 'local_8', 'datatype': 'undefined4', 'parent': 'FUN_00401090'}
 for l in local_var_list:
@@ -151,13 +177,13 @@ for l in local_var_list:
     local_var = pfs["mkg"][quote(l['var'])]
     data_type = pfs["mkg"][quote(l['datatype'])]
     parent_func = pfs["mkg"][quote(l['parent'])]
+    
     graph.add((local_var, a, LOCAL_VARIABLE))
     graph.add((data_type, a, DATA_TYPE))
     graph.add((parent_func, a, FUNCTION))
     
     graph.add((parent_func, defines, local_var))
     graph.add((local_var, hasDataType, DATA_TYPE))
-    
     
 # Parameters:
 # param format: {'var': 'hModule', 'datatype': 'typedef HMODULE HINSTANCE', 'parent': 'GetProcAddress'}
@@ -168,31 +194,42 @@ for p in parameters_list:
     
     graph.add((param, a, PARAMETER))
     graph.add((parent_func, a, FUNCTION))
+    
     graph.add((param, passesInto, parent_func))
     graph.add((param, hasDataType, DATA_TYPE))
 
 # Namespaces:
 # format: {'namespace': 'switchD_0040f727', 'address': 'NO ADDRESS', 'parent': 'Global', 'references': [], 'primary_reference': None}
 for n in namespace_list:
+    # make a URI for namespace and add it to KG
     n_instance = pfs["mkg"][quote(n['namespace'])]
     graph.add( (n_instance, a, NAMESPACE))
     
+    # add the address of namespace KG (both the address as ADDRESS object and the hasAddress relation)
     if n['address'] != "NO ADDRESS":
         n_address = pfs["mkg"][quote(n['address'])]
         graph.add((n_address, a, ADDRESS))
         graph.add( (n_instance, hasAddress, n_address))
         
-    # FIXME: get the exact type of symbol the parent is for each instance of this line
+    # get the parent namespace of the current object
     n_parent = pfs["mkg"][quote(n['parent'])]
-    graph.add((n_parent, a, NAMESPACE_SYMBOL))
+    # get the namespace type
+    parent_type = n['parenttype']
+    # if the given parent type is a type of symbol defined in the symbol class dictionary
+    if(parent_type in class_dict):
+        # then get the URIRef for that type of class and make the triple defining the parent as that type of class.
+        graph.add((n_parent, a, class_dict[parent_type]))
+    # then add the definedIn relation for the current namespace and its parent namespace
     graph.add((n_instance, definedIn, n_parent))
     
+    # if the namespace has any references, add them
     if n['references']:
         for r in n['references']:
             # method that will add a reference to the given object instance
             # false indicates that it's not a primary reference
             add_reference(n_instance, r, False)
 
+    # add primary reference if it exists
     if n['primary_reference']:
             # same as previous, except now it's a parimary reference so the third value is True
             add_reference(n_instance, n['primary_reference'], True)
@@ -210,7 +247,10 @@ for c in class_list:
         
     c_parent = pfs["mkg"][quote(c['parent'])]
     # FIXME: change from namespace symbol to more specific
-    graph.add((c_parent, a, NAMESPACE_SYMBOL))
+    
+    parent_type = c['parenttype']
+    if(parent_type in class_dict):
+        graph.add((n_parent, a, class_dict[parent_type]))
     graph.add((c_instance, definedIn, c_parent)) 
        
     if c['references']:
@@ -234,8 +274,10 @@ for l in dll_list:
         graph.add( (l_instance, hasAddress, l_address))
         
     l_parent = pfs["mkg"][quote(l['parent'])]
-    # FIXME: make more specific than namespace symbol
-    graph.add((l_parent, a, NAMESPACE_SYMBOL))
+    parent_type = l['parenttype']
+    if(parent_type in class_dict):
+        graph.add((l_parent, a, class_dict[parent_type]))
+        
     graph.add((l_instance, definedIn, l_parent))    
     
     if l['references']:
@@ -249,8 +291,6 @@ for l in dll_list:
 # 'references': [{'source': '00422018', 'destination': 'EXTERNAL:00000005', 'operandindex': '0', 'type': 'DATA'}, 
 # {'source': '004012f0', 'destination': 'EXTERNAL:00000005', 'operandindex': '-1', 'type': 'COMPUTED_CALL'}], 
 # 'primary_reference': {'source': '004012f0', 'destination': 'EXTERNAL:00000005', 'operandindex': '-1', 'type': 'COMPUTED_CALL'}} 
-# TODO: if possible, get all instructions present in each function
-# would have to modify both data extraction and data parser
 for f in function_list:
     f_instance = pfs["mkg"][quote(f['func'])]
     graph.add( (f_instance, a, FUNCTION))
@@ -260,9 +300,10 @@ for f in function_list:
         graph.add((f_address, a, ADDRESS))
         graph.add( (f_instance, hasAddress, f_address))
         
-    f_parent = pfs["mkg"][quote(f['parent'])]
-    # FIXME: make more specific
-    graph.add((f_parent, a, NAMESPACE_SYMBOL))
+    f_parent = pfs["mkg"][quote(f['parent'])]    
+    parent_type = f['parenttype']
+    if(parent_type in class_dict):
+        graph.add((f_parent, a, class_dict[parent_type]))
     graph.add((f_instance, definedIn, f_parent))
      
     # get all the functions called from this function
@@ -292,7 +333,7 @@ for f in function_list:
     if f['primary_reference']:
         add_reference(f_instance, f['primary_reference'], True)
 
-
+# {'label': 'shift', 'address': '00000000', 'parent': 'Global', 'parenttype': 'NAMESPACE', 'references': [], 'primary_reference': None}
 for l in label_list:
     l_instance = pfs["mkg"][quote(l['label'])]
     graph.add( (l_instance, a, LABEL))
@@ -303,7 +344,9 @@ for l in label_list:
         graph.add( (l_instance, hasAddress, l_address))
         
     l_parent = pfs["mkg"][quote(l['parent'])]
-    graph.add((l_parent, a, NAMESPACE_SYMBOL))
+    parent_type = l['parenttype']
+    if(parent_type in class_dict):
+        graph.add((l_parent, a, class_dict[parent_type]))
     graph.add((l_instance, definedIn, l_parent)) 
        
     if l['references']:

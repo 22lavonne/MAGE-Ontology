@@ -9,10 +9,8 @@ from pathlib import Path
 from ghidra.program.model.symbol import SymbolType
 from ghidra.program.model.lang import OperandType
 
-# TODO:
-# change the isA relation from opcode back if necessary
-# add stuff to opcode in schema if necessary
-# see what else you need to include for all symbols based on schema and ontology and add them in too (once you start string parsing)
+# NOTE: the decompilation is in C, meaning there are not classes in the traditional sense, 
+# so functions are only defined in DLLs or Namespaces
 
 # update key notions and axiomization with new schema
 # if undefined does not work for a data type, change it to something that can work 
@@ -56,17 +54,6 @@ def get_instructions_from_function(func, file):
                 else:
                     file.write("SOURCEOPERAND operand=" + operand)
                     file.write(" type=" + get_operand_type_string(operand_type) + "\n")
-        
-    # count = 0
-    # for instruction in instructionIterator:
-    #     if monitor.isCancelled():
-    #         break
-    #     # TODO: make the dictionary of the instruction here
-    #     # use min address to name the instruction
-    #     print(f"  {instruction.getMinAddress()}: {instruction.toString()}")
-    #     count += 1
-        
-    # print(f"Total instructions: {count}")
     
 
 def main():
@@ -76,7 +63,6 @@ def main():
     # prints all label symbols in label-output.txt
     label_out_path = script_dir / "label-output.txt"
     func_out_path = script_dir / "function-output.txt"
-    # TODO: maybe get rid of local variables and parameters from output.txt and just have them with functions
     local_var_out_path = script_dir / "local-variable-output.txt"
     param_out_path = script_dir / "parameter-output.txt"
     ins_out_path = script_dir / "instruction-output.txt"
@@ -98,7 +84,11 @@ def main():
                                 # get all the instructions contained in this function and put them into the instruction output file
                                 get_instructions_from_function(s, ins_file)
                                 # TODO: change the formatting of the return parameter if necessary 
-                                func_file.write("FUNCTION func=" + s.getName() + " address=" + str(s.getAddress()) + " returntype=" + str(s.getObject().getReturnType()) + " returnvalue=" + str(s.getObject().getReturn()) + " parent=" + str(s.getParentNamespace()) + "\n")
+                                func_file.write("FUNCTION func=" + s.getName() + " address=" + str(s.getAddress()) + 
+                                                " returntype=" + str(s.getObject().getReturnType()) + 
+                                                " returnvalue=" + str(s.getObject().getReturn()) + 
+                                                " parent=" + str(s.getParentNamespace()) + 
+                                                " parenttype=" + str(get_symbol_type_string(s.getParentNamespace().getSymbol())) + "\n")
                                 func_array = s.getObject().getCalledFunctions(monitor)
                                 if func_array:
                                     for func in func_array:
@@ -109,16 +99,22 @@ def main():
                                 local_array = s.getObject().getLocalVariables()
                                 if local_array:
                                     for local in local_array:
-                                        local_file.write("LOCALVARIABLE var=" + local.getName() + " datatype=" + str(local.getDataType()) + " parent=" + str(s) + "\n")
+                                        local_file.write("LOCALVARIABLE var=" + local.getName() + " datatype=" + str(local.getDataType()) + 
+                                                         " parent=" + str(s) + 
+                                                         " parenttype=FUNCTION\n") # parent type will always be function
                                 param_array = s.getObject().getParameters()
                                 if param_array:
                                     for param in param_array:
-                                        param_file.write("PARAMETER var=" + param.getName() + " datatype=" + str(param.getDataType()) + " parent=" + str(s) + "\n")
+                                        param_file.write("PARAMETER var=" + param.getName() + " datatype=" + str(param.getDataType()) + 
+                                                         " parent=" + str(s) + 
+                                                         " parenttype=FUNCTION\n") # parent type will always be function
                                 
                                 file_to_write = func_file
                             # if it's not a function, then it's a label
                             else:
-                                label_file.write("LABEL label=" + s.getName() + " address=" + str(s.getAddress()) + " parent=" + str(s.getParentNamespace()) + "\n")
+                                label_file.write("LABEL label=" + s.getName() + " address=" + str(s.getAddress()) + 
+                                                 " parent=" + str(s.getParentNamespace()) +
+                                                 " parenttype=" + str(get_symbol_type_string(s.getParentNamespace().getSymbol())) + "\n")
                                 file_to_write = label_file
                             # then, no matter if it was a function or label, print its references
                             ref_array = s.getReferences()
@@ -144,7 +140,9 @@ def main():
             # NOTE: classes do not have any references when trying to access them through the ghidra api
             # this is because references to classes are often indirect
             # so if I want classes to be able to have references, I might have to do more digging to find them
-            f.write("CLASS class=" + str(c) + " address=" + str(c.getSymbol().getAddress()) + " parent=" + str(c.getSymbol().getParentNamespace())  + "\n")
+            f.write("CLASS class=" + str(c) + " address=" + str(c.getSymbol().getAddress()) + 
+                    " parent=" + str(c.getSymbol().getParentNamespace())  + 
+                    " parenttype=" + str(get_symbol_type_string(c.getParentNamespace().getSymbol())) + "\n")
             ref_array = c.getSymbol().getReferences()
             print_references(ref_array, f)
             
@@ -160,8 +158,9 @@ def main():
             dll_symbol = ext_manager.getExternalLibrary(dll_str).getSymbol()
             # NOTE: all external libraries (which are dlls) will have the parent namespace of global
             # dlls also have no direct references
-            # f.write("DLL: " + dll_str + " Address: " + str(dll_symbol.getAddress()) + " Parent Namespace: " + str(dll_symbol.getParentNamespace()) + " References: ")
-            f.write("DLL dll=" + dll_str + " address=" + str(dll_symbol.getAddress()) + " parent=" + str(dll_symbol.getParentNamespace()) + "\n")
+            f.write("DLL dll=" + dll_str + " address=" + str(dll_symbol.getAddress()) + 
+                    " parent=" + str(dll_symbol.getParentNamespace()) + 
+                    " parenttype=" + str(get_symbol_type_string(dll_symbol.getParentNamespace().getSymbol())) + "\n")
             ref_array = dll_symbol.getReferences()
             print_references(ref_array, f)
 
@@ -171,7 +170,9 @@ def main():
         namespace_iterator = get_all_namespaces(currentProgram, monitor)
         for namespace in namespace_iterator:
             # f.write("Namespace: " + str(namespace) + " Address: " + str(namespace.getSymbol().getAddress()) + " Parent Namespace: " + str(namespace.getSymbol().getParentNamespace()) + "\n")
-            f.write("NAMESPACE namespace=" + str(namespace) + " address=" + str(namespace.getSymbol().getAddress()) + " parent=" + str(namespace.getSymbol().getParentNamespace()) + "\n")
+            f.write("NAMESPACE namespace=" + str(namespace) + " address=" + str(namespace.getSymbol().getAddress()) + 
+                    " parent=" + str(namespace.getSymbol().getParentNamespace()) + 
+                    " parenttype=" + str(get_symbol_type_string(namespace.getParentNamespace().getSymbol())) +"\n")
             # NOTE: namespaces also do not have direct references
             ref_array = namespace.getSymbol().getReferences()
             print_references(ref_array, f)
@@ -235,6 +236,24 @@ def get_operand_type_string(op_type):
     else:
         op_type_str = "UNKNOWN"
     return op_type_str
+
+def get_symbol_type_string(symbol):
+    if (symbol.getSymbolType() == SymbolType.FUNCTION):
+        return "FUNCTION"
+    # TODO: change this if you want global to be its own symbol
+    elif (symbol.getSymbolType() == SymbolType.NAMESPACE or symbol.getSymbolType() == SymbolType.GLOBAL):
+        return "NAMESPACE"
+    elif (symbol.getSymbolType() == SymbolType.CLASS):
+        return "CLASS"
+    elif (symbol.getSymbolType() == SymbolType.LIBRARY):
+        return "DLL"
+    elif (symbol.getSymbolType() == SymbolType.PARAMETER):
+        return "PARAMETER"
+    elif (symbol.getSymbolType() == SymbolType.LABEL):
+        return "LABEL"
+    else:
+        return ""
+
 
 if __name__ == "__main__":
     main()

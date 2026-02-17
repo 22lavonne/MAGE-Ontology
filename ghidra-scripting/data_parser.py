@@ -1,5 +1,8 @@
 import re
 
+# TODO:
+# make the file opening code more readable (instead of super indented)
+
 def key_value_parser(line):
     # split when we get the first instance of an = for a key
     # (prevents an = sign in a value from splitting again)
@@ -28,7 +31,7 @@ def group_by_blocks(lines):
             
             # since the last part of parameter and the first function line is 'parent=', if the current line contains that,
             # then we want to add it and end the current block
-            if " parent=" in line:
+            if " parenttype=" in line:
                 blocks.append(" ".join(current_block))
                 current_block = []
     # then if there is still something in current block at the end of the loop,
