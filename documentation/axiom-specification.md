@@ -1,40 +1,34 @@
 ## List of Axioms
 
-| #     | Subject       | Relationship          | Object        |
-| ----- | ------------- | -----------------     | -----------   |
-|   1   |Symbol         |hasReference           |Reference      |
-|   2   |Symbol         |hasPrimaryReference    |Reference      |
-|   3   |Symbol         |hasAddress             |Address        |
-|   4   |Data Symbol    |definedIn              |Lexical Scope Symbol|
-|   5   |Lexical Scope Symbol|hasLabel          |Label          |
-|   6   |Reference      |hasSourceAddress       |Address        |
-|   7   |Reference      |hasDestinationAddress  |Address        |
-|   8   |Reference      |hasType                |xsd:string     |
-|   9   |Reference      |hasOperandIndex        |xsd:integer    |
-|  10   |Address        |addressAsString        |xsd:string     |
-|  11   |DLL            |definedIn              |Import         |
-|  12   |DLL            |definedIn              |Export         |
-|  13   |Function       |hasReturnType          |Data Type      |
-|  14   |Function       |hasParameter           |Variable       |
-|  15   |Function       |returns                |Variable       |
-|  16   |Function       |calls                  |Function       |
-|  17   |Function       |definedIn              |Lexical Scope Symbol |
-|  18   |Function       |containsInstruction    |Instruction    |
-|  19   |Variable       |hasLabel               |Label          |
-|  20   |Variable       |hasDataType            |Data Type      |
-|  21   |Data Type      |hasName                |xsd:string     |
-|  22   |Class          |definedIn              |Class          |
-|  23   |Class          |definedIn              |Namespace      |
-|  24   |Label          |hasName                |xsd:string     |
-|  25   |Label          |hasAddress             |Address        |
-|  26   |Namespace      |hasName                |xsd:string     |
-|  27   |Instruction    |hasOpcode              |Opcode         |
-|  28   |Instruction    |hasSourceOperand       |Operand        |
-|  29   |Instruction    |hasDestinationOperand  |Operand        |
-|  30   |Address        |performsRole           |Operand        |
-|  31   |Register       |performsRole           |Operand        |
-|  32   |ImmediateOperand|performsRole          |Operand        |
-|  33   |Symbol         |performsRole           |Operand        |
+Not including subClassOf relations <br>
+
+| #     | Subject           | Relationship          | Object            |
+| ----- | ----------------- | --------------------- | ----------------- |
+| 1     | Symbol            | hasReference          | Reference         |
+| 2     | Symbol            | hasPrimaryReference   | Reference         |
+| 3     | Symbol            | hasAddress            | Address           |
+| 4     | Label             | definedIn             | Namespace Symbol  |
+| 5     | Class             | definedIn             | Namespace Symbol  |
+| 6     | Reference         | hasSourceAddress      | Address           |
+| 7     | Reference         | hasDestinationAddress | Address           |
+| 8     | Reference         | hasType               | xsd:string        |
+| 9     | Reference         | hasOperandIndex       | xsd:integer       |
+| 10    | Variable          | hasDataType           | Data Type         |
+| 11    | Parameter         | passesInto            | Function          |
+| 12    | Function          | defines               | Local Variable    |
+| 13    | Function          | hasReturnType         | Data Type         |
+| 14    | Function          | returns               | Parameter         |
+| 15    | Function          | calls                 | Function          |
+| 16    | Function          | definedIn             | Namespace Symbol  |
+| 17    | Function          | containsInstruction   | Instruction       |
+| 18    | Instruction       | hasOpcode             | Opcode            |
+| 19    | Instruction       | hasSourceOperand      | Operand           |
+| 20    | Instruction       | hasDestinationOperand | Operand           |
+| 21    | Address           | performsRole          | Operand           |
+| 22    | Register          | performsRole          | Operand           |
+| 23    | ImmediateOperand  | performsRole          | Operand           |
+| 24    | Dynamic           | performsRole          | Operand           |
+| 25    | Scalar            | performsRole          | Operand           |
 
 
 ## Axiom Selection
@@ -53,53 +47,30 @@
 * TRANS: Transivity
 * REF: Reflexivity
 
-<!-- 
-TODO: Look through the types of functionality and change where necessary
-- I already specified which relations are functional and I double checked the other types of relations before the functionality
--->
-
 | Rel | CD  |  D  | SD  |  R  | SR  |  E  | IE  |  F  | QF  | SF  | QSF | IF  | IQF | ISF | IQSF| ST  | SY  |TRANS| REF |
 | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- |
-|1    |     |  x  |     |  x  |     |     |  x  |     |     |     |     |     |     |     |     |  x  |     |     |     |
-|2    |     |  x  |     |  x  |     |     |  x  |     |     |     |  x  |     |     |     |     |  x  |     |     |     |
-|3    |     |     |  x  |     |  x  |  x  |     |     |     |     |  x  |     |     |     |     |     |     |     |     |
-|4    |     |     |  x  |     |     |  x  |     |     |     |     |     |     |     |     |     |  x  |     |     |     |
-|5    |     |     |     |  x  |     |  x  |     |     |     |     |  x  |     |     |     |     |     |     |     |     |
-|6    |     |  x  |     |  x  |     |  x  |     |     |     |     |  x  |     |     |     |     |     |     |     |     |
-|7    |     |  x  |     |  x  |     |  x  |     |     |     |     |  x  |     |     |     |     |     |     |     |     |
-|8    |     |  x  |     |     |     |     |     |     |     |     |  x  |     |     |     |     |     |     |     |     |
-|9    |     |  x  |     |  x  |     |     |     |     |     |     |  x  |     |     |     |     |     |     |     |     |
-|10   |     |  x  |     |  x  |     |     |     |     |     |     |  x  |     |     |     |     |     |     |     |     |
-|11   |     |     |  x  |     |     |     |     |     |     |     |  x  |     |     |     |     |     |     |     |     |
-|12   |     |     |  x  |     |     |     |     |     |     |     |  x  |     |     |     |     |     |     |     |     |
-|13   |     |  x  |     |  x  |     |     |     |     |     |     |     |     |     |     |     |     |     |     |     |
-|14   |     |  x  |     |  x  |     |     |     |     |     |     |     |     |     |     |     |  x  |     |     |     |
-|15   |     |  x  |     |  x  |     |     |     |     |     |     |  x  |     |     |     |     |     |     |     |     |
-|16   |     |  x  |     |  x  |     |     |     |     |     |     |     |     |     |     |     |     |     |     |  x  |
-|17   |     |     |  x  |     |  x  |     |     |     |     |     |  x  |     |     |     |     |     |     |     |     |
-|18   |     |  x  |     |  x  |     |  x  |     |     |     |     |     |     |     |     |  x  |     |     |     |     |
-|19   |     |  x  |     |  x  |     |  x  |     |     |     |     |  x  |     |     |     |     |     |     |     |     |
-|20   |     |  x  |     |  x  |     |  x  |     |     |     |     |  x  |     |     |     |     |     |     |     |     |
-|21   |     |  x  |     |  x  |  x  |  x  |     |     |     |     |  x  |     |     |     |     |     |     |     |     |
-|22   |     |     |  x  |     |  x  |  x  |     |     |     |     |  x  |     |     |     |     |     |     |     |     |
-|23   |     |     |  x  |     |  x  |  x  |     |     |     |     |  x  |     |     |     |     |     |     |     |     |
-|24   |     |  x  |     |  x  |     |     |     |     |     |     |  x  |     |     |     |     |     |     |     |     |
-|25   |     |  x  |     |  x  |     |  x  |     |     |     |     |  x  |     |     |     |     |     |     |     |     |
-|26   |     |  x  |     |  x  |     |     |     |     |     |     |  x  |     |     |     |     |     |     |     |     |
-|27   |     |  x  |     |  x  |     |  x  |  x  |     |     |     |  x  |     |     |     |     |     |     |     |     |
-|28   |     |  x  |     |  x  |     |     |     |     |     |     |     |     |     |     |     |     |     |     |     |
-|29   |     |  x  |     |  x  |     |     |     |     |     |     |  x  |     |     |     |     |     |     |     |     |
-|30   |     |  x  |     |  x  |     |     |     |     |     |     |     |     |     |     |     |     |     |     |     |
-|31   |     |  x  |     |  x  |     |     |     |     |     |     |     |     |     |     |     |     |     |     |     |
-|32   |     |  x  |     |  x  |     |     |     |     |     |     |     |     |     |     |     |     |     |     |     |
-|33   |     |  x  |     |  x  |     |     |     |     |     |     |     |     |     |     |     |     |     |     |     |
-
-### Notes:
-- 3: Most symbols must have an associated address, but there are some symbols that are tied to a context or constant value instead.
-- 4: Inverse is: Lexical Scope Symbol defines Data Symbol
-- 11: Inverse is: Import defines DLL
-- 12: Inverse is: Export defines DLL
-- 16: Inverse is: Function calledBy Function
-- 17: Inverse is: Class defines Function
-- 18: Inverse is: Namespace contains Function
-- 23: Inverse is: Namespace contains Class
+|  1  |     |  x  |     |  x  |     |     |  x  |     |     |     |     |     |     |     |     |  x  |     |     |     |
+|  2  |     |  x  |     |  x  |     |     |  x  |     |     |     |  x  |     |     |     |     |  x  |     |     |     |
+|  3  |     |  x  |     |  x  |     |     |  x  |     |     |     |  x  |     |     |     |     |  x  |     |     |     |
+|  4  |     |     |  x  |     |     |  x  |     |     |     |     |     |     |     |     |     |  x  |     |     |     |
+|  5  |     |     |  x  |     |     |  x  |     |     |     |     |     |     |     |     |     |  x  |     |     |     |
+|  6  |     |  x  |     |  x  |     |  x  |     |     |     |     |  x  |     |     |     |     |  x  |     |     |     |
+|  7  |     |  x  |     |  x  |     |  x  |     |     |     |     |  x  |     |     |     |     |  x  |     |     |     |
+|  8  |     |  x  |     |     |     |     |     |     |     |     |  x  |     |     |     |     |     |     |     |     |
+|  9  |     |  x  |     |  x  |     |     |     |     |     |     |  x  |     |     |     |     |     |     |     |     |
+| 10  |     |  x  |     |  x  |     |  x  |     |     |     |     |  x  |     |     |     |     |  x  |     |     |     |
+| 11  |     |  x  |     |  x  |     |     |     |     |     |     |     |     |     |     |     |  x  |     |     |     |
+| 12  |     |     |  x  |     |     |     |     |     |     |     |     |     |     |     |     |  x  |     |     |     |
+| 13  |     |  x  |     |  x  |     |  x  |     |     |     |     |  x  |     |     |     |     |  x  |     |     |     |
+| 14  |     |  x  |     |  x  |     |     |     |     |     |     |  x  |     |     |     |     |  x  |     |     |  x  |
+| 15  |     |  x  |     |  x  |     |     |     |     |     |     |     |     |     |     |     |  x  |     |     |     |
+| 16  |     |     |  x  |     |  x  |     |     |     |     |     |     |     |     |     |     |  x  |     |     |     |
+| 17  |     |  x  |     |  x  |     |  x  |     |     |     |     |     |     |     |     |  x  |  x  |     |     |     |
+| 18  |     |  x  |     |  x  |     |  x  |  x  |     |     |     |  x  |     |     |     |     |  x  |     |     |     |
+| 19  |     |  x  |     |  x  |     |     |     |     |     |     |     |     |     |     |     |  x  |     |     |     |
+| 20  |     |  x  |     |  x  |     |     |     |     |     |     |  x  |     |     |     |     |  x  |     |     |     |
+| 21  |     |  x  |     |  x  |     |     |     |     |     |     |     |     |     |     |     |  x  |     |     |     |
+| 22  |     |  x  |     |  x  |     |     |     |     |     |     |     |     |     |     |     |  x  |     |     |     |
+| 23  |     |  x  |     |  x  |     |     |     |     |     |     |     |     |     |     |     |  x  |     |     |     |
+| 24  |     |  x  |     |  x  |     |     |     |     |     |     |     |     |     |     |     |  x  |     |     |     |
+| 25  |     |  x  |     |  x  |     |     |     |     |     |     |     |     |     |     |     |  x  |     |     |     |
