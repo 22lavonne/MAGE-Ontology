@@ -21,11 +21,13 @@ pfs = {
 }
 
 # Current TODO:
-# break down KGs to have triples in multiple ttl files so they can be added to a triple store without worrying about 
+# break down KGs to have triples in multiple ttl files so they can be added to a triple store wihtout worrying about space
+# fix issues with output.tll file
+    # lines like "mkg:ADDRESS a :Address ;" and "mkg:DYNAMIC a :Dynamic ;" probably shouldn't be like that
+    # and some of the things are in the form "mkg:something" and some of them are in the URI format
 
 # Future TODO:
 # maybe change the name of DLL to library since it's called library in the ghidra api
-# update all the documentation on github repo
 
 # Initialization shortcut
 def init_kg(prefixes=pfs):
@@ -325,7 +327,8 @@ for f in function_list:
 # Label format example:
 # {'label': 'shift', 'address': '00000000', 'parent': 'Global', 'parenttype': 'NAMESPACE', 'references': [], 'primary_reference': None}
 for l in label_list:
-    l_instance = pfs["mkg"][quote(l['label'])]
+    # add address to the name to diffrentiate different labels with the same name
+    l_instance = pfs["mkg"][quote(l['label'] + "_" + l['address'])]
     graph.add( (l_instance, a, LABEL))
     
     if l['address'] != "NO ADDRESS":
