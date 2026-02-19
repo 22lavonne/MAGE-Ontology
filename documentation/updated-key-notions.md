@@ -85,7 +85,7 @@ The Function objects keeps track of all the aspects of a function, including any
 (calledBy is the inverse of calls)
 * `(16) Function definedIn Namespace Symbol Exactly 1 Namespace Symbol` <br>
 "A function is defined in exactly one lexical scope symbol"
-* `(17) Function containsInstruction min 1 instruction` <br>
+* `(17) Function containsInstruction min 1 Instruction` <br>
 "A function contains one or more instructions"
 
 
