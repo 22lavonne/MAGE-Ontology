@@ -1,0 +1,44 @@
+<!-- Query ideas gotten from Dr. Junjie Zhang -->
+
+PREFIX ontology: <http://www.semanticweb.org/jaspe/ontologies/2026/0/symbol-ontology>
+
+<!-- SPARQL queries are also in the form of triples -->
+<!-- Query structure:
+
+SELECT [subject]
+WHERE {
+    [conditions that need to be met for the objects to be returned]
+}
+ -->
+
+ <!--1.  Suspicious API Usage -->
+<!-- look for specific function names that indicate API usage -->
+
+<!-- 2. Dynamic Code Execution & Self‑Modification -->
+
+<!-- 3. Packed or Obfuscated Binary Detection -->
+<!-- Indicators:
+- Very small import table
+- High‑entropy sections
+- Manual PE parsing
+- Runtime decoding loops
+
+Query Ideas:
+A. Import sparsity vs binary size
+B. Section entropy analysis
+C. Self‑referential decode loops (read → transform → write → repeat) -->
+<!-- TODO:
+    - write query to get count for how many DLLs are in the file
+    - figure out what the indicators are for high entropy
+    - look in the instructions for loops that include reading and writing instructions
+ -->
+
+<!-- 4. Anti‑Analysis / Anti‑VM Behavior -->
+
+<!-- 5. Privilege Escalation / System Manipulation -->
+
+<!-- 6. File System Abuse -->
+
+<!-- 7. Command‑and‑Control (C2) Indicators -->
+
+<!-- 8. Cryptographic Activity -->
