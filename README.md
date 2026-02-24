@@ -9,3 +9,4 @@ This knowledge graph is based on the symbol table in Ghidra with the goal of ass
 * [Schema](https://github.com/22lavonne/Malware-Behavior-Knowledge-Graph/tree/main/schema): contains a .graphml file of the schema, and images of the individual modules of the schema (used in key-notions)
 * [Ontology](https://github.com/22lavonne/Malware-Behavior-Knowledge-Graph/tree/main/ontology): contains the Turtle file of the ontology.
 * [Ghidra Scripting](https://github.com/22lavonne/Malware-Behavior-Knowledge-Graph/tree/main/ghidra-scripting): contains any scripts used to extract the data for the knowledge graph (writen in Pyghidra).
+* [Honors Blitz](https://github.com/22lavonne/Malware-Behavior-Knowledge-Graph/tree/main/honors-blitz): contains the resources and presentation used for the honors blitz 2026 competition at Wright State.
