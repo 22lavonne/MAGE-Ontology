@@ -21,6 +21,10 @@ pfs = {
 }
 
 # Current TODO:
+# TODO: the quote function is what is causing some of the issues in the output.ttl file, 
+    # since it includes some characters not allowed for a prefix in the ttl format
+    # so make a function to replace quote that both uses quote then removes the other illegal characters
+
 # break down KGs to have triples in multiple ttl files so they can be added to a triple store wihtout worrying about space
 # fix issues with output.tll file
     # lines like "mkg:ADDRESS a :Address ;" and "mkg:DYNAMIC a :Dynamic ;" probably shouldn't be like that

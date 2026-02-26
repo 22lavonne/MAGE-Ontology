@@ -27,6 +27,7 @@ Detect executable memory allocation followed by control transfer
 into that region (shellcode execution pattern). -->
 
 
+
 <!-- 3. Packed or Obfuscated Binary Detection -->
 
 <!-- A. Import sparsity vs binary size -->
@@ -94,6 +95,19 @@ ORDER BY DESC(?totalRelevantInst)
 
 
 <!-- 4. Anti‑Analysis / Anti‑VM Behavior -->
+<!-- Indicators:
+- IsDebuggerPresent
+- CheckRemoteDebuggerPresent
+- NtQueryInformationProcess
+- Timing checks
+- CPUID checks
+- VM artifact detection
+
+Query Idea:
+Detect conditional branches that depend on debugger or VM presence. -->
+
+
+
 
 <!-- 5. Privilege Escalation / System Manipulation -->
 
