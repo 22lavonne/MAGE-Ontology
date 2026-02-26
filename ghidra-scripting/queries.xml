@@ -28,14 +28,6 @@ into that region (shellcode execution pattern). -->
 
 
 <!-- 3. Packed or Obfuscated Binary Detection -->
-<!-- Indicators:
-- Manual PE parsing
-- Runtime decoding loops
--->
-
-<!-- TODO:
-    - look in the instructions for loops that include reading and writing instructions
- -->
 
 <!-- A. Import sparsity vs binary size -->
 
@@ -69,11 +61,36 @@ GROUP BY ?function
 ORDER BY DESC(?diversityRatio)
 
 <!-- C. Self‑referential decode loops (read → transform → write → repeat)  -->
-<!-- Indicators:
-- Manual PE parsing
-- Runtime decoding loops
--->
 
+<!-- Looks for functions that contain both a transformation opcode and a loop/branch opcode -->
+<!-- This finds any self-referential decode loops, which can be an indicator of data obfuscation -->
+SELECT ?function (COUNT(?inst) AS ?totalRelevantInst)
+WHERE {
+  ?function ontology:containsInstruction ?inst .
+  ?inst ontology:hasOpcode ?opcode .
+  
+  BIND(LCASE(STR(?opcode)) AS ?opStr)
+  
+  # 1. Ensure the function has at least one TRANSFORMATION opcode
+  FILTER EXISTS {
+    ?function ontology:containsInstruction ?i_trans .
+    ?i_trans ontology:hasOpcode ?op_trans .
+    FILTER(?op_trans IN ("xor", "add", "sub", "ror", "rol", "not"))
+  }
+  
+  # 2. Ensure the same function has at least one LOOP/BRANCH opcode
+  FILTER EXISTS {
+    ?function ontology:containsInstruction ?i_loop .
+    ?i_loop ontology:hasOpcode ?op_loop .
+    FILTER(?op_loop IN ("jnz", "jz", "jmp", "loop"))
+  }
+
+  # Only count the instructions that match our overall 'suspicious' list
+  FILTER(?opcode IN ("xor", "add", "sub", "ror", "rol", "not", "jnz", "jz", "jmp", "loop"))
+}
+GROUP BY ?function
+HAVING (COUNT(?inst) >= 2) 
+ORDER BY DESC(?totalRelevantInst)
 
 
 <!-- 4. Anti‑Analysis / Anti‑VM Behavior -->
