@@ -52,7 +52,6 @@ hasSourceAddress = URIRef("http://www.semanticweb.org/jaspe/ontologies/2026/0/sy
 hasDestinationAddress = URIRef("http://www.semanticweb.org/jaspe/ontologies/2026/0/symbol-ontology/hasDestinationAddress")
 hasReference = URIRef("http://www.semanticweb.org/jaspe/ontologies/2026/0/symbol-ontology/hasReference")
 hasPrimaryReference = URIRef("http://www.semanticweb.org/jaspe/ontologies/2026/0/symbol-ontology/hasPrimaryReference")
-hasOpcode = URIRef("http://www.semanticweb.org/jaspe/ontologies/2026/0/symbol-ontology/hasOpcode")
 hasSourceOperand = URIRef("http://www.semanticweb.org/jaspe/ontologies/2026/0/symbol-ontology/hasSourceOperand")
 hasDestinationOperand = URIRef("http://www.semanticweb.org/jaspe/ontologies/2026/0/symbol-ontology/hasDestinationOperand")
 performsRole = URIRef("http://www.semanticweb.org/jaspe/ontologies/2026/0/symbol-ontology/performsRole")
@@ -61,6 +60,8 @@ defines = URIRef("http://www.semanticweb.org/jaspe/ontologies/2026/0/symbol-onto
 # Data Properties
 hasOperandIndex = URIRef("http://www.semanticweb.org/jaspe/ontologies/2026/0/symbol-ontology/hasOperandIndex")
 hasReferenceType = URIRef("http://www.semanticweb.org/jaspe/ontologies/2026/0/symbol-ontology/hasReferenceType")
+hasOpcode = URIRef("http://www.semanticweb.org/jaspe/ontologies/2026/0/symbol-ontology/hasOpcode")
+
 
 # Classes
 SYMBOL = URIRef("http://www.semanticweb.org/jaspe/ontologies/2026/0/symbol-ontology/Symbol")
@@ -358,7 +359,8 @@ for i in instruction_list:
     
     # opcode
     opcode = pfs["mkg"][quote(i["opcode"])]
-    graph.add((opcode, a, OPCODE))
+    opcode = Literal(i["opcode"])
+    # graph.add((opcode, a, OPCODE))
     graph.add((i_instance, hasOpcode, opcode))
     
     if i['source_operands']:
