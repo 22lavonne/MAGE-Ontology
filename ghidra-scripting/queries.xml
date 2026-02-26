@@ -14,24 +14,67 @@ WHERE {
  <!--1.  Suspicious API Usage -->
 <!-- look for specific function names that indicate API usage -->
 
+
 <!-- 2. Dynamic Code Execution & Self‑Modification -->
+<!-- Indicators:
+- VirtualAlloc with executable permissions
+- PAGE_EXECUTE_READWRITE
+- LoadLibrary + GetProcAddress
+- Indirect jumps into heap memory
+
+Query Idea:
+Detect executable memory allocation followed by control transfer
+into that region (shellcode execution pattern). -->
+
 
 <!-- 3. Packed or Obfuscated Binary Detection -->
 <!-- Indicators:
-- Very small import table
-- High‑entropy sections
 - Manual PE parsing
 - Runtime decoding loops
+-->
 
-Query Ideas:
-A. Import sparsity vs binary size
-B. Section entropy analysis
-C. Self‑referential decode loops (read → transform → write → repeat) -->
 <!-- TODO:
-    - write query to get count for how many DLLs are in the file
-    - figure out what the indicators are for high entropy
     - look in the instructions for loops that include reading and writing instructions
  -->
+
+<!-- A. Import sparsity vs binary size -->
+
+<!-- Gets the total count of DLLs (or external libraries) used by the program -->
+SELECT (COUNT (*) as ?total)
+WHERE {
+    ?instance a ontology:DLL
+}
+
+<!-- Gets the total number of instructions in an executable -->
+SELECT (COUNT (*) as ?total)
+WHERE {
+    ?instance a ontology:Instruction
+}
+
+<!-- B. Section entropy analysis -->
+<!-- this returns functions and the number of instructions based on a ratio of how many unique opcodes there are compared to the # of instructions -->
+<!-- The higher the ratio to 1, the more unique opcodes there are, leading to higher entropy -->
+<!-- It filters out any instructions that have less than 10 instructions -->
+SELECT ?function 
+    (COUNT(DISTINCT ?opcode) AS ?uniqueOpcodes) 
+    (COUNT(?instruction) AS ?totalInstructions)
+    ((COUNT(DISTINCT ?opcode) * 1.0 / COUNT(?instruction)) AS ?diversityRatio)
+
+WHERE {
+    ?function ontology:containsInstruction ?instruction .
+    ?instruction ontology:hasOpcode ?opcode .
+    HAVING (?totalInstructions > 10).
+}
+GROUP BY ?function
+ORDER BY DESC(?diversityRatio)
+
+<!-- C. Self‑referential decode loops (read → transform → write → repeat)  -->
+<!-- Indicators:
+- Manual PE parsing
+- Runtime decoding loops
+-->
+
+
 
 <!-- 4. Anti‑Analysis / Anti‑VM Behavior -->
 
