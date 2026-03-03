@@ -379,6 +379,7 @@ for i in instruction_list:
             # if the type of operand object is in the class list, then add that triple
             # if the operand type is in the class dictionary, then add that as a triple
             if (op_type in class_dict):
+                print(op_type)
                 graph.add((operand_type_instance, a, class_dict[op_type]))
             # then say that that instance performs the role of the current operand
             graph.add((operand_type_instance, performsRole, operand))

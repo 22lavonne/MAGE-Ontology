@@ -1,31 +1,117 @@
 <!-- Query ideas gotten from Dr. Junjie Zhang -->
+<!-- Queries generated and adapted from Google's AI mode -->
 
 PREFIX ontology: <http://www.semanticweb.org/jaspe/ontologies/2026/0/symbol-ontology>
+PREFIX xsd: <http://www.w3.org>
 
-<!-- SPARQL queries are also in the form of triples -->
-<!-- Query structure:
 
-SELECT [subject]
-WHERE {
-    [conditions that need to be met for the objects to be returned]
-}
- -->
+
 
  <!--1.  Suspicious API Usage -->
 <!-- look for specific function names that indicate API usage -->
+<!-- FIXME -->
+SELECT ?functionName ?openAddr ?allocAddr ?writeAddr
+WHERE {
+  # Get the function object and extract its name from the URI
+  ?func a ontology:Function ;
+        ontology:containsInstruction ?inst1, ?inst2, ?inst3 .
+  
+  # Extracts the part after the '#' or '/' in the URI
+  BIND(REPLACE(STR(?func), "^.*[#/]", "") AS ?functionName)
 
+  # 1. OpenProcess
+  ?inst1 ontology:hasOpcode "CALL" ;
+         ontology:hasSourceOperand ?api1 ;
+         ontology:hasDestinationOperand ?handleReg ; # Tracking the returned handle
+         ontology:atAddress ?addr1 .
+  FILTER(CONTAINS(STR(?api1), "OpenProcess"))
+
+  # 2. VirtualAllocEx (occurring after OpenProcess)
+  ?inst2 ontology:hasOpcode "CALL" ;
+         ontology:hasSourceOperand ?api2 ;
+         ontology:hasSourceOperand ?handleReg ; # Dataflow check
+         ontology:atAddress ?addr2 .
+  FILTER(CONTAINS(STR(?api2), "VirtualAllocEx"))
+  FILTER(xsd:integer(?addr2) > xsd:integer(?addr1))
+
+  # 3. WriteProcessMemory (occurring after VirtualAllocEx)
+  ?inst3 ontology:hasOpcode "CALL" ;
+         ontology:hasSourceOperand ?api3 ;
+         ontology:hasSourceOperand ?handleReg ; # Dataflow check
+         ontology:atAddress ?addr3 .
+  FILTER(CONTAINS(STR(?api3), "WriteProcessMemory"))
+  FILTER(xsd:integer(?addr3) > xsd:integer(?addr2))
+
+  # Optional: Tracking the allocated memory address (RDX/RAX depending on convention)
+  ?inst2 ontology:hasDestinationOperand ?memAddrReg .
+  ?inst3 ontology:hasSourceOperand ?memAddrReg .
+}
+
+<!-- FIXME -->
+SELECT ?function ?instr1 ?addr1 ?instr2 ?addr2 ?operandValue
+WHERE {
+  # Find an instruction that targets a persistence-related API
+  ?instr1 ontology:hasDestinationOperand ?apiName ;
+          ontology:atAddress ?addr1 .
+  
+  # Filter for relevant API calls
+  FILTER(REGEX(STR(?apiName), "RegCreateKey|RegSetValue|CreateService|CopyFile", "i"))
+
+  # Find a nearby instruction (likely preceding) that loads the target path
+  ?instr2 ontology:hasSourceOperand ?operandValue ;
+          ontology:atAddress ?addr2 .
+
+  # Heuristic: The path is usually loaded within a few bytes/instructions of the call
+  FILTER(?addr2 < ?addr1 && ?addr2 > (?addr1 - 32))
+
+  # Filter for suspicious indicators in the operand
+  FILTER(REGEX(STR(?operandValue), "Run|RunOnce|Start Menu|Startup", "i"))
+}
+ORDER BY ?addr1
+
+<!-- FIXME -->
+SELECT ?function ?instruction ?opcode ?targetAPI ?address
+WHERE {
+  # Locate the instruction and its address
+  ?instruction ontology:atAddress ?addrObj ;
+               ontology:opcode "call" .
+  ?addrObj ontology:value ?address .
+  
+  # Identify if the call target is a known networking API
+  ?instruction ontology:hasDestinationOperand ?targetAPI .
+  FILTER(?targetAPI IN ("socket", "connect", "send", "recv", "WinHttpSendRequest", "InternetOpenUrl"))
+  
+  # Link back to the containing function if your ontology allows
+  ?function ontology:containsInstruction ?instruction .
+}
+ORDER BY ?address
 
 <!-- 2. Dynamic Code Execution & Self‑Modification -->
-<!-- Indicators:
-- VirtualAlloc with executable permissions
-- PAGE_EXECUTE_READWRITE
-- LoadLibrary + GetProcAddress
-- Indirect jumps into heap memory
+<!-- FIXME: probably doesn't work, needs to be fixed -->
+SELECT ?allocFunc ?jumpInst ?retParam
+WHERE {
+  # 1. Identify the VirtualAlloc function by its string name
+  ?allocFunc a ontology:Function .
+  FILTER(CONTAINS(STR(?allocFunc), "VirtualAlloc"))
 
-Query Idea:
-Detect executable memory allocation followed by control transfer
-into that region (shellcode execution pattern). -->
+  # 2. Find the parameter defining PAGE_EXECUTE_READWRITE (0x40)
+  ?permParam ontology:passesInto ?allocFunc .
+  # Filtering by the URI or Label of the parameter for the hex value
+  FILTER(CONTAINS(STR(?permParam), "0x40") || CONTAINS(STR(?permParam), "PAGE_EXECUTE_READWRITE"))
 
+  # 3. Identify the parameter variable returned by the allocation
+  ?allocFunc ontology:returns ?retParam .
+
+  # 4. Find an indirect jump instruction
+  ?program ontology:containsInstruction ?jumpInst .
+  ?jumpInst ontology:hasOpcode "jmp" ;
+            ontology:hasSourceOperand ?retParam ; # Tracking the returned variable to the jump
+            ontology:atAddress ?jumpAddr .
+
+  # 5. Logical Sequence: Ensure the jump's address is higher than the allocation function
+  ?allocFunc ontology:atAddress ?allocAddr .
+  FILTER(?jumpAddr > ?allocAddr)
+}
 
 
 <!-- 3. Packed or Obfuscated Binary Detection -->
@@ -95,24 +181,152 @@ ORDER BY DESC(?totalRelevantInst)
 
 
 <!-- 4. Anti‑Analysis / Anti‑VM Behavior -->
-<!-- Indicators:
-- IsDebuggerPresent
-- CheckRemoteDebuggerPresent
-- NtQueryInformationProcess
-- Timing checks
-- CPUID checks
-- VM artifact detection
+<!-- Detect conditional branches that depend on debugger or VM presence. -->
 
-Query Idea:
-Detect conditional branches that depend on debugger or VM presence. -->
+<!-- This query should theoretically check for a specific sequence of actions that indicate the behavior
+So API call -> branch instruction -> conditional branch
+But since my ontology doesn't currently have a way to check for subsequent instructions,
+it just checks if all of those instructions are present in a function, which can lead to false positives. -->
+<!-- TODO: check to make sure this query works -->
+<!-- TODO: add the nextInstruction functionality to the ontology if there is time 
+Or add the address where the instruction is located to determine if an instruction occurs before or after another-->
+SELECT DISTINCT ?function
+WHERE {
+  # 1. Find a function that contains an Anti-VM/Debugger indicator
+  ?function ontology:containsInstruction ?apiCall .
+  ?apiCall ontology:hasOpcode "CALL" ;
+           ontology:hasOperand ?apiName .
+  
+  FILTER(?apiName IN ("IsDebuggerPresent", "CheckRemoteDebuggerPresent", "NtQueryInformationProcess"))
 
+  # 2. Ensure the SAME function also contains a conditional jump
+  ?function ontology:containsInstruction ?jumpInstr .
+  ?jumpInstr ontology:hasOpcode ?jumpOpcode .
+  
+  # Filter for common x86 conditional jump opcodes (JZ, JNZ, JE, JNE, etc.)
+  FILTER(REGEX(STR(?jumpOpcode), "^J[A-Z]{1,2}$", "i"))
+}
 
 
 
 <!-- 5. Privilege Escalation / System Manipulation -->
+<!-- FIXME: This currently doesn't work since operands cannot be represented as strings like that -->
+SELECT ?function ?instrName1 ?instrName2 WHERE {
+  # Bind the same function to multiple instructions
+  ?function ontology:containsInstruction ?instr1 ;
+            ontology:containsInstruction ?instr2 ;
+            ontology:containsInstruction ?instr3 .
+
+  # Identify the call to OpenProcessToken
+  ?instr1 ontology:hasOpcode "CALL" ;
+          ontology:hasSourceOperand "OpenProcessToken" .
+
+  # Identify the loading of the privilege string (source or destination)
+  ?instr2 ontology:hasSourceOperand ?val .
+  FILTER(CONTAINS(LCASE(STR(?val)), "sedebugprivilege"))
+
+  # Identify the call to AdjustTokenPrivileges
+  ?instr3 ontology:hasOpcode "CALL" ;
+          ontology:hasSourceOperand "AdjustTokenPrivileges" .
+  
+  # Ensure we aren't matching the exact same instruction object
+  FILTER(?instr1 != ?instr2 && ?instr2 != ?instr3)
+}
+
 
 <!-- 6. File System Abuse -->
+<!-- FIXME: fix this because it probably doesn't work -->
+SELECT DISTINCT ?functionURI ?functionName ?suspiciousPath ?instructionAddress
+WHERE {
+  # 1. Identify the function and extract its name from the URI
+  ?func a ontology:Function .
+  BIND(STR(?func) AS ?funcString)
+  # Extract the part after the last '#' or '/' to get the "name"
+  BIND(REPLACE(?funcString, "^.*[#/]", "") AS ?functionName)
+  
+  # Filter for relevant file-manipulation APIs based on the URI's local name
+  FILTER(REGEX(?functionName, "CreateFile|WriteFile|CopyFile|DeleteFile|MoveFile", "i"))
+
+  # 2. Find the CALL instruction targeting this function
+  ?callInst a ontology:Instruction ;
+            ontology:atAddress ?instructionAddress ;
+            ontology:hasOpcode "CALL" ;
+            ontology:hasSourceOperand ?func .
+
+  # 3. Look for instructions involving suspicious paths in either operand
+  ?pathInst a ontology:Instruction ;
+            (ontology:hasSourceOperand|ontology:hasDestinationOperand) ?suspiciousPath .
+  
+  # 4. Filter for your specific indicators
+  FILTER(
+    REGEX(STR(?suspiciousPath), "System32", "i") ||
+    REGEX(STR(?suspiciousPath), "Temp", "i") ||
+    REGEX(STR(?suspiciousPath), "etc/hosts", "i") ||
+    REGEX(STR(?suspiciousPath), "vssadmin.*delete.*shadows", "i")
+  )
+}
+
 
 <!-- 7. Command‑and‑Control (C2) Indicators -->
+<!-- FIXME: fix this because it probably doesn't work -->
+SELECT ?functionName ?opcode ?operandName ?indicatorType
+WHERE {
+  # 1. Get Function Name from the Object's URI
+  ?func ontology:containsInstruction ?inst .
+  BIND(REPLACE(STR(?func), "^.*[#/]", "") AS ?functionName)
+
+  # 2. Get Instruction and Opcode
+  ?inst ontology:hasOpcode ?opcode .
+
+  # 3. Get Operand Name from either Source or Destination
+  { ?inst ontology:hasSourceOperand ?operand . }
+  UNION
+  { ?inst ontology:hasDestinationOperand ?operand . }
+  
+  # Extract the name/value from the operand's URI
+  BIND(REPLACE(STR(?operand), "^.*[#/]", "") AS ?operandName)
+
+  # 4. Filter for C2 Indicators in the operand name
+  BIND(
+    IF(REGEX(?operandName, "^[0-9]{1,3}\\.[0-9]{1,3}\\.[0-9]{1,3}\\.[0-9]{1,3}$"), "IP Address",
+    IF(REGEX(?operandName, "^(https?://|www\\.)", "i"), "URL",
+    IF(REGEX(?operandName, "\\.[a-z]{2,6}$", "i"), "Domain", "Unknown"))) 
+    AS ?indicatorType
+  )
+
+  FILTER(?indicatorType != "Unknown")
+}
+ORDER BY ?functionName
 
 <!-- 8. Cryptographic Activity -->
+<!-- FIXME: this probably doesn't work so fix it -->
+SELECT DISTINCT ?function ?loopStartAddr ?xorAddr
+WHERE {
+    # 1. Scope the search to instructions within the same function
+    ?function ontology:containsInstruction ?instr1, ?xorInstr, ?jumpInstr .
+
+    # 2. Identify the addresses
+    ?instr1 ontology:atAddress ?loopStartAddr .
+    ?xorInstr ontology:atAddress ?xorAddr .
+    ?jumpInstr ontology:atAddress ?jumpAddr .
+
+    # 3. Detect a Loop: A jump instruction that points back to an earlier address
+    ?jumpInstr ontology:hasOpcode ?jOp .
+    FILTER(REGEX(?jOp, "^J", "i")) # Matches JMP, JNZ, JZ, etc.
+    ?jumpInstr ontology:hasDestinationOperand ?loopStartAddr .
+    
+    # Logic: The jump must go backwards (loopStartAddr < jumpAddr)
+    FILTER(?loopStartAddr < ?jumpAddr)
+
+    # 4. Identify Bitwise/XOR logic located between the loop start and the jump
+    ?xorInstr ontology:hasOpcode ?xorOp .
+    FILTER(?xorOp IN ("XOR", "ROL", "ROR", "NOT", "AND"))
+    
+    # Logic: XOR must be physically located within the loop boundaries
+    FILTER(?xorAddr >= ?loopStartAddr && ?xorAddr < ?jumpAddr)
+
+    # 5. Refinement: Filter out 'XOR EAX, EAX' (common way to set register to 0)
+    ?xorInstr ontology:hasSourceOperand ?src ;
+              ontology:hasDestinationOperand ?dest .
+    FILTER(?src != ?dest)
+}
