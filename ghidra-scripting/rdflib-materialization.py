@@ -21,7 +21,7 @@ pfs = {
 }
 
 # Current TODO:
-# break down KGs to have triples in multiple ttl files so they can be added to a triple store wihtout worrying about space
+# make a property for next instruction so it can be used for finding a sequence of instructions to detect malicious behavior
 
 # Future TODO:
 # maybe change the name of DLL to library since it's called library in the ghidra api
@@ -44,7 +44,7 @@ passesInto = URIRef("http://www.semanticweb.org/jaspe/ontologies/2026/0/symbol-o
 returns = URIRef("http://www.semanticweb.org/jaspe/ontologies/2026/0/symbol-ontology/returns")
 containsInstruction = URIRef("http://www.semanticweb.org/jaspe/ontologies/2026/0/symbol-ontology/containsInstruction")
 hasDataType = URIRef("http://www.semanticweb.org/jaspe/ontologies/2026/0/symbol-ontology/hasDataType")
-hasAddress = URIRef("http://www.semanticweb.org/jaspe/ontologies/2026/0/symbol-ontology/hasAddress")
+atAddress = URIRef("http://www.semanticweb.org/jaspe/ontologies/2026/0/symbol-ontology/atAddress")
 hasSourceAddress = URIRef("http://www.semanticweb.org/jaspe/ontologies/2026/0/symbol-ontology/hasSourceAddress")
 hasDestinationAddress = URIRef("http://www.semanticweb.org/jaspe/ontologies/2026/0/symbol-ontology/hasDestinationAddress")
 hasReference = URIRef("http://www.semanticweb.org/jaspe/ontologies/2026/0/symbol-ontology/hasReference")
@@ -77,7 +77,6 @@ REFERENCE = URIRef("http://www.semanticweb.org/jaspe/ontologies/2026/0/symbol-on
 INSTRUCTION = URIRef("http://www.semanticweb.org/jaspe/ontologies/2026/0/symbol-ontology/Instruction")
 IMMEDIATE_OPERAND = URIRef("http://www.semanticweb.org/jaspe/ontologies/2026/0/symbol-ontology/ImmediateOperand")
 REGISTER = URIRef("http://www.semanticweb.org/jaspe/ontologies/2026/0/symbol-ontology/Register")
-OPCODE = URIRef("http://www.semanticweb.org/jaspe/ontologies/2026/0/symbol-ontology/Opcode")
 OPERAND = URIRef("http://www.semanticweb.org/jaspe/ontologies/2026/0/symbol-ontology/Operand")
 DYNAMIC = URIRef("http://www.semanticweb.org/jaspe/ontologies/2026/0/symbol-ontology/Dynamic")
 SCALAR = URIRef("http://www.semanticweb.org/jaspe/ontologies/2026/0/symbol-ontology/Scalar")
@@ -100,7 +99,6 @@ class_dict = {
     "INSTRUCTION": INSTRUCTION,
     "IMMEDIATE_OPERAND": IMMEDIATE_OPERAND,
     "REGISTER": REGISTER,
-    "OPCODE": OPCODE,
     "OPERAND": OPERAND,
     "DYNAMIC": DYNAMIC,
     "SCALAR": SCALAR
@@ -157,7 +155,7 @@ def add_reference(object_instance, reference, isPrimary):
     graph.add((ref, hasOperandIndex, op_index))
     graph.add((ref, hasReferenceType, ref_type))
     
-# turn the 
+# use the quote function, but remove other special characters from the string so the URI can be in a valid turtle syntax
 def quote_for_turtle(obj_string):
     quoted_string = quote(obj_string)
     return_string = quoted_string.replace('%', '_')
@@ -201,11 +199,11 @@ for n in namespace_list:
     n_instance = pfs["mkg"][quote_for_turtle(n['namespace'])]
     graph.add( (n_instance, a, NAMESPACE))
     
-    # add the address of namespace KG (both the address as an ADDRESS object, and the hasAddress relation)
+    # add the address of namespace KG (both the address as an ADDRESS object, and the atAddress relation)
     if n['address'] != "NO ADDRESS":
         n_address = pfs["mkg"][quote_for_turtle(n['address'])]
         graph.add((n_address, a, ADDRESS))
-        graph.add( (n_instance, hasAddress, n_address))
+        graph.add( (n_instance, atAddress, n_address))
         
     # get the parent namespace of the current object
     n_parent = pfs["mkg"][quote_for_turtle(n['parent'])]
@@ -240,7 +238,7 @@ for c in class_list:
     if c['address'] != "NO ADDRESS":
         c_address = pfs["mkg"][quote_for_turtle(c['address'])]
         graph.add((c_address, a, ADDRESS))
-        graph.add( (c_instance, hasAddress, c_address))
+        graph.add( (c_instance, atAddress, c_address))
         
     c_parent = pfs["mkg"][quote_for_turtle(c['parent'])]    
     parent_type = c['parenttype']
@@ -267,7 +265,7 @@ for l in dll_list:
     if l['address'] != "NO ADDRESS":
         l_address = pfs["mkg"][quote_for_turtle(l['address'])]
         graph.add((l_address, a, ADDRESS))
-        graph.add( (l_instance, hasAddress, l_address))
+        graph.add( (l_instance, atAddress, l_address))
         
     l_parent = pfs["mkg"][quote_for_turtle(l['parent'])]
     parent_type = l['parenttype']
@@ -294,7 +292,7 @@ for f in function_list:
     if f['address'] != "NO ADDRESS":
         f_address = pfs["mkg"][quote_for_turtle(f['address'])]
         graph.add((f_address, a, ADDRESS))
-        graph.add( (f_instance, hasAddress, f_address))
+        graph.add( (f_instance, atAddress, f_address))
         
     f_parent = pfs["mkg"][quote_for_turtle(f['parent'])]    
     parent_type = f['parenttype']
@@ -339,7 +337,7 @@ for l in label_list:
     if l['address'] != "NO ADDRESS":
         l_address = pfs["mkg"][quote_for_turtle(l['address'])]
         graph.add((l_address, a, ADDRESS))
-        graph.add( (l_instance, hasAddress, l_address))
+        graph.add( (l_instance, atAddress, l_address))
         
     l_parent = pfs["mkg"][quote_for_turtle(l['parent'])]
     parent_type = l['parenttype']
@@ -360,6 +358,10 @@ for l in label_list:
 for i in instruction_list:
     i_instance = pfs["mkg"]["ins_" + str(i["min_address"])]
     graph.add((i_instance, a, INSTRUCTION))
+    
+    i_address = pfs["mkg"][quote_for_turtle(i['min_address'])]
+    graph.add((i_address, a, ADDRESS))
+    graph.add((i_instance, atAddress, i_address))
     
     # opcode
     opcode = pfs["mkg"][quote_for_turtle(i["opcode"])]
