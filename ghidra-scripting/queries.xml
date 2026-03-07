@@ -1,20 +1,73 @@
 <!-- Query ideas gotten from Dr. Junjie Zhang -->
-<!-- Queries generated and adapted from Google's AI mode and chatgpt -->
+<!-- Queries generated and adapted from Google's AI mode (3) and ChatGPT (1, 2, 4-8) -->
 
 PREFIX ontology: <http://www.semanticweb.org/jaspe/ontologies/2026/0/symbol-ontology>
 
-<!-- 2. Dynamic Code Execution & Self‑Modification -->
-<!-- TEST THIS -->
-SELECT ?instr ?opcode
+
+<!-- 1. Suspicious API Usage (Behavioral Indicators) -->
+<!-- detects suspicious api calls in elf files -->
+SELECT DISTINCT ?f ?name
 WHERE {
-    ?instr a ontology:Instruction ;
-           ontology:hasOpcode ?opcode ;
+
+    ?f ontology:calls ?api .
+    ?api ontology:hasName ?name .
+
+    FILTER regex(?name,
+      "ptrace|process_vm_writev|fork|clone|execve|socket|connect|system",
+      "i")
+}
+
+
+<!-- detect persistent apis -->
+SELECT ?f ?name
+WHERE {
+
+    ?f ontology:calls ?api .
+    ?api ontology:hasName ?name .
+
+    FILTER regex(?name,
+      "system|execve|popen",
+      "i")
+}
+
+<!-- detects networking activity through specific api calls -->
+SELECT ?f ?name
+WHERE {
+
+    ?f ontology:calls ?api .
+    ?api ontology:hasName ?name .
+
+    FILTER regex(?name,
+      "socket|connect|send|recv|sendto|recvfrom",
+      "i")
+}
+
+<!-- 2. Dynamic Code Execution & Self‑Modification -->
+<!-- Indirect control flow, common in shellcode loaders -->
+SELECT ?instr ?opcode ?reg
+WHERE {
+
+    ?instr ontology:hasOpcode ?opcode ;
            ontology:hasDestinationOperand ?op .
 
-    ?reg ontology:performsRole ?op .
+    ?op ontology:hasOperandType "REGISTER" ;
+        ontology:hasOperandValue ?reg .
 
-    FILTER (?opcode IN ("JMP", "call"))
+    FILTER (?opcode IN ("JMP","CALL"))
 }
+
+<!-- detect executable memory allocation -->
+SELECT ?f ?name
+WHERE {
+
+    ?f ontology:calls ?api .
+    ?api ontology:hasName ?name .
+
+    FILTER regex(?name,
+      "mmap|mprotect",
+      "i")
+}
+
 
 <!-- 3. Packed or Obfuscated Binary Detection -->
 
@@ -82,12 +135,65 @@ HAVING (COUNT(?inst) >= 2)
 ORDER BY DESC(?totalRelevantInst)
 
 <!-- 4. Anti‑Analysis / Anti‑VM Behavior -->
+<!-- detecting ptrace api, which is a process injection technique that can often be used in linux malware -->
+SELECT ?f
+WHERE {
+
+    ?f ontology:calls ?api .
+    ?api ontology:hasName ?name .
+
+    FILTER regex(?name,"ptrace","i")
+}
+
 <!-- cpuid instructions are often used for VM detection -->
 <!-- TODO: maybe modify this to show what function this opcode/instruction is located in -->
 SELECT ?instr
 WHERE {
     ?instr a ontology:Instruction ;
            ontology:hasOpcode "CPUID" .
+}
+
+<!-- 5. Privilege Escalation / System Manipulation -->
+<!-- looking for api calls that indicate permission escalation -->
+SELECT ?f ?name
+WHERE {
+
+    ?f ontology:calls ?api .
+    ?api ontology:hasName ?name .
+
+    FILTER regex(?name,
+      "setuid|setgid|capset|prctl",
+      "i")
+}
+
+<!-- 6. File System Abuse -->
+<!-- looking for api calls that can be used for file system abuse -->
+SELECT ?f ?name
+WHERE {
+
+    ?f ontology:calls ?api .
+    ?api ontology:hasName ?name .
+
+    FILTER regex(?name,
+      "open|write|unlink|chmod|chown",
+      "i")
+}
+
+<!-- 7. Command‑and‑Control (C2) Indicators -->
+<!-- checking for hard coded ip addresses, domains, or urls, which indicate C2 behavior -->
+SELECT ?f ?value
+WHERE {
+
+    ?f ontology:calls ?api .
+    ?api ontology:hasName ?name .
+
+    FILTER regex(?name,"socket|connect|send|recv","i")
+
+    ?f ontology:containsInstruction ?i .
+    ?i ontology:hasSourceOperand ?op .
+    ?op ontology:hasOperandValue ?value .
+
+    FILTER regex(?value,"http|\\.(com|net|org)","i")
 }
 
 <!-- 8. Cryptographic Activity -->
@@ -104,17 +210,59 @@ GROUP BY ?f
 HAVING (?xorCount > 10)
 ORDER BY DESC(?xorCount)
 
+<!-- detecting cryptography libraries through api calls -->
+SELECT ?f ?name
+WHERE {
+
+    ?f ontology:calls ?api .
+    ?api ontology:hasName ?name .
+
+    FILTER regex(?name,
+      "aes|sha|md5|evp",
+      "i")
+}
+
+<!-- detecting patterns in loops that often indicate custom encryption routines -->
+SELECT ?f (COUNT(?instr) AS ?bitwiseOps)
+WHERE {
+
+    ?f ontology:containsInstruction ?instr .
+    ?instr ontology:hasOpcode ?op .
+
+    FILTER (?op IN ("XOR","ROL","ROR","SHL","SHR","AND","OR"))
+}
+GROUP BY ?f
+HAVING (?bitwiseOps > 30)
+
 <!-- Other -->
-<!-- detect indriect jumps -->
-<!-- TEST ME -->
+<!-- detect jumps into memory -->
+<!-- TODO: Maybe see what functions are doing this in memory -->
 SELECT ?instr ?value
 WHERE {
-    ?instr a ontology:Instruction ;
-           ontology:hasOpcode ?opcode ;
+    ?instr ontology:hasOpcode ?opcode ;
            ontology:hasDestinationOperand ?op .
 
-    ?op ontology:hasOperandType "register" ;
+    ?op ontology:hasOperandType "ADDRESS" ;
         ontology:hasOperandValue ?value .
 
     FILTER (?opcode IN ("JMP","CALL"))
+}
+
+
+<!-- detect reverse shell behavior -->
+SELECT ?f
+WHERE {
+    ?f a ontology:Function .
+
+    ?f ontology:calls ?c1 .
+    ?c1 ontology:hasName ?n1 .
+    FILTER regex(?n1, "socket")
+
+    ?f ontology:calls ?c2 .
+    ?c2 ontology:hasName ?n2 .
+    FILTER regex(?n2, "connect")
+
+    ?f ontology:calls ?c3 .
+    ?c3 ontology:hasName ?n3 .
+    FILTER regex(?n3, "execve|system")
 }
