@@ -52,7 +52,7 @@ ORDER BY DESC(?diversityRatio)
 
 <!-- Looks for functions that contain both a transformation opcode and a loop/branch opcode -->
 <!-- This finds any self-referential decode loops, which can be an indicator of data obfuscation -->
-<!-- TEST THIS -->
+<!-- It counts how many 'suspicious' instructions are in the given function -->
 SELECT ?function (COUNT(?inst) AS ?totalRelevantInst)
 WHERE {
   ?function ontology:containsInstruction ?inst .
@@ -102,3 +102,19 @@ WHERE {
 }
 GROUP BY ?f
 HAVING (?xorCount > 10)
+ORDER BY DESC(?xorCount)
+
+<!-- Other -->
+<!-- detect indriect jumps -->
+<!-- TEST ME -->
+SELECT ?instr ?value
+WHERE {
+    ?instr a ontology:Instruction ;
+           ontology:hasOpcode ?opcode ;
+           ontology:hasDestinationOperand ?op .
+
+    ?op ontology:hasOperandType "register" ;
+        ontology:hasOperandValue ?value .
+
+    FILTER (?opcode IN ("JMP","CALL"))
+}

@@ -60,6 +60,7 @@ hasReferenceType = URIRef("http://www.semanticweb.org/jaspe/ontologies/2026/0/sy
 hasOpcode = URIRef("http://www.semanticweb.org/jaspe/ontologies/2026/0/symbol-ontology/hasOpcode")
 hasOperandType = URIRef("http://www.semanticweb.org/jaspe/ontologies/2026/0/symbol-ontology/hasOperandType")
 hasOperandValue = URIRef("http://www.semanticweb.org/jaspe/ontologies/2026/0/symbol-ontology/hasOperandValue")
+hasName = URIRef("http://www.semanticweb.org/jaspe/ontologies/2026/0/symbol-ontology/hasName")
 
 
 
@@ -177,6 +178,8 @@ for l in local_var_list:
     graph.add((local_var, a, LOCAL_VARIABLE))
     graph.add((data_type, a, DATA_TYPE))
     graph.add((parent_func, a, FUNCTION))
+    # get the name of the function and add that relation
+    graph.add((parent_func, hasName, Literal(str(parent_func))))
     
     graph.add((parent_func, defines, local_var))
     graph.add((local_var, hasDataType, data_type))
@@ -191,6 +194,7 @@ for p in parameters_list:
     
     graph.add((param, a, PARAMETER))
     graph.add((parent_func, a, FUNCTION))
+    graph.add((parent_func, hasName, Literal(str(parent_func))))
     
     graph.add((param, passesInto, parent_func))
     graph.add((param, hasDataType, data_type))
@@ -291,6 +295,7 @@ for l in dll_list:
 for f in function_list:
     f_instance = pfs["mkg"][quote_for_turtle(f['func'])]
     graph.add( (f_instance, a, FUNCTION))
+    graph.add((f_instance, hasName, Literal(str(f_instance))))
     
     if f['address'] != "NO ADDRESS":
         f_address = pfs["mkg"][quote_for_turtle(f['address'])]
@@ -309,6 +314,7 @@ for f in function_list:
             # make the URI of the function since it is seen elsewhere
             func_called = pfs["mkg"][quote_for_turtle(fc['func'])]
             graph.add((func_called, a, FUNCTION))
+            graph.add((func_called, hasName, Literal(str(func_called))))
             graph.add((f_instance, calls, func_called))
             
     # return type
@@ -395,6 +401,7 @@ for i in instruction_list:
     func = pfs["mkg"][quote_for_turtle(i['in_function'])]
     # then add the function contains instruction relation with the current instruction
     graph.add((func, a, FUNCTION))
+    graph.add((func, hasName, Literal(str(func))))
     graph.add((func, containsInstruction, i_instance))    
 
 # then serialize the graph

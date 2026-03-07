@@ -100,12 +100,8 @@
 #    Data properties
 #################################################################
 
-###  http://www.semanticweb.org/jaspe/ontologies/2026/0/symbol-ontology#hasOperandType
-:hasOperandType rdf:type owl:DatatypeProperty .
-
-
-###  http://www.semanticweb.org/jaspe/ontologies/2026/0/symbol-ontology#hasOperandValue
-:hasOperandValue rdf:type owl:DatatypeProperty .
+###  http://www.semanticweb.org/jaspe/ontologies/2026/0/symbol-ontology#hasName
+:hasName rdf:type owl:DatatypeProperty .
 
 
 ###  http://www.semanticweb.org/jaspe/ontologies/2026/0/symbol-ontology/hasOpcode
@@ -115,6 +111,14 @@
 ###  http://www.semanticweb.org/jaspe/ontologies/2026/0/symbol-ontology/hasOperandIndex
 :hasOperandIndex rdf:type owl:DatatypeProperty ;
                  rdfs:subPropertyOf owl:topDataProperty .
+
+
+###  http://www.semanticweb.org/jaspe/ontologies/2026/0/symbol-ontology/hasOperandType
+:hasOperandType rdf:type owl:DatatypeProperty .
+
+
+###  http://www.semanticweb.org/jaspe/ontologies/2026/0/symbol-ontology/hasOperandValue
+:hasOperandValue rdf:type owl:DatatypeProperty .
 
 
 ###  http://www.semanticweb.org/jaspe/ontologies/2026/0/symbol-ontology/hasReferenceType
@@ -181,6 +185,10 @@
                           [ rdf:type owl:Restriction ;
                             owl:onProperty :returns ;
                             owl:someValuesFrom :Variable
+                          ] ,
+                          [ rdf:type owl:Restriction ;
+                            owl:onProperty :hasName ;
+                            owl:someValuesFrom xsd:string
                           ] .
 
 
