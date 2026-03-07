@@ -21,6 +21,7 @@ pfs = {
 }
 
 # Current TODO:
+# modify ontology to be able ot get the actual literal value out of a scalar object
 # make a property for next instruction so it can be used for finding a sequence of instructions to detect malicious behavior
 
 # Future TODO:
@@ -379,7 +380,7 @@ for i in instruction_list:
             # if the type of operand object is in the class list, then add that triple
             # if the operand type is in the class dictionary, then add that as a triple
             if (op_type in class_dict):
-                print(op_type)
+                # print(op_type)
                 graph.add((operand_type_instance, a, class_dict[op_type]))
             # then say that that instance performs the role of the current operand
             graph.add((operand_type_instance, performsRole, operand))

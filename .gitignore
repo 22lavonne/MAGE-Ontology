@@ -15,3 +15,4 @@ ghidra-scripting/data-extraction-old.py
 ghidra-scripting/data_parser_extra.py
 ghidra-scripting/*.ttl
 ghidra-scripting/rdflib-materialization-short.py
+ghidra-scripting/queries_old.xml

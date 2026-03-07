@@ -29,7 +29,7 @@ def get_instructions_from_function(func, file):
     
     for instruction in instructionIterator:
         file.write("INSTRUCTION min_address=" + str(instruction.getMinAddress()))
-        file.write(" opcode=" + str(instruction.getMnemonicString()))
+        file.write(" opcode=" + instruction.getMnemonicString().upper())
         file.write(" in_function=" + str(func.getName()))
         file.write(" numoperands=" + str(instruction.getNumOperands()) + "\n")
         
