@@ -52,13 +52,15 @@ hasReference = URIRef("http://www.semanticweb.org/jaspe/ontologies/2026/0/symbol
 hasPrimaryReference = URIRef("http://www.semanticweb.org/jaspe/ontologies/2026/0/symbol-ontology/hasPrimaryReference")
 hasSourceOperand = URIRef("http://www.semanticweb.org/jaspe/ontologies/2026/0/symbol-ontology/hasSourceOperand")
 hasDestinationOperand = URIRef("http://www.semanticweb.org/jaspe/ontologies/2026/0/symbol-ontology/hasDestinationOperand")
-performsRole = URIRef("http://www.semanticweb.org/jaspe/ontologies/2026/0/symbol-ontology/performsRole")
 defines = URIRef("http://www.semanticweb.org/jaspe/ontologies/2026/0/symbol-ontology/defines")
 
 # Data Properties
 hasOperandIndex = URIRef("http://www.semanticweb.org/jaspe/ontologies/2026/0/symbol-ontology/hasOperandIndex")
 hasReferenceType = URIRef("http://www.semanticweb.org/jaspe/ontologies/2026/0/symbol-ontology/hasReferenceType")
 hasOpcode = URIRef("http://www.semanticweb.org/jaspe/ontologies/2026/0/symbol-ontology/hasOpcode")
+hasOperandType = URIRef("http://www.semanticweb.org/jaspe/ontologies/2026/0/symbol-ontology/hasOperandType")
+hasOperandValue = URIRef("http://www.semanticweb.org/jaspe/ontologies/2026/0/symbol-ontology/hasOperandValue")
+
 
 
 # Classes
@@ -365,9 +367,7 @@ for i in instruction_list:
     graph.add((i_instance, atAddress, i_address))
     
     # opcode
-    opcode = pfs["mkg"][quote_for_turtle(i["opcode"])]
     opcode = Literal(i["opcode"])
-    # graph.add((opcode, a, OPCODE))
     graph.add((i_instance, hasOpcode, opcode))
     
     if i['source_operands']:
@@ -375,28 +375,19 @@ for i in instruction_list:
             operand = pfs["mkg"][quote_for_turtle(s['operand'])]
             graph.add((operand, a, OPERAND))
             
-            op_type = s["type"]
-            operand_type_instance = pfs["mkg"][quote_for_turtle(op_type)]
-            # if the type of operand object is in the class list, then add that triple
-            # if the operand type is in the class dictionary, then add that as a triple
-            if (op_type in class_dict):
-                # print(op_type)
-                graph.add((operand_type_instance, a, class_dict[op_type]))
-            # then say that that instance performs the role of the current operand
-            graph.add((operand_type_instance, performsRole, operand))
-            # then give the instrution instance a source operand of this operand
+            op_type = Literal(str(s["type"]))
+            graph.add((operand, hasOperandType, op_type))
+            graph.add((operand, hasOperandValue, Literal(s['operand'])))
+            
             graph.add((i_instance, hasSourceOperand, operand))
             
     if i['destination_operand']:
         operand = pfs["mkg"][quote_for_turtle(i['destination_operand']['operand'])]
         graph.add((operand, a, OPERAND))
         
-        op_type = s["type"]
-        operand_type_instance = pfs["mkg"][quote_for_turtle(op_type)]
-
-        if (op_type in class_dict):
-            graph.add((operand_type_instance, a, class_dict[op_type]))
-        graph.add((operand_type_instance, performsRole, operand))
+        op_type = Literal(str(s["type"]))
+        graph.add((operand, hasOperandType, op_type))
+        graph.add((operand, hasOperandValue, Literal(i['destination_operand']['operand'])))
         
         graph.add((i_instance, hasDestinationOperand, operand))
         

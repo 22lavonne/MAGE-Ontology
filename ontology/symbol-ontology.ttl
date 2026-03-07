@@ -12,7 +12,7 @@
 #    Object Properties
 #################################################################
 
-###  http://www.semanticweb.org/jaspe/ontologies/2026/0/symbol-ontology#atAddress
+###  http://www.semanticweb.org/jaspe/ontologies/2026/0/symbol-ontology/atAddress
 :atAddress rdf:type owl:ObjectProperty .
 
 
@@ -91,11 +91,6 @@
 :passesInto rdf:type owl:ObjectProperty .
 
 
-###  http://www.semanticweb.org/jaspe/ontologies/2026/0/symbol-ontology/performsRole
-:performsRole rdf:type owl:ObjectProperty ;
-              rdfs:subPropertyOf owl:topObjectProperty .
-
-
 ###  http://www.semanticweb.org/jaspe/ontologies/2026/0/symbol-ontology/returns
 :returns rdf:type owl:ObjectProperty ;
          rdfs:subPropertyOf owl:topObjectProperty .
@@ -104,6 +99,14 @@
 #################################################################
 #    Data properties
 #################################################################
+
+###  http://www.semanticweb.org/jaspe/ontologies/2026/0/symbol-ontology#hasOperandType
+:hasOperandType rdf:type owl:DatatypeProperty .
+
+
+###  http://www.semanticweb.org/jaspe/ontologies/2026/0/symbol-ontology#hasOperandValue
+:hasOperandValue rdf:type owl:DatatypeProperty .
+
 
 ###  http://www.semanticweb.org/jaspe/ontologies/2026/0/symbol-ontology/hasOpcode
 :hasOpcode rdf:type owl:DatatypeProperty .
@@ -123,11 +126,7 @@
 #################################################################
 
 ###  http://www.semanticweb.org/jaspe/ontologies/2026/0/symbol-ontology/Address
-:Address rdf:type owl:Class ;
-         rdfs:subClassOf [ rdf:type owl:Restriction ;
-                           owl:onProperty :performsRole ;
-                           owl:someValuesFrom :Operand
-                         ] .
+:Address rdf:type owl:Class .
 
 
 ###  http://www.semanticweb.org/jaspe/ontologies/2026/0/symbol-ontology/Class
@@ -149,11 +148,7 @@
 
 
 ###  http://www.semanticweb.org/jaspe/ontologies/2026/0/symbol-ontology/Dynamic
-:Dynamic rdf:type owl:Class ;
-         rdfs:subClassOf [ rdf:type owl:Restriction ;
-                           owl:onProperty :performsRole ;
-                           owl:someValuesFrom :Operand
-                         ] .
+:Dynamic rdf:type owl:Class .
 
 
 ###  http://www.semanticweb.org/jaspe/ontologies/2026/0/symbol-ontology/Function
@@ -190,11 +185,7 @@
 
 
 ###  http://www.semanticweb.org/jaspe/ontologies/2026/0/symbol-ontology/ImmediateOperand
-:ImmediateOperand rdf:type owl:Class ;
-                  rdfs:subClassOf [ rdf:type owl:Restriction ;
-                                    owl:onProperty :performsRole ;
-                                    owl:someValuesFrom :Operand
-                                  ] .
+:ImmediateOperand rdf:type owl:Class .
 
 
 ###  http://www.semanticweb.org/jaspe/ontologies/2026/0/symbol-ontology/Instruction
@@ -258,6 +249,14 @@
                          [ rdf:type owl:Restriction ;
                            owl:onProperty :isA ;
                            owl:someValuesFrom :Register
+                         ] ,
+                         [ rdf:type owl:Restriction ;
+                           owl:onProperty :hasOperandType ;
+                           owl:someValuesFrom xsd:string
+                         ] ,
+                         [ rdf:type owl:Restriction ;
+                           owl:onProperty :hasOperandValue ;
+                           owl:someValuesFrom xsd:string
                          ] .
 
 
@@ -291,19 +290,11 @@
 
 
 ###  http://www.semanticweb.org/jaspe/ontologies/2026/0/symbol-ontology/Register
-:Register rdf:type owl:Class ;
-          rdfs:subClassOf [ rdf:type owl:Restriction ;
-                            owl:onProperty :performsRole ;
-                            owl:someValuesFrom :Operand
-                          ] .
+:Register rdf:type owl:Class .
 
 
 ###  http://www.semanticweb.org/jaspe/ontologies/2026/0/symbol-ontology/Scalar
-:Scalar rdf:type owl:Class ;
-        rdfs:subClassOf [ rdf:type owl:Restriction ;
-                          owl:onProperty :performsRole ;
-                          owl:someValuesFrom :Operand
-                        ] .
+:Scalar rdf:type owl:Class .
 
 
 ###  http://www.semanticweb.org/jaspe/ontologies/2026/0/symbol-ontology/Symbol
