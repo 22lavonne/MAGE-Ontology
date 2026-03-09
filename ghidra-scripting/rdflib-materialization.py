@@ -20,13 +20,6 @@ pfs = {
 "time": TIME
 }
 
-# Current TODO:
-# modify ontology to be able ot get the actual literal value out of a scalar object
-# make a property for next instruction so it can be used for finding a sequence of instructions to detect malicious behavior
-
-# Future TODO:
-# maybe change the name of DLL to library since it's called library in the ghidra api
-
 # Initialization shortcut
 def init_kg(prefixes=pfs):
     kg = Graph()
@@ -61,8 +54,6 @@ hasOpcode = URIRef("http://www.semanticweb.org/jaspe/ontologies/2026/0/symbol-on
 hasOperandType = URIRef("http://www.semanticweb.org/jaspe/ontologies/2026/0/symbol-ontology/hasOperandType")
 hasOperandValue = URIRef("http://www.semanticweb.org/jaspe/ontologies/2026/0/symbol-ontology/hasOperandValue")
 hasName = URIRef("http://www.semanticweb.org/jaspe/ontologies/2026/0/symbol-ontology/hasName")
-
-
 
 # Classes
 SYMBOL = URIRef("http://www.semanticweb.org/jaspe/ontologies/2026/0/symbol-ontology/Symbol")

@@ -1,11 +1,44 @@
 # # Query ideas gotten from Dr. Junjie Zhang
 # Queries generated and adapted from Google's AI mode (3) and ChatGPT (1, 2, 4-8, other)
 
+# These queries are specifically written for detecting malicious behavior in ELF (executable and linkable format) files,
+# which are primarily UNIX based. Most of these queries will not work with other kinds of files,
+# since the format and names of api calls will be different.
+
 PREFIX ontology: <http://www.semanticweb.org/jaspe/ontologies/2026/0/symbol-ontology>
 
 
 # 1. Suspicious API Usage (Behavioral Indicators)
-# detects suspicious api calls in elf files
+
+# a. detect persistent apis
+# returns the base function name and the suspicious api function name
+SELECT ?f ?fname ?cname
+WHERE {
+
+    ?f ontology:calls ?api .
+    ?f ontology:hasName ?fname .
+    ?api ontology:hasName ?cname .
+
+    FILTER regex(?cname,
+      "system|execve|popen",
+      "i")
+}
+
+# b. detects networking activity through specific api calls
+# returns base function name and the suspicious netowrking api function name
+SELECT ?f ?fname ?name
+WHERE {
+
+    ?f ontology:calls ?api .
+    ?f ontology:hasName ?fname .
+    ?api ontology:hasName ?name .
+
+    FILTER regex(?name,
+      "socket|connect|send|recv|sendto|recvfrom",
+      "i")
+}
+
+# c. detects other kinds of suspicious api calls
 # returns the base function name and the suspicious api function name
 SELECT DISTINCT ?f ?fname ?cname
 WHERE {
@@ -15,37 +48,14 @@ WHERE {
     ?api ontology:hasName ?cname .
 
     FILTER regex(?cname,
-      "ptrace|process_vm_writev|fork|clone|execve|socket|connect|system",
-      "i")
-}
-
-
-# detect persistent apis
-SELECT ?f ?name
-WHERE {
-
-    ?f ontology:calls ?api .
-    ?api ontology:hasName ?name .
-
-    FILTER regex(?name,
-      "system|execve|popen",
-      "i")
-}
-
-# detects networking activity through specific api calls
-SELECT ?f ?name
-WHERE {
-
-    ?f ontology:calls ?api .
-    ?api ontology:hasName ?name .
-
-    FILTER regex(?name,
-      "socket|connect|send|recv|sendto|recvfrom",
+      "process_vm_writev|fork|clone",
       "i")
 }
 
 # 2. Dynamic Code Execution & Self‑Modification
-# Indirect control flow, common in shellcode loaders
+
+# a. Indirect control flow, common in shellcode loaders
+# finds instructions with a jump or call opcode, with the destination operand being a register
 SELECT ?instr ?opcode ?reg
 WHERE {
 
@@ -58,11 +68,12 @@ WHERE {
     FILTER (?opcode IN ("JMP","CALL"))
 }
 
-# detect executable memory allocation
-SELECT ?f ?name
+# b. detect executable memory allocation through the api calls "mmap" and "mprotect"
+SELECT ?f ?fname ?name
 WHERE {
 
     ?f ontology:calls ?api .
+    ?f ontology:hasName ?fname .
     ?api ontology:hasName ?name .
 
     FILTER regex(?name,
@@ -73,7 +84,7 @@ WHERE {
 
 # 3. Packed or Obfuscated Binary Detection
 
-# A. Import sparsity vs binary size
+# a. Import sparsity vs binary size
 # Gets the total count of DLLs (or external libraries) used by the program
 SELECT (COUNT (*) as ?total)
 WHERE {
@@ -86,7 +97,7 @@ WHERE {
     ?instance a ontology:Instruction
 }
 
-# B. Section entropy analysis
+# b. Section entropy analysis
 # this returns functions and the number of instructions based on a ratio of how many unique opcodes there are compared to the # of instructions
 # The higher the ratio to 1, the more unique opcodes there are, leading to higher entropy
 # It filters out any instructions that have less than 10 instructions
@@ -103,7 +114,7 @@ GROUP BY ?function
 HAVING (?totalInstructions > 10)
 ORDER BY DESC(?diversityRatio)
 
-# C. Self‑referential decode loops (read → transform → write → repeat) 
+# c. Self‑referential decode loops (read → transform → write → repeat) 
 
 # Looks for functions that contain both a transformation opcode and a loop/branch opcode
 # This finds any self-referential decode loops, which can be an indicator of data obfuscation
@@ -115,21 +126,21 @@ WHERE {
   
   BIND(LCASE(STR(?opcode)) AS ?opStr)
   
-  # 1. Ensure the function has at least one TRANSFORMATION opcode
+  # ensure the function has at least one TRANSFORMATION opcode
   FILTER EXISTS {
     ?function ontology:containsInstruction ?i_trans .
     ?i_trans ontology:hasOpcode ?op_trans .
     FILTER(?op_trans IN ("XOR", "ADD", "SUB", "ROR", "ROL", "NOT"))
   }
   
-  # 2. Ensure the same function has at least one LOOP/BRANCH opcode
+  # ensure the same function has at least one LOOP/BRANCH opcode
   FILTER EXISTS {
     ?function ontology:containsInstruction ?i_loop .
     ?i_loop ontology:hasOpcode ?op_loop .
     FILTER(?op_loop IN ("JNZ", "JZ", "JMP", "LOOP"))
   }
 
-  # Only count the instructions that match our overall 'suspicious' list
+  # only count the instructions that match our overall 'suspicious' list
   FILTER(?opcode IN ("XOR", "ADD", "SUB", "ROR", "ROL", "NOT", "JNZ", "JZ", "JMP", "LOOP"))
 }
 GROUP BY ?function
@@ -137,7 +148,7 @@ HAVING (COUNT(?inst) >= 2)
 ORDER BY DESC(?totalRelevantInst)
 
 # 4. Anti‑Analysis / Anti‑VM Behavior
-# detecting ptrace api, which is a process injection technique that can often be used in linux malware
+# a. detecting ptrace api, which is a process injection technique that can often be used in linux malware
 SELECT ?f
 WHERE {
 
@@ -147,7 +158,7 @@ WHERE {
     FILTER regex(?name,"ptrace","i")
 }
 
-# cpuid instructions are often used for VM detection
+# b. cpuid instructions are often used for VM detection
 # TODO: maybe modify this to show what function this opcode/instruction is located in
 SELECT ?instr
 WHERE {
@@ -156,7 +167,7 @@ WHERE {
 }
 
 # 5. Privilege Escalation / System Manipulation
-# looking for api calls that indicate permission escalation
+# a. looking for api calls that indicate permission escalation
 SELECT ?f ?name
 WHERE {
 
@@ -169,7 +180,7 @@ WHERE {
 }
 
 # 6. File System Abuse
-# looking for api calls that can be used for file system abuse
+# a. looking for api calls that can be used for file system abuse
 SELECT ?f ?name
 WHERE {
 
@@ -182,7 +193,7 @@ WHERE {
 }
 
 # 7. Command‑and‑Control (C2) Indicators
-# checking for hard coded ip addresses, domains, or urls, which indicate C2 behavior
+# a. checking for hard coded ip addresses, domains, or urls, which indicate C2 behavior
 SELECT ?f ?value
 WHERE {
 
@@ -199,8 +210,10 @@ WHERE {
 }
 
 # 8. Cryptographic Activity
-# getting the count of how many xor instructions are in a given function,
+
+# a. getting the count of how many xor instructions are in a given function,
 # large amounts often indicate custom encryption, unpacking loops, or string decoding
+# only returns functions with more than 10 instances, sorts by most to least
 SELECT ?f (COUNT(?xor) AS ?xorCount)
 WHERE {
     ?f a ontology:Function ;
@@ -212,7 +225,7 @@ GROUP BY ?f
 HAVING (?xorCount > 10)
 ORDER BY DESC(?xorCount)
 
-# detecting cryptography libraries through api calls
+# b. detecting cryptography libraries through api calls
 SELECT ?f ?name
 WHERE {
 
@@ -224,7 +237,9 @@ WHERE {
       "i")
 }
 
-# detecting patterns in loops that often indicate custom encryption routines
+# c. detecting patterns in loops that often indicate custom encryption routines
+# counts how many instances of certain instructions there are, 
+# and only shows functions with over 30, sorting by most to least
 SELECT ?f (COUNT(?instr) AS ?bitwiseOps)
 WHERE {
 
@@ -235,12 +250,16 @@ WHERE {
 }
 GROUP BY ?f
 HAVING (?bitwiseOps > 30)
+ORDER BY DESC(?bitwiseOps)
 
 # Other
-# detect jumps into memory
-# TODO: Maybe see what functions are doing this in memory
-SELECT ?instr ?value
+# a. detect jumps into memory, where there is a jmp or call operand on an address
+# returns which function contains this instruction and what the memory address is
+SELECT ?f ?fname ?instr ?value
 WHERE {
+    ?f ontology:containsInstruction ?instr ;
+        ontology:hasName ?fname.
+
     ?instr ontology:hasOpcode ?opcode ;
            ontology:hasDestinationOperand ?op .
 
@@ -250,8 +269,7 @@ WHERE {
     FILTER (?opcode IN ("JMP","CALL"))
 }
 
-
-# detect reverse shell behavior
+# b. detect reverse shell behavior, where a function calls 3 specific apis
 SELECT ?f
 WHERE {
     ?f a ontology:Function .
