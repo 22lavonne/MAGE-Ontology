@@ -1,24 +1,26 @@
-<!-- Query ideas gotten from Dr. Junjie Zhang -->
-<!-- Queries generated and adapted from Google's AI mode (3) and ChatGPT (1, 2, 4-8) -->
+# # Query ideas gotten from Dr. Junjie Zhang
+# Queries generated and adapted from Google's AI mode (3) and ChatGPT (1, 2, 4-8, other)
 
 PREFIX ontology: <http://www.semanticweb.org/jaspe/ontologies/2026/0/symbol-ontology>
 
 
-<!-- 1. Suspicious API Usage (Behavioral Indicators) -->
-<!-- detects suspicious api calls in elf files -->
-SELECT DISTINCT ?f ?name
+# 1. Suspicious API Usage (Behavioral Indicators)
+# detects suspicious api calls in elf files
+# returns the base function name and the suspicious api function name
+SELECT DISTINCT ?f ?fname ?cname
 WHERE {
 
     ?f ontology:calls ?api .
-    ?api ontology:hasName ?name .
+    ?f ontology:hasName ?fname .
+    ?api ontology:hasName ?cname .
 
-    FILTER regex(?name,
+    FILTER regex(?cname,
       "ptrace|process_vm_writev|fork|clone|execve|socket|connect|system",
       "i")
 }
 
 
-<!-- detect persistent apis -->
+# detect persistent apis
 SELECT ?f ?name
 WHERE {
 
@@ -30,7 +32,7 @@ WHERE {
       "i")
 }
 
-<!-- detects networking activity through specific api calls -->
+# detects networking activity through specific api calls
 SELECT ?f ?name
 WHERE {
 
@@ -42,8 +44,8 @@ WHERE {
       "i")
 }
 
-<!-- 2. Dynamic Code Execution & Self‑Modification -->
-<!-- Indirect control flow, common in shellcode loaders -->
+# 2. Dynamic Code Execution & Self‑Modification
+# Indirect control flow, common in shellcode loaders
 SELECT ?instr ?opcode ?reg
 WHERE {
 
@@ -56,7 +58,7 @@ WHERE {
     FILTER (?opcode IN ("JMP","CALL"))
 }
 
-<!-- detect executable memory allocation -->
+# detect executable memory allocation
 SELECT ?f ?name
 WHERE {
 
@@ -69,25 +71,25 @@ WHERE {
 }
 
 
-<!-- 3. Packed or Obfuscated Binary Detection -->
+# 3. Packed or Obfuscated Binary Detection
 
-<!-- A. Import sparsity vs binary size -->
-<!-- Gets the total count of DLLs (or external libraries) used by the program -->
+# A. Import sparsity vs binary size
+# Gets the total count of DLLs (or external libraries) used by the program
 SELECT (COUNT (*) as ?total)
 WHERE {
     ?instance a ontology:DLL
 }
 
-<!-- Gets the total number of instructions in an executable -->
+# Gets the total number of instructions in an executable
 SELECT (COUNT (*) as ?total)
 WHERE {
     ?instance a ontology:Instruction
 }
 
-<!-- B. Section entropy analysis -->
-<!-- this returns functions and the number of instructions based on a ratio of how many unique opcodes there are compared to the # of instructions -->
-<!-- The higher the ratio to 1, the more unique opcodes there are, leading to higher entropy -->
-<!-- It filters out any instructions that have less than 10 instructions -->
+# B. Section entropy analysis
+# this returns functions and the number of instructions based on a ratio of how many unique opcodes there are compared to the # of instructions
+# The higher the ratio to 1, the more unique opcodes there are, leading to higher entropy
+# It filters out any instructions that have less than 10 instructions
 SELECT ?function 
     (COUNT(DISTINCT ?opcode) AS ?uniqueOpcodes) 
     (COUNT(?instruction) AS ?totalInstructions)
@@ -101,11 +103,11 @@ GROUP BY ?function
 HAVING (?totalInstructions > 10)
 ORDER BY DESC(?diversityRatio)
 
-<!-- C. Self‑referential decode loops (read → transform → write → repeat)  -->
+# C. Self‑referential decode loops (read → transform → write → repeat) 
 
-<!-- Looks for functions that contain both a transformation opcode and a loop/branch opcode -->
-<!-- This finds any self-referential decode loops, which can be an indicator of data obfuscation -->
-<!-- It counts how many 'suspicious' instructions are in the given function -->
+# Looks for functions that contain both a transformation opcode and a loop/branch opcode
+# This finds any self-referential decode loops, which can be an indicator of data obfuscation
+# It counts how many 'suspicious' instructions are in the given function
 SELECT ?function (COUNT(?inst) AS ?totalRelevantInst)
 WHERE {
   ?function ontology:containsInstruction ?inst .
@@ -134,8 +136,8 @@ GROUP BY ?function
 HAVING (COUNT(?inst) >= 2) 
 ORDER BY DESC(?totalRelevantInst)
 
-<!-- 4. Anti‑Analysis / Anti‑VM Behavior -->
-<!-- detecting ptrace api, which is a process injection technique that can often be used in linux malware -->
+# 4. Anti‑Analysis / Anti‑VM Behavior
+# detecting ptrace api, which is a process injection technique that can often be used in linux malware
 SELECT ?f
 WHERE {
 
@@ -145,16 +147,16 @@ WHERE {
     FILTER regex(?name,"ptrace","i")
 }
 
-<!-- cpuid instructions are often used for VM detection -->
-<!-- TODO: maybe modify this to show what function this opcode/instruction is located in -->
+# cpuid instructions are often used for VM detection
+# TODO: maybe modify this to show what function this opcode/instruction is located in
 SELECT ?instr
 WHERE {
     ?instr a ontology:Instruction ;
            ontology:hasOpcode "CPUID" .
 }
 
-<!-- 5. Privilege Escalation / System Manipulation -->
-<!-- looking for api calls that indicate permission escalation -->
+# 5. Privilege Escalation / System Manipulation
+# looking for api calls that indicate permission escalation
 SELECT ?f ?name
 WHERE {
 
@@ -166,8 +168,8 @@ WHERE {
       "i")
 }
 
-<!-- 6. File System Abuse -->
-<!-- looking for api calls that can be used for file system abuse -->
+# 6. File System Abuse
+# looking for api calls that can be used for file system abuse
 SELECT ?f ?name
 WHERE {
 
@@ -179,8 +181,8 @@ WHERE {
       "i")
 }
 
-<!-- 7. Command‑and‑Control (C2) Indicators -->
-<!-- checking for hard coded ip addresses, domains, or urls, which indicate C2 behavior -->
+# 7. Command‑and‑Control (C2) Indicators
+# checking for hard coded ip addresses, domains, or urls, which indicate C2 behavior
 SELECT ?f ?value
 WHERE {
 
@@ -196,9 +198,9 @@ WHERE {
     FILTER regex(?value,"http|\\.(com|net|org)","i")
 }
 
-<!-- 8. Cryptographic Activity -->
-<!-- getting the count of how many xor instructions are in a given function,
-large amounts often indicate custom encryption, unpacking loops, or string decoding -->
+# 8. Cryptographic Activity
+# getting the count of how many xor instructions are in a given function,
+# large amounts often indicate custom encryption, unpacking loops, or string decoding
 SELECT ?f (COUNT(?xor) AS ?xorCount)
 WHERE {
     ?f a ontology:Function ;
@@ -210,7 +212,7 @@ GROUP BY ?f
 HAVING (?xorCount > 10)
 ORDER BY DESC(?xorCount)
 
-<!-- detecting cryptography libraries through api calls -->
+# detecting cryptography libraries through api calls
 SELECT ?f ?name
 WHERE {
 
@@ -222,7 +224,7 @@ WHERE {
       "i")
 }
 
-<!-- detecting patterns in loops that often indicate custom encryption routines -->
+# detecting patterns in loops that often indicate custom encryption routines
 SELECT ?f (COUNT(?instr) AS ?bitwiseOps)
 WHERE {
 
@@ -234,9 +236,9 @@ WHERE {
 GROUP BY ?f
 HAVING (?bitwiseOps > 30)
 
-<!-- Other -->
-<!-- detect jumps into memory -->
-<!-- TODO: Maybe see what functions are doing this in memory -->
+# Other
+# detect jumps into memory
+# TODO: Maybe see what functions are doing this in memory
 SELECT ?instr ?value
 WHERE {
     ?instr ontology:hasOpcode ?opcode ;
@@ -249,7 +251,7 @@ WHERE {
 }
 
 
-<!-- detect reverse shell behavior -->
+# detect reverse shell behavior
 SELECT ?f
 WHERE {
     ?f a ontology:Function .
