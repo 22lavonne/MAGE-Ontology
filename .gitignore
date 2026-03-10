@@ -1,5 +1,4 @@
-documentation/axiom-specification-old1.md
-documentation/axiom-specification-old2.md
+documentation/old-versions
 
 documentation/annotated-bib/*.aux
 documentation/annotated-bib/*.bbl
@@ -8,11 +7,9 @@ documentation/annotated-bib/*.log
 documentation/annotated-bib/*.out
 
 schema/schema-diagram-notes.graphml
+schema/schema-diagram-images-old
+schema/schema-diagram-old.graphml
 
 ghidra-scripting/*.txt
 ghidra-scripting/__pycache__/
-ghidra-scripting/data-extraction-old.py
-ghidra-scripting/data_parser_extra.py
 ghidra-scripting/*.ttl
-ghidra-scripting/rdflib-materialization-short.py
-ghidra-scripting/queries_old.xml

@@ -87,6 +87,8 @@ The Function objects keeps track of all the aspects of a function, including any
 "A function is defined in exactly one lexical scope symbol"
 * `(17) Function containsInstruction min 1 Instruction` <br>
 "A function contains one or more instructions"
+* `(18) Function hasName xsd:string exactly 1 name` <br>
+"A function has exactly one name represented as a string"
 
 
 ## Instruction
@@ -96,22 +98,20 @@ The instruction object refers to an assembly instruction that will originate fro
 ![Instruction](../schema/schema-diagram-images/instruction-schema.png)
 
 ### Axioms
-* `(18) Instruction hasOpcode exactly 1 Opcode` <br>
-"Every instruction has exactly 1 opcode"
-* `(19) Instruction hasSourceOperand min 0 Operand` <br>
+* `(19) Instruction hasOpcode xsd:string exactly 1 opcode` <br>
+"Every instruction has exactly 1 opcode (represented as a string)"
+* `(20) Instruction hasSourceOperand min 0 Operand` <br>
 "Every instruction has 0 or more source operands"
-* `(20) Instruction hasDestinationOperand min 0 max 1 Operand` <br>
+* `(21) Instruction hasDestinationOperand min 0 max 1 Operand` <br>
 "Every instruction has exactly 0 or 1 destination oeprands"
-* `(21) Address performsRole Operand` <br>
-"An address can perform the role of an operand"
-* `(22) Register performsRole Operand` <br>
-"A register can perform the role of an operand"
-* `(23) ImmediateOperand performsRole Operand` <br>
-"An immediateOperand can perform the role of an operand"
-* `(24) Dynamic performsRole Operand` <br>
-"A dynamic can perform the role of an operand"
-* `(25) Scalar performsRole Operand` <br>
-"A scalar can perform the role of an operand"
+* `(22) Instruction atAddress exactly 1 Address` <br>
+"Every instruction is located at exactly 1 (starting) address"
+* `(23) Operand hasType xsd:string exactly 1 type` <br>
+"Every operand has exactly one type represented as a string"<br>
+(Specifies the kind of object the operand is)
+* `(24) Operand hasValue xsd:string exactly 1 value` <br>
+"Every operand has exactly one value represented as a string"
+
 
 
 ## Overall Schema Diagram

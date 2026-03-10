@@ -21,14 +21,13 @@ Not including subClassOf relations <br>
 | 15    | Function          | calls                 | Function          |
 | 16    | Function          | definedIn             | Namespace Symbol  |
 | 17    | Function          | containsInstruction   | Instruction       |
-| 18    | Instruction       | hasOpcode             | Opcode            |
-| 19    | Instruction       | hasSourceOperand      | Operand           |
-| 20    | Instruction       | hasDestinationOperand | Operand           |
-| 21    | Address           | performsRole          | Operand           |
-| 22    | Register          | performsRole          | Operand           |
-| 23    | ImmediateOperand  | performsRole          | Operand           |
-| 24    | Dynamic           | performsRole          | Operand           |
-| 25    | Scalar            | performsRole          | Operand           |
+| 18    | Function          | hasName               | xsd:string        |
+| 19    | Instruction       | hasOpcode             | Opcode            |
+| 20    | Instruction       | hasSourceOperand      | Operand           |
+| 21    | Instruction       | hasDestinationOperand | Operand           |
+| 22    | Instruction       | atAddress             | Address           |
+| 23    | Operand           | hasType               | xsd:string        |
+| 24    | Operand           | hasValue              | xsd:string        |
 
 
 ## Axiom Selection
@@ -66,11 +65,10 @@ Not including subClassOf relations <br>
 | 15  |     |  x  |     |  x  |     |     |     |     |     |     |     |     |     |     |     |  x  |     |     |     |
 | 16  |     |     |  x  |     |  x  |     |     |     |     |     |     |     |     |     |     |  x  |     |     |     |
 | 17  |     |  x  |     |  x  |     |  x  |     |     |     |     |     |     |     |     |  x  |  x  |     |     |     |
-| 18  |     |  x  |     |  x  |     |  x  |  x  |     |     |     |  x  |     |     |     |     |  x  |     |     |     |
-| 19  |     |  x  |     |  x  |     |     |     |     |     |     |     |     |     |     |     |  x  |     |     |     |
-| 20  |     |  x  |     |  x  |     |     |     |     |     |     |  x  |     |     |     |     |  x  |     |     |     |
-| 21  |     |  x  |     |  x  |     |     |     |     |     |     |     |     |     |     |     |  x  |     |     |     |
-| 22  |     |  x  |     |  x  |     |     |     |     |     |     |     |     |     |     |     |  x  |     |     |     |
-| 23  |     |  x  |     |  x  |     |     |     |     |     |     |     |     |     |     |     |  x  |     |     |     |
-| 24  |     |  x  |     |  x  |     |     |     |     |     |     |     |     |     |     |     |  x  |     |     |     |
-| 25  |     |  x  |     |  x  |     |     |     |     |     |     |     |     |     |     |     |  x  |     |     |     |
+| 18  |     |  x  |     |  x  |     |     |     |     |     |     |  x  |     |     |     |     |     |     |     |     |
+| 19  |     |  x  |     |  x  |     |  x  |  x  |     |     |     |  x  |     |     |     |     |  x  |     |     |     |
+| 20  |     |  x  |     |  x  |     |     |     |     |     |     |     |     |     |     |     |  x  |     |     |     |
+| 21  |     |  x  |     |  x  |     |     |     |     |     |     |  x  |     |     |     |     |  x  |     |     |     |
+| 22  |     |  x  |     |  x  |     |  x  |     |     |     |     |  x  |     |     |     |     |  x  |     |     |     |
+| 23  |     |  x  |     |  x  |     |     |     |     |     |     |  x  |     |     |     |     |     |     |     |     |
+| 24  |     |  x  |     |  x  |     |     |     |     |     |     |  x  |     |     |     |     |     |     |     |     |
