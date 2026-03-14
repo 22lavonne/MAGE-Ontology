@@ -1,0 +1,618 @@
+<?xml version="1.0"?>
+<rdf:RDF xmlns="http://www.semanticweb.org/jaspe/ontologies/2026/0/symbol-ontology/"
+     xml:base="http://www.semanticweb.org/jaspe/ontologies/2026/0/symbol-ontology/"
+     xmlns:owl="http://www.w3.org/2002/07/owl#"
+     xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#"
+     xmlns:xml="http://www.w3.org/XML/1998/namespace"
+     xmlns:xsd="http://www.w3.org/2001/XMLSchema#"
+     xmlns:rdfs="http://www.w3.org/2000/01/rdf-schema#">
+    <owl:Ontology rdf:about="http://www.semanticweb.org/jaspe/ontologies/2026/0/symbol-ontology"/>
+    
+
+
+    <!-- 
+    ///////////////////////////////////////////////////////////////////////////////////////
+    //
+    // Object Properties
+    //
+    ///////////////////////////////////////////////////////////////////////////////////////
+     -->
+
+    
+
+
+    <!-- http://www.semanticweb.org/jaspe/ontologies/2026/0/symbol-ontology/atAddress -->
+
+    <owl:ObjectProperty rdf:about="http://www.semanticweb.org/jaspe/ontologies/2026/0/symbol-ontology/atAddress">
+        <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#FunctionalProperty"/>
+        <rdfs:domain rdf:resource="http://www.semanticweb.org/jaspe/ontologies/2026/0/symbol-ontology/Instruction"/>
+        <rdfs:range rdf:resource="http://www.semanticweb.org/jaspe/ontologies/2026/0/symbol-ontology/Address"/>
+    </owl:ObjectProperty>
+    
+
+
+    <!-- http://www.semanticweb.org/jaspe/ontologies/2026/0/symbol-ontology/calls -->
+
+    <owl:ObjectProperty rdf:about="http://www.semanticweb.org/jaspe/ontologies/2026/0/symbol-ontology/calls">
+        <rdfs:subPropertyOf rdf:resource="http://www.w3.org/2002/07/owl#topObjectProperty"/>
+        <rdfs:domain rdf:resource="http://www.semanticweb.org/jaspe/ontologies/2026/0/symbol-ontology/Function"/>
+        <rdfs:range rdf:resource="http://www.semanticweb.org/jaspe/ontologies/2026/0/symbol-ontology/Function"/>
+    </owl:ObjectProperty>
+    
+
+
+    <!-- http://www.semanticweb.org/jaspe/ontologies/2026/0/symbol-ontology/containsInstruction -->
+
+    <owl:ObjectProperty rdf:about="http://www.semanticweb.org/jaspe/ontologies/2026/0/symbol-ontology/containsInstruction">
+        <rdfs:domain rdf:resource="http://www.semanticweb.org/jaspe/ontologies/2026/0/symbol-ontology/Function"/>
+        <rdfs:range rdf:resource="http://www.semanticweb.org/jaspe/ontologies/2026/0/symbol-ontology/Instruction"/>
+    </owl:ObjectProperty>
+    
+
+
+    <!-- http://www.semanticweb.org/jaspe/ontologies/2026/0/symbol-ontology/definedIn -->
+
+    <owl:ObjectProperty rdf:about="http://www.semanticweb.org/jaspe/ontologies/2026/0/symbol-ontology/definedIn">
+        <rdfs:subPropertyOf rdf:resource="http://www.w3.org/2002/07/owl#topObjectProperty"/>
+        <rdfs:domain rdf:resource="http://www.semanticweb.org/jaspe/ontologies/2026/0/symbol-ontology/Class"/>
+        <rdfs:domain rdf:resource="http://www.semanticweb.org/jaspe/ontologies/2026/0/symbol-ontology/Function"/>
+        <rdfs:domain rdf:resource="http://www.semanticweb.org/jaspe/ontologies/2026/0/symbol-ontology/Label"/>
+        <rdfs:range rdf:resource="http://www.semanticweb.org/jaspe/ontologies/2026/0/symbol-ontology/NamespaceSymbol"/>
+    </owl:ObjectProperty>
+    
+
+
+    <!-- http://www.semanticweb.org/jaspe/ontologies/2026/0/symbol-ontology/defines -->
+
+    <owl:ObjectProperty rdf:about="http://www.semanticweb.org/jaspe/ontologies/2026/0/symbol-ontology/defines">
+        <rdfs:domain rdf:resource="http://www.semanticweb.org/jaspe/ontologies/2026/0/symbol-ontology/Function"/>
+        <rdfs:range rdf:resource="http://www.semanticweb.org/jaspe/ontologies/2026/0/symbol-ontology/LocalVariable"/>
+    </owl:ObjectProperty>
+    
+
+
+    <!-- http://www.semanticweb.org/jaspe/ontologies/2026/0/symbol-ontology/hasAddress -->
+
+    <owl:ObjectProperty rdf:about="http://www.semanticweb.org/jaspe/ontologies/2026/0/symbol-ontology/hasAddress">
+        <rdfs:subPropertyOf rdf:resource="http://www.w3.org/2002/07/owl#topObjectProperty"/>
+        <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#FunctionalProperty"/>
+        <rdfs:domain rdf:resource="http://www.semanticweb.org/jaspe/ontologies/2026/0/symbol-ontology/Symbol"/>
+        <rdfs:range rdf:resource="http://www.semanticweb.org/jaspe/ontologies/2026/0/symbol-ontology/Address"/>
+    </owl:ObjectProperty>
+    
+
+
+    <!-- http://www.semanticweb.org/jaspe/ontologies/2026/0/symbol-ontology/hasDataType -->
+
+    <owl:ObjectProperty rdf:about="http://www.semanticweb.org/jaspe/ontologies/2026/0/symbol-ontology/hasDataType">
+        <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#FunctionalProperty"/>
+        <rdfs:domain rdf:resource="http://www.semanticweb.org/jaspe/ontologies/2026/0/symbol-ontology/Variable"/>
+        <rdfs:range rdf:resource="http://www.semanticweb.org/jaspe/ontologies/2026/0/symbol-ontology/DataType"/>
+    </owl:ObjectProperty>
+    
+
+
+    <!-- http://www.semanticweb.org/jaspe/ontologies/2026/0/symbol-ontology/hasDestinationAddress -->
+
+    <owl:ObjectProperty rdf:about="http://www.semanticweb.org/jaspe/ontologies/2026/0/symbol-ontology/hasDestinationAddress">
+        <rdfs:subPropertyOf rdf:resource="http://www.w3.org/2002/07/owl#topObjectProperty"/>
+        <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#FunctionalProperty"/>
+        <rdfs:domain rdf:resource="http://www.semanticweb.org/jaspe/ontologies/2026/0/symbol-ontology/Reference"/>
+        <rdfs:range rdf:resource="http://www.semanticweb.org/jaspe/ontologies/2026/0/symbol-ontology/Address"/>
+    </owl:ObjectProperty>
+    
+
+
+    <!-- http://www.semanticweb.org/jaspe/ontologies/2026/0/symbol-ontology/hasDestinationOperand -->
+
+    <owl:ObjectProperty rdf:about="http://www.semanticweb.org/jaspe/ontologies/2026/0/symbol-ontology/hasDestinationOperand">
+        <rdfs:subPropertyOf rdf:resource="http://www.w3.org/2002/07/owl#topObjectProperty"/>
+        <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#FunctionalProperty"/>
+        <rdfs:domain rdf:resource="http://www.semanticweb.org/jaspe/ontologies/2026/0/symbol-ontology/Instruction"/>
+        <rdfs:range rdf:resource="http://www.semanticweb.org/jaspe/ontologies/2026/0/symbol-ontology/Operand"/>
+    </owl:ObjectProperty>
+    
+
+
+    <!-- http://www.semanticweb.org/jaspe/ontologies/2026/0/symbol-ontology/hasParameter -->
+
+    <owl:ObjectProperty rdf:about="http://www.semanticweb.org/jaspe/ontologies/2026/0/symbol-ontology/hasParameter">
+        <rdfs:subPropertyOf rdf:resource="http://www.w3.org/2002/07/owl#topObjectProperty"/>
+    </owl:ObjectProperty>
+    
+
+
+    <!-- http://www.semanticweb.org/jaspe/ontologies/2026/0/symbol-ontology/hasPrimaryReference -->
+
+    <owl:ObjectProperty rdf:about="http://www.semanticweb.org/jaspe/ontologies/2026/0/symbol-ontology/hasPrimaryReference">
+        <rdfs:subPropertyOf rdf:resource="http://www.w3.org/2002/07/owl#topObjectProperty"/>
+        <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#FunctionalProperty"/>
+        <rdfs:domain rdf:resource="http://www.semanticweb.org/jaspe/ontologies/2026/0/symbol-ontology/Symbol"/>
+        <rdfs:range rdf:resource="http://www.semanticweb.org/jaspe/ontologies/2026/0/symbol-ontology/Reference"/>
+    </owl:ObjectProperty>
+    
+
+
+    <!-- http://www.semanticweb.org/jaspe/ontologies/2026/0/symbol-ontology/hasReference -->
+
+    <owl:ObjectProperty rdf:about="http://www.semanticweb.org/jaspe/ontologies/2026/0/symbol-ontology/hasReference">
+        <rdfs:subPropertyOf rdf:resource="http://www.w3.org/2002/07/owl#topObjectProperty"/>
+        <rdfs:domain rdf:resource="http://www.semanticweb.org/jaspe/ontologies/2026/0/symbol-ontology/Symbol"/>
+        <rdfs:range rdf:resource="http://www.semanticweb.org/jaspe/ontologies/2026/0/symbol-ontology/Reference"/>
+    </owl:ObjectProperty>
+    
+
+
+    <!-- http://www.semanticweb.org/jaspe/ontologies/2026/0/symbol-ontology/hasReturnType -->
+
+    <owl:ObjectProperty rdf:about="http://www.semanticweb.org/jaspe/ontologies/2026/0/symbol-ontology/hasReturnType">
+        <rdfs:subPropertyOf rdf:resource="http://www.w3.org/2002/07/owl#topObjectProperty"/>
+        <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#FunctionalProperty"/>
+        <rdfs:domain rdf:resource="http://www.semanticweb.org/jaspe/ontologies/2026/0/symbol-ontology/Function"/>
+        <rdfs:range rdf:resource="http://www.semanticweb.org/jaspe/ontologies/2026/0/symbol-ontology/DataType"/>
+    </owl:ObjectProperty>
+    
+
+
+    <!-- http://www.semanticweb.org/jaspe/ontologies/2026/0/symbol-ontology/hasSourceAddress -->
+
+    <owl:ObjectProperty rdf:about="http://www.semanticweb.org/jaspe/ontologies/2026/0/symbol-ontology/hasSourceAddress">
+        <rdfs:subPropertyOf rdf:resource="http://www.w3.org/2002/07/owl#topObjectProperty"/>
+        <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#FunctionalProperty"/>
+        <rdfs:domain rdf:resource="http://www.semanticweb.org/jaspe/ontologies/2026/0/symbol-ontology/Reference"/>
+        <rdfs:range rdf:resource="http://www.semanticweb.org/jaspe/ontologies/2026/0/symbol-ontology/Address"/>
+    </owl:ObjectProperty>
+    
+
+
+    <!-- http://www.semanticweb.org/jaspe/ontologies/2026/0/symbol-ontology/hasSourceOperand -->
+
+    <owl:ObjectProperty rdf:about="http://www.semanticweb.org/jaspe/ontologies/2026/0/symbol-ontology/hasSourceOperand">
+        <rdfs:subPropertyOf rdf:resource="http://www.w3.org/2002/07/owl#topObjectProperty"/>
+        <rdfs:domain rdf:resource="http://www.semanticweb.org/jaspe/ontologies/2026/0/symbol-ontology/Instruction"/>
+        <rdfs:range rdf:resource="http://www.semanticweb.org/jaspe/ontologies/2026/0/symbol-ontology/Operand"/>
+    </owl:ObjectProperty>
+    
+
+
+    <!-- http://www.semanticweb.org/jaspe/ontologies/2026/0/symbol-ontology/passesInto -->
+
+    <owl:ObjectProperty rdf:about="http://www.semanticweb.org/jaspe/ontologies/2026/0/symbol-ontology/passesInto">
+        <rdfs:domain rdf:resource="http://www.semanticweb.org/jaspe/ontologies/2026/0/symbol-ontology/Parameter"/>
+        <rdfs:range rdf:resource="http://www.semanticweb.org/jaspe/ontologies/2026/0/symbol-ontology/Function"/>
+    </owl:ObjectProperty>
+    
+
+
+    <!-- http://www.semanticweb.org/jaspe/ontologies/2026/0/symbol-ontology/returns -->
+
+    <owl:ObjectProperty rdf:about="http://www.semanticweb.org/jaspe/ontologies/2026/0/symbol-ontology/returns">
+        <rdfs:subPropertyOf rdf:resource="http://www.w3.org/2002/07/owl#topObjectProperty"/>
+        <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#FunctionalProperty"/>
+        <rdfs:domain rdf:resource="http://www.semanticweb.org/jaspe/ontologies/2026/0/symbol-ontology/Function"/>
+        <rdfs:range rdf:resource="http://www.semanticweb.org/jaspe/ontologies/2026/0/symbol-ontology/Parameter"/>
+    </owl:ObjectProperty>
+    
+
+
+    <!-- 
+    ///////////////////////////////////////////////////////////////////////////////////////
+    //
+    // Data properties
+    //
+    ///////////////////////////////////////////////////////////////////////////////////////
+     -->
+
+    
+
+
+    <!-- http://www.semanticweb.org/jaspe/ontologies/2026/0/symbol-ontology/hasName -->
+
+    <owl:DatatypeProperty rdf:about="http://www.semanticweb.org/jaspe/ontologies/2026/0/symbol-ontology/hasName">
+        <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#FunctionalProperty"/>
+        <rdfs:domain rdf:resource="http://www.semanticweb.org/jaspe/ontologies/2026/0/symbol-ontology/Function"/>
+        <rdfs:range rdf:resource="http://www.w3.org/2001/XMLSchema#string"/>
+    </owl:DatatypeProperty>
+    
+
+
+    <!-- http://www.semanticweb.org/jaspe/ontologies/2026/0/symbol-ontology/hasOpcode -->
+
+    <owl:DatatypeProperty rdf:about="http://www.semanticweb.org/jaspe/ontologies/2026/0/symbol-ontology/hasOpcode">
+        <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#FunctionalProperty"/>
+        <rdfs:domain rdf:resource="http://www.semanticweb.org/jaspe/ontologies/2026/0/symbol-ontology/Instruction"/>
+        <rdfs:range rdf:resource="http://www.w3.org/2001/XMLSchema#string"/>
+    </owl:DatatypeProperty>
+    
+
+
+    <!-- http://www.semanticweb.org/jaspe/ontologies/2026/0/symbol-ontology/hasOperandIndex -->
+
+    <owl:DatatypeProperty rdf:about="http://www.semanticweb.org/jaspe/ontologies/2026/0/symbol-ontology/hasOperandIndex">
+        <rdfs:subPropertyOf rdf:resource="http://www.w3.org/2002/07/owl#topDataProperty"/>
+        <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#FunctionalProperty"/>
+        <rdfs:domain rdf:resource="http://www.semanticweb.org/jaspe/ontologies/2026/0/symbol-ontology/Reference"/>
+        <rdfs:range rdf:resource="http://www.w3.org/2001/XMLSchema#integer"/>
+    </owl:DatatypeProperty>
+    
+
+
+    <!-- http://www.semanticweb.org/jaspe/ontologies/2026/0/symbol-ontology/hasOperandType -->
+
+    <owl:DatatypeProperty rdf:about="http://www.semanticweb.org/jaspe/ontologies/2026/0/symbol-ontology/hasOperandType">
+        <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#FunctionalProperty"/>
+        <rdfs:domain rdf:resource="http://www.semanticweb.org/jaspe/ontologies/2026/0/symbol-ontology/Operand"/>
+        <rdfs:range rdf:resource="http://www.w3.org/2001/XMLSchema#string"/>
+    </owl:DatatypeProperty>
+    
+
+
+    <!-- http://www.semanticweb.org/jaspe/ontologies/2026/0/symbol-ontology/hasOperandValue -->
+
+    <owl:DatatypeProperty rdf:about="http://www.semanticweb.org/jaspe/ontologies/2026/0/symbol-ontology/hasOperandValue">
+        <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#FunctionalProperty"/>
+        <rdfs:domain rdf:resource="http://www.semanticweb.org/jaspe/ontologies/2026/0/symbol-ontology/Operand"/>
+        <rdfs:range rdf:resource="http://www.w3.org/2001/XMLSchema#string"/>
+    </owl:DatatypeProperty>
+    
+
+
+    <!-- http://www.semanticweb.org/jaspe/ontologies/2026/0/symbol-ontology/hasReferenceType -->
+
+    <owl:DatatypeProperty rdf:about="http://www.semanticweb.org/jaspe/ontologies/2026/0/symbol-ontology/hasReferenceType">
+        <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#FunctionalProperty"/>
+        <rdfs:domain rdf:resource="http://www.semanticweb.org/jaspe/ontologies/2026/0/symbol-ontology/Reference"/>
+        <rdfs:range rdf:resource="http://www.w3.org/2001/XMLSchema#string"/>
+    </owl:DatatypeProperty>
+    
+
+
+    <!-- 
+    ///////////////////////////////////////////////////////////////////////////////////////
+    //
+    // Classes
+    //
+    ///////////////////////////////////////////////////////////////////////////////////////
+     -->
+
+    
+
+
+    <!-- http://www.semanticweb.org/jaspe/ontologies/2026/0/symbol-ontology/Address -->
+
+    <owl:Class rdf:about="http://www.semanticweb.org/jaspe/ontologies/2026/0/symbol-ontology/Address"/>
+    
+
+
+    <!-- http://www.semanticweb.org/jaspe/ontologies/2026/0/symbol-ontology/Class -->
+
+    <owl:Class rdf:about="http://www.semanticweb.org/jaspe/ontologies/2026/0/symbol-ontology/Class">
+        <rdfs:subClassOf rdf:resource="http://www.semanticweb.org/jaspe/ontologies/2026/0/symbol-ontology/NamespaceSymbol"/>
+        <rdfs:subClassOf>
+            <owl:Restriction>
+                <owl:onProperty rdf:resource="http://www.semanticweb.org/jaspe/ontologies/2026/0/symbol-ontology/definedIn"/>
+                <owl:someValuesFrom rdf:resource="http://www.semanticweb.org/jaspe/ontologies/2026/0/symbol-ontology/NamespaceSymbol"/>
+            </owl:Restriction>
+        </rdfs:subClassOf>
+    </owl:Class>
+    
+
+
+    <!-- http://www.semanticweb.org/jaspe/ontologies/2026/0/symbol-ontology/DLL -->
+
+    <owl:Class rdf:about="http://www.semanticweb.org/jaspe/ontologies/2026/0/symbol-ontology/DLL">
+        <rdfs:subClassOf rdf:resource="http://www.semanticweb.org/jaspe/ontologies/2026/0/symbol-ontology/NamespaceSymbol"/>
+    </owl:Class>
+    
+
+
+    <!-- http://www.semanticweb.org/jaspe/ontologies/2026/0/symbol-ontology/DataType -->
+
+    <owl:Class rdf:about="http://www.semanticweb.org/jaspe/ontologies/2026/0/symbol-ontology/DataType"/>
+    
+
+
+    <!-- http://www.semanticweb.org/jaspe/ontologies/2026/0/symbol-ontology/Dynamic -->
+
+    <owl:Class rdf:about="http://www.semanticweb.org/jaspe/ontologies/2026/0/symbol-ontology/Dynamic"/>
+    
+
+
+    <!-- http://www.semanticweb.org/jaspe/ontologies/2026/0/symbol-ontology/Function -->
+
+    <owl:Class rdf:about="http://www.semanticweb.org/jaspe/ontologies/2026/0/symbol-ontology/Function">
+        <rdfs:subClassOf rdf:resource="http://www.semanticweb.org/jaspe/ontologies/2026/0/symbol-ontology/NamespaceSymbol"/>
+        <rdfs:subClassOf>
+            <owl:Restriction>
+                <owl:onProperty rdf:resource="http://www.semanticweb.org/jaspe/ontologies/2026/0/symbol-ontology/calls"/>
+                <owl:someValuesFrom rdf:resource="http://www.semanticweb.org/jaspe/ontologies/2026/0/symbol-ontology/Function"/>
+            </owl:Restriction>
+        </rdfs:subClassOf>
+        <rdfs:subClassOf>
+            <owl:Restriction>
+                <owl:onProperty rdf:resource="http://www.semanticweb.org/jaspe/ontologies/2026/0/symbol-ontology/containsInstruction"/>
+                <owl:someValuesFrom rdf:resource="http://www.semanticweb.org/jaspe/ontologies/2026/0/symbol-ontology/Instruction"/>
+            </owl:Restriction>
+        </rdfs:subClassOf>
+        <rdfs:subClassOf>
+            <owl:Restriction>
+                <owl:onProperty rdf:resource="http://www.semanticweb.org/jaspe/ontologies/2026/0/symbol-ontology/definedIn"/>
+                <owl:someValuesFrom rdf:resource="http://www.semanticweb.org/jaspe/ontologies/2026/0/symbol-ontology/NamespaceSymbol"/>
+            </owl:Restriction>
+        </rdfs:subClassOf>
+        <rdfs:subClassOf>
+            <owl:Restriction>
+                <owl:onProperty rdf:resource="http://www.semanticweb.org/jaspe/ontologies/2026/0/symbol-ontology/defines"/>
+                <owl:someValuesFrom rdf:resource="http://www.semanticweb.org/jaspe/ontologies/2026/0/symbol-ontology/LocalVariable"/>
+            </owl:Restriction>
+        </rdfs:subClassOf>
+        <rdfs:subClassOf>
+            <owl:Restriction>
+                <owl:onProperty rdf:resource="http://www.semanticweb.org/jaspe/ontologies/2026/0/symbol-ontology/hasReturnType"/>
+                <owl:someValuesFrom rdf:resource="http://www.semanticweb.org/jaspe/ontologies/2026/0/symbol-ontology/DataType"/>
+            </owl:Restriction>
+        </rdfs:subClassOf>
+        <rdfs:subClassOf>
+            <owl:Restriction>
+                <owl:onProperty rdf:resource="http://www.semanticweb.org/jaspe/ontologies/2026/0/symbol-ontology/returns"/>
+                <owl:someValuesFrom rdf:resource="http://www.semanticweb.org/jaspe/ontologies/2026/0/symbol-ontology/Parameter"/>
+            </owl:Restriction>
+        </rdfs:subClassOf>
+        <rdfs:subClassOf>
+            <owl:Restriction>
+                <owl:onProperty rdf:resource="http://www.semanticweb.org/jaspe/ontologies/2026/0/symbol-ontology/returns"/>
+                <owl:someValuesFrom rdf:resource="http://www.semanticweb.org/jaspe/ontologies/2026/0/symbol-ontology/Variable"/>
+            </owl:Restriction>
+        </rdfs:subClassOf>
+        <rdfs:subClassOf>
+            <owl:Restriction>
+                <owl:onProperty rdf:resource="http://www.semanticweb.org/jaspe/ontologies/2026/0/symbol-ontology/hasName"/>
+                <owl:someValuesFrom rdf:resource="http://www.w3.org/2001/XMLSchema#string"/>
+            </owl:Restriction>
+        </rdfs:subClassOf>
+    </owl:Class>
+    
+
+
+    <!-- http://www.semanticweb.org/jaspe/ontologies/2026/0/symbol-ontology/ImmediateOperand -->
+
+    <owl:Class rdf:about="http://www.semanticweb.org/jaspe/ontologies/2026/0/symbol-ontology/ImmediateOperand"/>
+    
+
+
+    <!-- http://www.semanticweb.org/jaspe/ontologies/2026/0/symbol-ontology/Instruction -->
+
+    <owl:Class rdf:about="http://www.semanticweb.org/jaspe/ontologies/2026/0/symbol-ontology/Instruction">
+        <rdfs:subClassOf>
+            <owl:Restriction>
+                <owl:onProperty rdf:resource="http://www.semanticweb.org/jaspe/ontologies/2026/0/symbol-ontology/atAddress"/>
+                <owl:someValuesFrom rdf:resource="http://www.semanticweb.org/jaspe/ontologies/2026/0/symbol-ontology/Address"/>
+            </owl:Restriction>
+        </rdfs:subClassOf>
+        <rdfs:subClassOf>
+            <owl:Restriction>
+                <owl:onProperty rdf:resource="http://www.semanticweb.org/jaspe/ontologies/2026/0/symbol-ontology/hasDestinationOperand"/>
+                <owl:someValuesFrom rdf:resource="http://www.semanticweb.org/jaspe/ontologies/2026/0/symbol-ontology/Operand"/>
+            </owl:Restriction>
+        </rdfs:subClassOf>
+        <rdfs:subClassOf>
+            <owl:Restriction>
+                <owl:onProperty rdf:resource="http://www.semanticweb.org/jaspe/ontologies/2026/0/symbol-ontology/hasSourceOperand"/>
+                <owl:someValuesFrom rdf:resource="http://www.semanticweb.org/jaspe/ontologies/2026/0/symbol-ontology/Operand"/>
+            </owl:Restriction>
+        </rdfs:subClassOf>
+        <rdfs:subClassOf>
+            <owl:Restriction>
+                <owl:onProperty rdf:resource="http://www.semanticweb.org/jaspe/ontologies/2026/0/symbol-ontology/hasOpcode"/>
+                <owl:someValuesFrom rdf:resource="http://www.w3.org/2001/XMLSchema#string"/>
+            </owl:Restriction>
+        </rdfs:subClassOf>
+    </owl:Class>
+    
+
+
+    <!-- http://www.semanticweb.org/jaspe/ontologies/2026/0/symbol-ontology/Label -->
+
+    <owl:Class rdf:about="http://www.semanticweb.org/jaspe/ontologies/2026/0/symbol-ontology/Label">
+        <rdfs:subClassOf rdf:resource="http://www.semanticweb.org/jaspe/ontologies/2026/0/symbol-ontology/Symbol"/>
+        <rdfs:subClassOf>
+            <owl:Restriction>
+                <owl:onProperty rdf:resource="http://www.semanticweb.org/jaspe/ontologies/2026/0/symbol-ontology/definedIn"/>
+                <owl:someValuesFrom rdf:resource="http://www.semanticweb.org/jaspe/ontologies/2026/0/symbol-ontology/NamespaceSymbol"/>
+            </owl:Restriction>
+        </rdfs:subClassOf>
+        <owl:disjointWith rdf:resource="http://www.semanticweb.org/jaspe/ontologies/2026/0/symbol-ontology/NamespaceSymbol"/>
+    </owl:Class>
+    
+
+
+    <!-- http://www.semanticweb.org/jaspe/ontologies/2026/0/symbol-ontology/LocalVariable -->
+
+    <owl:Class rdf:about="http://www.semanticweb.org/jaspe/ontologies/2026/0/symbol-ontology/LocalVariable">
+        <rdfs:subClassOf rdf:resource="http://www.semanticweb.org/jaspe/ontologies/2026/0/symbol-ontology/Variable"/>
+        <owl:disjointWith rdf:resource="http://www.semanticweb.org/jaspe/ontologies/2026/0/symbol-ontology/Parameter"/>
+    </owl:Class>
+    
+
+
+    <!-- http://www.semanticweb.org/jaspe/ontologies/2026/0/symbol-ontology/Namespace -->
+
+    <owl:Class rdf:about="http://www.semanticweb.org/jaspe/ontologies/2026/0/symbol-ontology/Namespace">
+        <rdfs:subClassOf rdf:resource="http://www.semanticweb.org/jaspe/ontologies/2026/0/symbol-ontology/NamespaceSymbol"/>
+    </owl:Class>
+    
+
+
+    <!-- http://www.semanticweb.org/jaspe/ontologies/2026/0/symbol-ontology/NamespaceSymbol -->
+
+    <owl:Class rdf:about="http://www.semanticweb.org/jaspe/ontologies/2026/0/symbol-ontology/NamespaceSymbol">
+        <rdfs:subClassOf rdf:resource="http://www.semanticweb.org/jaspe/ontologies/2026/0/symbol-ontology/Symbol"/>
+    </owl:Class>
+    
+
+
+    <!-- http://www.semanticweb.org/jaspe/ontologies/2026/0/symbol-ontology/Opcode -->
+
+    <owl:Class rdf:about="http://www.semanticweb.org/jaspe/ontologies/2026/0/symbol-ontology/Opcode"/>
+    
+
+
+    <!-- http://www.semanticweb.org/jaspe/ontologies/2026/0/symbol-ontology/Operand -->
+
+    <owl:Class rdf:about="http://www.semanticweb.org/jaspe/ontologies/2026/0/symbol-ontology/Operand">
+        <rdfs:subClassOf>
+            <owl:Restriction>
+                <owl:onProperty rdf:resource="http://www.semanticweb.org/jaspe/ontologies/2026/0/symbol-ontology/hasOperandType"/>
+                <owl:someValuesFrom rdf:resource="http://www.w3.org/2001/XMLSchema#string"/>
+            </owl:Restriction>
+        </rdfs:subClassOf>
+        <rdfs:subClassOf>
+            <owl:Restriction>
+                <owl:onProperty rdf:resource="http://www.semanticweb.org/jaspe/ontologies/2026/0/symbol-ontology/hasOperandValue"/>
+                <owl:someValuesFrom rdf:resource="http://www.w3.org/2001/XMLSchema#string"/>
+            </owl:Restriction>
+        </rdfs:subClassOf>
+    </owl:Class>
+    
+
+
+    <!-- http://www.semanticweb.org/jaspe/ontologies/2026/0/symbol-ontology/Parameter -->
+
+    <owl:Class rdf:about="http://www.semanticweb.org/jaspe/ontologies/2026/0/symbol-ontology/Parameter">
+        <rdfs:subClassOf rdf:resource="http://www.semanticweb.org/jaspe/ontologies/2026/0/symbol-ontology/Variable"/>
+        <rdfs:subClassOf>
+            <owl:Restriction>
+                <owl:onProperty rdf:resource="http://www.semanticweb.org/jaspe/ontologies/2026/0/symbol-ontology/passesInto"/>
+                <owl:someValuesFrom rdf:resource="http://www.semanticweb.org/jaspe/ontologies/2026/0/symbol-ontology/Function"/>
+            </owl:Restriction>
+        </rdfs:subClassOf>
+    </owl:Class>
+    
+
+
+    <!-- http://www.semanticweb.org/jaspe/ontologies/2026/0/symbol-ontology/Reference -->
+
+    <owl:Class rdf:about="http://www.semanticweb.org/jaspe/ontologies/2026/0/symbol-ontology/Reference">
+        <rdfs:subClassOf>
+            <owl:Restriction>
+                <owl:onProperty rdf:resource="http://www.semanticweb.org/jaspe/ontologies/2026/0/symbol-ontology/hasDestinationAddress"/>
+                <owl:someValuesFrom rdf:resource="http://www.semanticweb.org/jaspe/ontologies/2026/0/symbol-ontology/Address"/>
+            </owl:Restriction>
+        </rdfs:subClassOf>
+        <rdfs:subClassOf>
+            <owl:Restriction>
+                <owl:onProperty rdf:resource="http://www.semanticweb.org/jaspe/ontologies/2026/0/symbol-ontology/hasSourceAddress"/>
+                <owl:someValuesFrom rdf:resource="http://www.semanticweb.org/jaspe/ontologies/2026/0/symbol-ontology/Address"/>
+            </owl:Restriction>
+        </rdfs:subClassOf>
+        <rdfs:subClassOf>
+            <owl:Restriction>
+                <owl:onProperty rdf:resource="http://www.semanticweb.org/jaspe/ontologies/2026/0/symbol-ontology/hasOperandIndex"/>
+                <owl:someValuesFrom rdf:resource="http://www.w3.org/2001/XMLSchema#integer"/>
+            </owl:Restriction>
+        </rdfs:subClassOf>
+        <rdfs:subClassOf>
+            <owl:Restriction>
+                <owl:onProperty rdf:resource="http://www.semanticweb.org/jaspe/ontologies/2026/0/symbol-ontology/hasReferenceType"/>
+                <owl:someValuesFrom rdf:resource="http://www.w3.org/2001/XMLSchema#string"/>
+            </owl:Restriction>
+        </rdfs:subClassOf>
+    </owl:Class>
+    
+
+
+    <!-- http://www.semanticweb.org/jaspe/ontologies/2026/0/symbol-ontology/Register -->
+
+    <owl:Class rdf:about="http://www.semanticweb.org/jaspe/ontologies/2026/0/symbol-ontology/Register"/>
+    
+
+
+    <!-- http://www.semanticweb.org/jaspe/ontologies/2026/0/symbol-ontology/Scalar -->
+
+    <owl:Class rdf:about="http://www.semanticweb.org/jaspe/ontologies/2026/0/symbol-ontology/Scalar"/>
+    
+
+
+    <!-- http://www.semanticweb.org/jaspe/ontologies/2026/0/symbol-ontology/Symbol -->
+
+    <owl:Class rdf:about="http://www.semanticweb.org/jaspe/ontologies/2026/0/symbol-ontology/Symbol">
+        <rdfs:subClassOf>
+            <owl:Restriction>
+                <owl:onProperty rdf:resource="http://www.semanticweb.org/jaspe/ontologies/2026/0/symbol-ontology/atAddress"/>
+                <owl:someValuesFrom rdf:resource="http://www.semanticweb.org/jaspe/ontologies/2026/0/symbol-ontology/Address"/>
+            </owl:Restriction>
+        </rdfs:subClassOf>
+        <rdfs:subClassOf>
+            <owl:Restriction>
+                <owl:onProperty rdf:resource="http://www.semanticweb.org/jaspe/ontologies/2026/0/symbol-ontology/hasPrimaryReference"/>
+                <owl:someValuesFrom rdf:resource="http://www.semanticweb.org/jaspe/ontologies/2026/0/symbol-ontology/Reference"/>
+            </owl:Restriction>
+        </rdfs:subClassOf>
+        <rdfs:subClassOf>
+            <owl:Restriction>
+                <owl:onProperty rdf:resource="http://www.semanticweb.org/jaspe/ontologies/2026/0/symbol-ontology/hasReference"/>
+                <owl:someValuesFrom rdf:resource="http://www.semanticweb.org/jaspe/ontologies/2026/0/symbol-ontology/Reference"/>
+            </owl:Restriction>
+        </rdfs:subClassOf>
+    </owl:Class>
+    
+
+
+    <!-- http://www.semanticweb.org/jaspe/ontologies/2026/0/symbol-ontology/Variable -->
+
+    <owl:Class rdf:about="http://www.semanticweb.org/jaspe/ontologies/2026/0/symbol-ontology/Variable">
+        <rdfs:subClassOf>
+            <owl:Restriction>
+                <owl:onProperty rdf:resource="http://www.semanticweb.org/jaspe/ontologies/2026/0/symbol-ontology/hasDataType"/>
+                <owl:someValuesFrom rdf:resource="http://www.semanticweb.org/jaspe/ontologies/2026/0/symbol-ontology/DataType"/>
+            </owl:Restriction>
+        </rdfs:subClassOf>
+    </owl:Class>
+    
+
+
+    <!-- 
+    ///////////////////////////////////////////////////////////////////////////////////////
+    //
+    // General axioms
+    //
+    ///////////////////////////////////////////////////////////////////////////////////////
+     -->
+
+    <rdf:Description>
+        <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#AllDisjointClasses"/>
+        <owl:members rdf:parseType="Collection">
+            <rdf:Description rdf:about="http://www.semanticweb.org/jaspe/ontologies/2026/0/symbol-ontology/Address"/>
+            <rdf:Description rdf:about="http://www.semanticweb.org/jaspe/ontologies/2026/0/symbol-ontology/DataType"/>
+            <rdf:Description rdf:about="http://www.semanticweb.org/jaspe/ontologies/2026/0/symbol-ontology/Instruction"/>
+            <rdf:Description rdf:about="http://www.semanticweb.org/jaspe/ontologies/2026/0/symbol-ontology/Opcode"/>
+            <rdf:Description rdf:about="http://www.semanticweb.org/jaspe/ontologies/2026/0/symbol-ontology/Operand"/>
+            <rdf:Description rdf:about="http://www.semanticweb.org/jaspe/ontologies/2026/0/symbol-ontology/Reference"/>
+            <rdf:Description rdf:about="http://www.semanticweb.org/jaspe/ontologies/2026/0/symbol-ontology/Symbol"/>
+            <rdf:Description rdf:about="http://www.semanticweb.org/jaspe/ontologies/2026/0/symbol-ontology/Variable"/>
+        </owl:members>
+    </rdf:Description>
+    <rdf:Description>
+        <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#AllDisjointClasses"/>
+        <owl:members rdf:parseType="Collection">
+            <rdf:Description rdf:about="http://www.semanticweb.org/jaspe/ontologies/2026/0/symbol-ontology/Address"/>
+            <rdf:Description rdf:about="http://www.semanticweb.org/jaspe/ontologies/2026/0/symbol-ontology/Dynamic"/>
+            <rdf:Description rdf:about="http://www.semanticweb.org/jaspe/ontologies/2026/0/symbol-ontology/Register"/>
+            <rdf:Description rdf:about="http://www.semanticweb.org/jaspe/ontologies/2026/0/symbol-ontology/Scalar"/>
+        </owl:members>
+    </rdf:Description>
+    <rdf:Description>
+        <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#AllDisjointClasses"/>
+        <owl:members rdf:parseType="Collection">
+            <rdf:Description rdf:about="http://www.semanticweb.org/jaspe/ontologies/2026/0/symbol-ontology/Class"/>
+            <rdf:Description rdf:about="http://www.semanticweb.org/jaspe/ontologies/2026/0/symbol-ontology/DLL"/>
+            <rdf:Description rdf:about="http://www.semanticweb.org/jaspe/ontologies/2026/0/symbol-ontology/Function"/>
+            <rdf:Description rdf:about="http://www.semanticweb.org/jaspe/ontologies/2026/0/symbol-ontology/Namespace"/>
+        </owl:members>
+    </rdf:Description>
+</rdf:RDF>
+
+
+
+<!-- Generated by the OWL API (version 4.5.29.2024-05-13T12:11:03Z) https://github.com/owlcs/owlapi -->
+

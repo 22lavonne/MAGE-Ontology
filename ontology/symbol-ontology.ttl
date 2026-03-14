@@ -83,10 +83,6 @@
                   rdfs:subPropertyOf owl:topObjectProperty .
 
 
-###  http://www.semanticweb.org/jaspe/ontologies/2026/0/symbol-ontology/isA
-:isA rdf:type owl:ObjectProperty .
-
-
 ###  http://www.semanticweb.org/jaspe/ontologies/2026/0/symbol-ontology/passesInto
 :passesInto rdf:type owl:ObjectProperty .
 
@@ -100,7 +96,7 @@
 #    Data properties
 #################################################################
 
-###  http://www.semanticweb.org/jaspe/ontologies/2026/0/symbol-ontology#hasName
+###  http://www.semanticweb.org/jaspe/ontologies/2026/0/symbol-ontology/hasName
 :hasName rdf:type owl:DatatypeProperty .
 
 
@@ -247,18 +243,6 @@
 ###  http://www.semanticweb.org/jaspe/ontologies/2026/0/symbol-ontology/Operand
 :Operand rdf:type owl:Class ;
          rdfs:subClassOf [ rdf:type owl:Restriction ;
-                           owl:onProperty :isA ;
-                           owl:someValuesFrom :Address
-                         ] ,
-                         [ rdf:type owl:Restriction ;
-                           owl:onProperty :isA ;
-                           owl:someValuesFrom :ImmediateOperand
-                         ] ,
-                         [ rdf:type owl:Restriction ;
-                           owl:onProperty :isA ;
-                           owl:someValuesFrom :Register
-                         ] ,
-                         [ rdf:type owl:Restriction ;
                            owl:onProperty :hasOperandType ;
                            owl:someValuesFrom xsd:string
                          ] ,

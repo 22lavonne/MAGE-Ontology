@@ -11,7 +11,7 @@ Not including subClassOf relations <br>
 | 5     | Class             | definedIn             | Namespace Symbol  |
 | 6     | Reference         | hasSourceAddress      | Address           |
 | 7     | Reference         | hasDestinationAddress | Address           |
-| 8     | Reference         | hasType               | xsd:string        |
+| 8     | Reference         | hasReferenceType      | xsd:string        |
 | 9     | Reference         | hasOperandIndex       | xsd:integer       |
 | 10    | Variable          | hasDataType           | Data Type         |
 | 11    | Parameter         | passesInto            | Function          |
@@ -22,12 +22,12 @@ Not including subClassOf relations <br>
 | 16    | Function          | definedIn             | Namespace Symbol  |
 | 17    | Function          | containsInstruction   | Instruction       |
 | 18    | Function          | hasName               | xsd:string        |
-| 19    | Instruction       | hasOpcode             | Opcode            |
+| 19    | Instruction       | hasOpcode             | xsd:string        |
 | 20    | Instruction       | hasSourceOperand      | Operand           |
 | 21    | Instruction       | hasDestinationOperand | Operand           |
 | 22    | Instruction       | atAddress             | Address           |
-| 23    | Operand           | hasType               | xsd:string        |
-| 24    | Operand           | hasValue              | xsd:string        |
+| 23    | Operand           | hasOperandType        | xsd:string        |
+| 24    | Operand           | hasOperandValue       | xsd:string        |
 
 
 ## Axiom Selection
@@ -61,7 +61,7 @@ Not including subClassOf relations <br>
 | 11  |     |  x  |     |  x  |     |     |     |     |     |     |     |     |     |     |     |  x  |     |     |     |
 | 12  |     |     |  x  |     |     |     |     |     |     |     |     |     |     |     |     |  x  |     |     |     |
 | 13  |     |  x  |     |  x  |     |  x  |     |     |     |     |  x  |     |     |     |     |  x  |     |     |     |
-| 14  |     |  x  |     |  x  |     |     |     |     |     |     |  x  |     |     |     |     |  x  |     |     |  x  |
+| 14  |     |  x  |     |  x  |     |     |     |     |     |     |  x  |     |     |     |     |  x  |     |     |     |
 | 15  |     |  x  |     |  x  |     |     |     |     |     |     |     |     |     |     |     |  x  |     |     |     |
 | 16  |     |     |  x  |     |  x  |     |     |     |     |     |     |     |     |     |     |  x  |     |     |     |
 | 17  |     |  x  |     |  x  |     |  x  |     |     |     |     |     |     |     |     |  x  |  x  |     |     |     |
