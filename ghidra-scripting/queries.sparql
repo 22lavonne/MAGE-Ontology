@@ -159,9 +159,9 @@ WHERE {
 }
 
 # b. cpuid instructions are often used for VM detection
-# TODO: maybe modify this to show what function this opcode/instruction is located in
-SELECT ?instr
+SELECT ?func ?instr
 WHERE {
+    ?func ontology:containsInstruction ?instr .
     ?instr a ontology:Instruction ;
            ontology:hasOpcode "CPUID" .
 }
