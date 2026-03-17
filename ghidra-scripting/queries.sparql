@@ -286,3 +286,24 @@ WHERE {
     ?c3 ontology:hasName ?n3 .
     FILTER regex(?n3, "execve|system")
 }
+
+# c. Get the percentage of functions that are imported from a DLL
+SELECT 
+  ?totalFunctions
+  ?externalFunctions
+#   gets percentage based on the numbers returned from external functions and total functions
+  (((?externalFunctions * 1.0) / ?totalFunctions) * 100 AS ?percentage)
+#   where those numbers are returned from this sub query
+WHERE {
+  {
+    SELECT 
+    # get the count of how many functions are defined in, with the parent name containing EXTERNAL 
+    # (indicating it's from a dll)
+      (COUNT(?f) AS ?totalFunctions)
+      (SUM(IF(CONTAINS(STR(?dll), "EXTERNAL"), 1, 0)) AS ?externalFunctions)
+    WHERE {
+        ?f a ontology:Function .
+        ?f ontology:definedIn ?dll .
+    }
+  }
+}

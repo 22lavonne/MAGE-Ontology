@@ -31,20 +31,17 @@ Bridges Datasets: dataset 1, dataset 2, ...
 * Competency Question<br>
 Bridges Datasets: dataset 1, dataset 2, ...
 -->
-* Is the general purpose of the original executable file known?
-* Is the original exectuable file known to be malicious?
-* How would a user query the knowledge graph to see the relationships between the symbols?
-* What variables and functions are used the most within the file?
-* Is the current executable file part of a larger structure or supply chain?
-* Are there any imported DLLs that are known to be vulnerable?
-* Are there any imported DLLs that are used in other known malware?
-* Does the file implement any known malware techniques like code injection?
+* Can the ontology detect malicious API calls within the executable?
+* Is there any suspicious networking activity within the executable?
+* Are there any indirect control flow patterns in the executable file indicating vulnerable code?
+* Can sections of entropy be detected through the ratio of unique opcodes and total number of instructions in a function?
+* Can patterns of self referential decode loops be found to detect data obfuscation?
+* Can the ontology detect anti VM behavior from the executable?
+* Does the executable perform unauthorized system privelege escalation?
+* Are there command and control indicators in the executable file?
+* Is there cryptographic activity within the executable, that can indicate encryption to hide parts of the program?
 * What percentage of the functions in the binary file are imported (are external)?
-* Are there any instances of memeory leaks within the executable file?
-* How does the program access memory?
-* Do the frequency and type of instructions indicate malicious behavior
-   * Does the frequency of the CALL instructions equal the frequency of RET instructions?
-   * Does the frequency of PUSH instructions equal the frequency of POP functions?
+
 
 <!-- 
 How many datasets is appropriate for my scale of KG?
