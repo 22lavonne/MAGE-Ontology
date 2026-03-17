@@ -370,6 +370,9 @@ def main():
     parameter_file = "ghidra-scripting/parameter-output.txt"
     l1 = parse_parameters(parameter_file)
     print(l1[0], "\n")
+    # for item in l1:
+    #     print(item, "\n")
+    
     
     local_file = "ghidra-scripting/local-variable-output.txt"
     l1 = parse_local(local_file)

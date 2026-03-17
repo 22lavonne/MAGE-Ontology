@@ -180,7 +180,7 @@ for l in local_var_list:
 # {'var': 'hModule', 'datatype': 'typedef HMODULE HINSTANCE', 'parent': 'GetProcAddress'}
 for p in parameters_list:
     param = pfs["mkg"][quote_for_turtle(p['var'])]
-    DATA_TYPE = pfs["mkg"][quote_for_turtle(p['datatype'])]
+    data_type = pfs["mkg"][quote_for_turtle(p['datatype'])]
     parent_func = pfs["mkg"][quote_for_turtle(p['parent'])]
     
     graph.add((param, a, PARAMETER))
@@ -229,30 +229,31 @@ for n in namespace_list:
    
 # Class format example:
 # {'class': 'type_info (GhidraClass)', 'address': 'NO ADDRESS', 'parent': 'Global', 'references': [], 'primary_reference': None} 
-for c in class_list:
-    c_instance = pfs["mkg"][quote_for_turtle(c['class'])]
-    graph.add( (c_instance, a, CLASS_))
-    
-    if c['address'] != "NO ADDRESS":
-        c_address = pfs["mkg"][quote_for_turtle(c['address'])]
-        graph.add((c_address, a, ADDRESS))
-        graph.add( (c_instance, atAddress, c_address))
+if (class_list):
+    for c in class_list:
+        c_instance = pfs["mkg"][quote_for_turtle(c['class'])]
+        graph.add( (c_instance, a, CLASS_))
         
-    c_parent = pfs["mkg"][quote_for_turtle(c['parent'])]    
-    parent_type = c['parenttype']
-    if(parent_type in class_dict):
-        graph.add((n_parent, a, class_dict[parent_type]))
-    graph.add((c_instance, definedIn, c_parent)) 
-       
-    if c['references']:
-        for r in c['references']:
-           ref = pfs["mkg"]["ref_" + str(r['source'])]
-           graph.add( (c_instance, hasReference, ref))
-           
-    if c['primary_reference']:
-        ref = pfs["mkg"]["ref_" + str(c['primary_reference']['source'])]
-        c_primary_ref = pfs["mkg"][quote_for_turtle(ref)]
-        graph.add( (c_instance, hasPrimaryReference, c_primary_ref))         
+        if c['address'] != "NO ADDRESS":
+            c_address = pfs["mkg"][quote_for_turtle(c['address'])]
+            graph.add((c_address, a, ADDRESS))
+            graph.add( (c_instance, atAddress, c_address))
+            
+        c_parent = pfs["mkg"][quote_for_turtle(c['parent'])]    
+        parent_type = c['parenttype']
+        if(parent_type in class_dict):
+            graph.add((n_parent, a, class_dict[parent_type]))
+        graph.add((c_instance, definedIn, c_parent)) 
+        
+        if c['references']:
+            for r in c['references']:
+                ref = pfs["mkg"]["ref_" + str(r['source'])]
+                graph.add( (c_instance, hasReference, ref))
+            
+        if c['primary_reference']:
+            ref = pfs["mkg"]["ref_" + str(c['primary_reference']['source'])]
+            c_primary_ref = pfs["mkg"][quote_for_turtle(ref)]
+            graph.add( (c_instance, hasPrimaryReference, c_primary_ref))         
 
 # DLL format example:
 # {'dll': 'KERNEL32.DLL', 'address': 'NO ADDRESS parent:Global', 'references': [], 'primary_reference': None}
@@ -315,7 +316,7 @@ for f in function_list:
     
     # return value (as a parameter)
     f_return_value = pfs["mkg"][quote_for_turtle(f['returnvalue'])]
-    graph.add((f_return_type, a, PARAMETER))
+    graph.add((f_return_value, a, PARAMETER))
     graph.add((f_instance, returns, f_return_value))
     
     
@@ -331,7 +332,8 @@ for f in function_list:
 # {'label': 'shift', 'address': '00000000', 'parent': 'Global', 'parenttype': 'NAMESPACE', 'references': [], 'primary_reference': None}
 for l in label_list:
     # add address to the name to diffrentiate different labels with the same name
-    l_instance = pfs["mkg"][quote_for_turtle(l['label'] + "_" + l['address'])]
+    # and do 2 underscores to differentiate between namespace names
+    l_instance = pfs["mkg"][quote_for_turtle(l['label'] + "__" + l['address'])]
     graph.add( (l_instance, a, LABEL))
     
     if l['address'] != "NO ADDRESS":
