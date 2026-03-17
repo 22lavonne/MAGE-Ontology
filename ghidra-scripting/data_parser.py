@@ -398,7 +398,8 @@ def main():
     
     namespace_file = "ghidra-scripting/namespace-output.txt"
     l1 = parse_namespaces(namespace_file)
-    print(l1[0], "\n")
+    if l1:
+        print(l1[0], "\n")
     
     instruction_file = "ghidra-scripting/instruction-output.txt"
     l1 = parse_instructions(instruction_file)
