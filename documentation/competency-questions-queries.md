@@ -1,7 +1,7 @@
 ## Competency Questions and Queries
 
-### 1. Can the ontology detect malicious API calls within the executable?
-* Query goal: detecting persistant API calls and other suspicious API calls <br>
+### 1. Can the ontology detect malicious persistent API calls within the executable?
+* Query goal: detecting persistant API calls<br>
 ```
 SELECT ?f ?fname ?cname
 WHERE {
@@ -12,20 +12,6 @@ WHERE {
 
     FILTER regex(?cname,
       "system|execve|popen",
-      "i")
-}
-```
-
-```
-SELECT DISTINCT ?f ?fname ?cname
-WHERE {
-
-    ?f ontology:calls ?api .
-    ?f ontology:hasName ?fname .
-    ?api ontology:hasName ?cname .
-
-    FILTER regex(?cname,
-      "process_vm_writev|fork|clone",
       "i")
 }
 ```
@@ -107,28 +93,11 @@ GROUP BY ?function
 HAVING (COUNT(?inst) >= 2) 
 ORDER BY DESC(?totalRelevantInst)
 ```
-### 6. Can the ontology detect anti VM behavior from the executable?
-* Query goal: Detect API calls and instruction opcodes that indicate anti VM behavior
-```
-SELECT ?f
-WHERE {
 
-    ?f ontology:calls ?api .
-    ?api ontology:hasName ?name .
 
-    FILTER regex(?name,"ptrace","i")
-}
-```
-```
-SELECT ?func ?instr
-WHERE {
-    ?func ontology:containsInstruction ?instr .
-    ?instr a ontology:Instruction ;
-           ontology:hasOpcode "CPUID" .
-}
-```
-### 7. Does the executable perform unauthorized system privilege escalation?
-* Query goal: look for API calls that indicate privilege escalation
+### 6. Can the ontology detect file system abuse?
+* Query goal: look for api calls that indicate file system abuse
+
 ```
 SELECT ?f ?name
 WHERE {
@@ -137,28 +106,49 @@ WHERE {
     ?api ontology:hasName ?name .
 
     FILTER regex(?name,
-      "setuid|setgid|capset|prctl",
+      "open|write|unlink|chmod|chown",
       "i")
 }
+
 ```
-### 8. Are there command and control indicators in the executable file?
-* Query goal: search for indicators for c2c like hard coded ip addresses, domain names, and urls
+
+### 7. Are there any suspicious jumps into memory in the executable?
+* Query goal: find instances where a call or jump instruction is used specifically on a memory address
+
 ```
-SELECT ?f ?value
+SELECT ?f ?fname ?instr ?value
+WHERE {
+    ?f ontology:containsInstruction ?instr ;
+        ontology:hasName ?fname.
+
+    ?instr ontology:hasOpcode ?opcode ;
+           ontology:hasDestinationOperand ?op .
+
+    ?op ontology:hasOperandType "ADDRESS" ;
+        ontology:hasOperandValue ?value .
+
+    FILTER (?opcode IN ("JMP","CALL"))
+}
+
+```
+
+### 8. Are there any other suspicious API calles contained in the executable file?
+* Query goal: search for other api calls that can be deemed suspicious
+
+```
+SELECT DISTINCT ?f ?fname ?cname
 WHERE {
 
     ?f ontology:calls ?api .
-    ?api ontology:hasName ?name .
+    ?f ontology:hasName ?fname .
+    ?api ontology:hasName ?cname .
 
-    FILTER regex(?name,"socket|connect|send|recv","i")
-
-    ?f ontology:containsInstruction ?i .
-    ?i ontology:hasSourceOperand ?op .
-    ?op ontology:hasOperandValue ?value .
-
-    FILTER regex(?value,"http|\\.(com|net|org)","i")
+    FILTER regex(?cname,
+      "process_vm_writev|fork|clone",
+      "i")
 }
 ```
+
 ### 9. Is there cryptographic activity within the executable, that can indicate encryption to hide parts of the program?
 * Query goals: 
   * Get the number of XOR opcodes from a function, where large numbers can indicate custom encryption algorithms

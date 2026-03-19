@@ -31,16 +31,16 @@ Bridges Datasets: dataset 1, dataset 2, ...
 * Competency Question<br>
 Bridges Datasets: dataset 1, dataset 2, ...
 -->
-* Can the ontology detect malicious API calls within the executable?
-* Is there any suspicious networking activity within the executable?
-* Are there any indirect control flow patterns in the executable file indicating vulnerable code?
-* Can sections of entropy be detected through the ratio of unique opcodes and total number of instructions in a function?
-* Can patterns of self referential decode loops be found to detect data obfuscation?
-* Can the ontology detect anti VM behavior from the executable?
-* Does the executable perform unauthorized system privelege escalation?
-* Are there command and control indicators in the executable file?
-* Is there cryptographic activity within the executable, that can indicate encryption to hide parts of the program?
-* What percentage of the functions in the binary file are imported (are external)?
+1. Can the ontology detect malicious persistent API calls within the executable?
+2. Is there any suspicious networking activity within the executable?
+3. Are there any indirect control flow patterns in the executable file indicating vulnerable code?
+4. Can sections of entropy be detected through the ratio of unique opcodes and total number of instructions in a function?
+5. Can patterns of self referential decode loops be found to detect data obfuscation?
+6. Can the ontology detect file system abuse?
+7. Are there any suspicious jumps into memory in the executable?
+8. Are there any other suspicious API calles contained in the executable file?
+9. Is there cryptographic activity within the executable, that can indicate encryption to hide parts of the program?
+10. What percentage of the functions in the binary file are imported (are external)?
 
 
 <!-- 
