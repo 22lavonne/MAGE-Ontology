@@ -1,0 +1,6 @@
+"instr","opcode","reg"
+"https://mkg.com/data#ins_00401545","JMP","RAX"
+"https://mkg.com/data#ins_004014e0","JMP","qword ptr [0x00607ff8]"
+"https://mkg.com/data#ins_00404aa3","JMP","RCX"
+"https://mkg.com/data#ins_00401593","JMP","RAX"
+"https://mkg.com/data#ins_004015de","CALL","RAX"

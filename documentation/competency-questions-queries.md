@@ -1,6 +1,6 @@
 ## Competency Questions and Queries
 
-### Can the ontology detect malicious API calls within the executable?
+### 1. Can the ontology detect malicious API calls within the executable?
 * Query goal: detecting persistant API calls and other suspicious API calls <br>
 ```
 SELECT ?f ?fname ?cname
@@ -30,7 +30,7 @@ WHERE {
 }
 ```
 
-### Is there any suspicious networking activity within the executable?
+### 2. Is there any suspicious networking activity within the executable?
 * Query goal: search for api calls that are often used in networking activity<br>
 ```
 SELECT ?f ?fname ?name
@@ -45,7 +45,7 @@ WHERE {
       "i")
 }
 ```
-### Are there any indirect control flow patterns in the executable file indicating vulnerable code?
+### 3. Are there any indirect control flow patterns in the executable file indicating vulnerable code?
 * Query goal: find instructions with a jump or call opcode, with the destination operand being a register to detect indirect control flow <br>
 ```
 SELECT ?instr ?opcode ?reg
@@ -60,7 +60,7 @@ WHERE {
     FILTER (?opcode IN ("JMP","CALL"))
 }
 ```
-### Can sections of entropy be detected through the ratio of unique opcodes and total number of instructions in a function?
+### 4. Can sections of entropy be detected through the ratio of unique opcodes and total number of instructions in a function?
 * Query goal: return a ratio of total instructions in a function to how many unique opcodes are used, since the more unique opcodes there are, the more entropy there usually is.
 ```
 SELECT ?function 
@@ -76,7 +76,7 @@ GROUP BY ?function
 HAVING (?totalInstructions > 10)
 ORDER BY DESC(?diversityRatio)
 ```
-### Can patterns of self referential decode loops be found to detect data obfuscation?
+### 5. Can patterns of self referential decode loops be found to detect data obfuscation?
 * Query goal: looks for functions that contain both a transformation opcode and a loop/branch opcode, which can indicate self referencial decode loops, which can be a sign of data obfuscation.
 ```
 SELECT ?function (COUNT(?inst) AS ?totalRelevantInst)
@@ -107,7 +107,7 @@ GROUP BY ?function
 HAVING (COUNT(?inst) >= 2) 
 ORDER BY DESC(?totalRelevantInst)
 ```
-### Can the ontology detect anti VM behavior from the executable?
+### 6. Can the ontology detect anti VM behavior from the executable?
 * Query goal: Detect API calls and instruction opcodes that indicate anti VM behavior
 ```
 SELECT ?f
@@ -127,7 +127,7 @@ WHERE {
            ontology:hasOpcode "CPUID" .
 }
 ```
-### Does the executable perform unauthorized system privilege escalation?
+### 7. Does the executable perform unauthorized system privilege escalation?
 * Query goal: look for API calls that indicate privilege escalation
 ```
 SELECT ?f ?name
@@ -141,7 +141,7 @@ WHERE {
       "i")
 }
 ```
-### Are there command and control indicators in the executable file?
+### 8. Are there command and control indicators in the executable file?
 * Query goal: search for indicators for c2c like hard coded ip addresses, domain names, and urls
 ```
 SELECT ?f ?value
@@ -159,7 +159,7 @@ WHERE {
     FILTER regex(?value,"http|\\.(com|net|org)","i")
 }
 ```
-### Is there cryptographic activity within the executable, that can indicate encryption to hide parts of the program?
+### 9. Is there cryptographic activity within the executable, that can indicate encryption to hide parts of the program?
 * Query goals: 
   * Get the number of XOR opcodes from a function, where large numbers can indicate custom encryption algorithms
   * Detecting API calls to encryption libraries
@@ -201,7 +201,7 @@ GROUP BY ?f
 HAVING (?bitwiseOps > 30)
 ORDER BY DESC(?bitwiseOps)
 ```
-### What percentage of the functions in the binary file are imported (are external)?
+### 10. What percentage of the functions in the binary file are imported (are external)?
 * Query goal: Get the percentage of functions that have the parent namespace as a DLL, or are external.
 ```
 SELECT 
