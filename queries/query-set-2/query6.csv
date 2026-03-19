@@ -1,0 +1,5 @@
+"f","name"
+"https://mkg.com/data#create_and_bind","fwrite"
+"https://mkg.com/data#fwrite","fwrite"
+"https://mkg.com/data#main","fopen"
+"https://mkg.com/data#fopen","fopen"

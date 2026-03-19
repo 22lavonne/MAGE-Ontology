@@ -1,0 +1,8 @@
+"f","name"
+"https://mkg.com/data#write","write"
+"https://mkg.com/data#printchar","write"
+"https://mkg.com/data#open","open"
+"https://mkg.com/data#getOurIP","open"
+"https://mkg.com/data#getBogos","open"
+"https://mkg.com/data#getCores","open"
+"https://mkg.com/data#main","fdpopen"
