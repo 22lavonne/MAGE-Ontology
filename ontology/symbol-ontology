@@ -541,15 +541,6 @@
     
 
 
-    <!-- http://www.semanticweb.org/jaspe/ontologies/2026/0/symbol-ontology/Dynamic -->
-
-    <owl:Class rdf:about="http://www.semanticweb.org/jaspe/ontologies/2026/0/symbol-ontology/Dynamic">
-        <rdfs:comment>type of operand, determined dynamically during runtime instead of compile time</rdfs:comment>
-        <rdfs:label>Dynamic</rdfs:label>
-    </owl:Class>
-    
-
-
     <!-- http://www.semanticweb.org/jaspe/ontologies/2026/0/symbol-ontology/Function -->
 
     <owl:Class rdf:about="http://www.semanticweb.org/jaspe/ontologies/2026/0/symbol-ontology/Function">
@@ -604,15 +595,6 @@
         </rdfs:subClassOf>
         <rdfs:comment>a function defined by the ghidra decompilation</rdfs:comment>
         <rdfs:label>Function</rdfs:label>
-    </owl:Class>
-    
-
-
-    <!-- http://www.semanticweb.org/jaspe/ontologies/2026/0/symbol-ontology/ImmediateOperand -->
-
-    <owl:Class rdf:about="http://www.semanticweb.org/jaspe/ontologies/2026/0/symbol-ontology/ImmediateOperand">
-        <rdfs:comment>type of operand, stores an immediate value</rdfs:comment>
-        <rdfs:label>ImmediateOperand</rdfs:label>
     </owl:Class>
     
 
@@ -768,24 +750,6 @@
     
 
 
-    <!-- http://www.semanticweb.org/jaspe/ontologies/2026/0/symbol-ontology/Register -->
-
-    <owl:Class rdf:about="http://www.semanticweb.org/jaspe/ontologies/2026/0/symbol-ontology/Register">
-        <rdfs:comment>type of operand, a place to hold immediate data before it is put into a memory address</rdfs:comment>
-        <rdfs:label>Register</rdfs:label>
-    </owl:Class>
-    
-
-
-    <!-- http://www.semanticweb.org/jaspe/ontologies/2026/0/symbol-ontology/Scalar -->
-
-    <owl:Class rdf:about="http://www.semanticweb.org/jaspe/ontologies/2026/0/symbol-ontology/Scalar">
-        <rdfs:comment>type of operand, represents an immediate integer value</rdfs:comment>
-        <rdfs:label>Scalar</rdfs:label>
-    </owl:Class>
-    
-
-
     <!-- http://www.semanticweb.org/jaspe/ontologies/2026/0/symbol-ontology/Symbol -->
 
     <owl:Class rdf:about="http://www.semanticweb.org/jaspe/ontologies/2026/0/symbol-ontology/Symbol">
@@ -836,15 +800,6 @@
     ///////////////////////////////////////////////////////////////////////////////////////
      -->
 
-    <rdf:Description>
-        <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#AllDisjointClasses"/>
-        <owl:members rdf:parseType="Collection">
-            <rdf:Description rdf:about="http://www.semanticweb.org/jaspe/ontologies/2026/0/symbol-ontology/Address"/>
-            <rdf:Description rdf:about="http://www.semanticweb.org/jaspe/ontologies/2026/0/symbol-ontology/Dynamic"/>
-            <rdf:Description rdf:about="http://www.semanticweb.org/jaspe/ontologies/2026/0/symbol-ontology/Register"/>
-            <rdf:Description rdf:about="http://www.semanticweb.org/jaspe/ontologies/2026/0/symbol-ontology/Scalar"/>
-        </owl:members>
-    </rdf:Description>
     <rdf:Description>
         <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#AllDisjointClasses"/>
         <owl:members rdf:parseType="Collection">
