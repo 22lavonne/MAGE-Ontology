@@ -132,7 +132,7 @@ WHERE {
 
 ```
 
-### 8. Are there any other suspicious API calles contained in the executable file?
+### 8. Are there any other kinds suspicious API calles contained in the executable file?
 * Query goal: search for other api calls that can be deemed suspicious
 
 ```
@@ -149,7 +149,7 @@ WHERE {
 }
 ```
 
-### 9. Is there cryptographic activity within the executable, that can indicate encryption to hide parts of the program?
+### 9. Is there any cryptographic activity within the executable that can indicate encryption to hide parts of the program?
 * Query goals: 
   * Get the number of XOR opcodes from a function, where large numbers can indicate custom encryption algorithms
   * Detecting API calls to encryption libraries
