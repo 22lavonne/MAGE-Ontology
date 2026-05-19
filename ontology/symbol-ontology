@@ -128,18 +128,6 @@
     
 
 
-    <!-- http://www.semanticweb.org/jaspe/ontologies/2026/0/symbol-ontology/hasDataType -->
-
-    <owl:ObjectProperty rdf:about="http://www.semanticweb.org/jaspe/ontologies/2026/0/symbol-ontology/hasDataType">
-        <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#FunctionalProperty"/>
-        <rdfs:domain rdf:resource="http://www.semanticweb.org/jaspe/ontologies/2026/0/symbol-ontology/Variable"/>
-        <rdfs:range rdf:resource="http://www.semanticweb.org/jaspe/ontologies/2026/0/symbol-ontology/DataType"/>
-        <rdfs:comment>specifies what data type a variable has</rdfs:comment>
-        <rdfs:label>hasDataType</rdfs:label>
-    </owl:ObjectProperty>
-    
-
-
     <!-- http://www.semanticweb.org/jaspe/ontologies/2026/0/symbol-ontology/hasDestinationAddress -->
 
     <owl:ObjectProperty rdf:about="http://www.semanticweb.org/jaspe/ontologies/2026/0/symbol-ontology/hasDestinationAddress">
@@ -191,19 +179,6 @@
         <rdfs:range rdf:resource="http://www.semanticweb.org/jaspe/ontologies/2026/0/symbol-ontology/Reference"/>
         <rdfs:comment>specifies a reference that the symbol has</rdfs:comment>
         <rdfs:label>hasReference</rdfs:label>
-    </owl:ObjectProperty>
-    
-
-
-    <!-- http://www.semanticweb.org/jaspe/ontologies/2026/0/symbol-ontology/hasReturnType -->
-
-    <owl:ObjectProperty rdf:about="http://www.semanticweb.org/jaspe/ontologies/2026/0/symbol-ontology/hasReturnType">
-        <rdfs:subPropertyOf rdf:resource="http://www.w3.org/2002/07/owl#topObjectProperty"/>
-        <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#FunctionalProperty"/>
-        <rdfs:domain rdf:resource="http://www.semanticweb.org/jaspe/ontologies/2026/0/symbol-ontology/Function"/>
-        <rdfs:range rdf:resource="http://www.semanticweb.org/jaspe/ontologies/2026/0/symbol-ontology/DataType"/>
-        <rdfs:comment>specifies the return type of a function</rdfs:comment>
-        <rdfs:label>hasReturnType</rdfs:label>
     </owl:ObjectProperty>
     
 
@@ -412,6 +387,28 @@
     
 
 
+    <!-- http://www.semanticweb.org/jaspe/ontologies/2026/0/symbol-ontology#hasDataType -->
+
+    <owl:DatatypeProperty rdf:about="http://www.semanticweb.org/jaspe/ontologies/2026/0/symbol-ontology#hasDataType">
+        <rdfs:domain rdf:resource="http://www.semanticweb.org/jaspe/ontologies/2026/0/symbol-ontology/Variable"/>
+        <rdfs:range rdf:resource="http://www.w3.org/2001/XMLSchema#string"/>
+        <rdfs:comment>The data type of the given variable expressed as a string</rdfs:comment>
+        <rdfs:label>hasDataType</rdfs:label>
+    </owl:DatatypeProperty>
+    
+
+
+    <!-- http://www.semanticweb.org/jaspe/ontologies/2026/0/symbol-ontology#hasReturnType -->
+
+    <owl:DatatypeProperty rdf:about="http://www.semanticweb.org/jaspe/ontologies/2026/0/symbol-ontology#hasReturnType">
+        <rdfs:domain rdf:resource="http://www.semanticweb.org/jaspe/ontologies/2026/0/symbol-ontology/Function"/>
+        <rdfs:range rdf:resource="http://www.w3.org/2001/XMLSchema#string"/>
+        <rdfs:comment>The data type of the variable returned by a function expressed as a string</rdfs:comment>
+        <rdfs:label>hasReturnType</rdfs:label>
+    </owl:DatatypeProperty>
+    
+
+
     <!-- http://www.semanticweb.org/jaspe/ontologies/2026/0/symbol-ontology/hasName -->
 
     <owl:DatatypeProperty rdf:about="http://www.semanticweb.org/jaspe/ontologies/2026/0/symbol-ontology/hasName">
@@ -532,15 +529,6 @@
     
 
 
-    <!-- http://www.semanticweb.org/jaspe/ontologies/2026/0/symbol-ontology/DataType -->
-
-    <owl:Class rdf:about="http://www.semanticweb.org/jaspe/ontologies/2026/0/symbol-ontology/DataType">
-        <rdfs:comment>The data type of either a variable or the return type of a function</rdfs:comment>
-        <rdfs:label>DataType</rdfs:label>
-    </owl:Class>
-    
-
-
     <!-- http://www.semanticweb.org/jaspe/ontologies/2026/0/symbol-ontology/Function -->
 
     <owl:Class rdf:about="http://www.semanticweb.org/jaspe/ontologies/2026/0/symbol-ontology/Function">
@@ -567,12 +555,6 @@
             <owl:Restriction>
                 <owl:onProperty rdf:resource="http://www.semanticweb.org/jaspe/ontologies/2026/0/symbol-ontology/defines"/>
                 <owl:someValuesFrom rdf:resource="http://www.semanticweb.org/jaspe/ontologies/2026/0/symbol-ontology/LocalVariable"/>
-            </owl:Restriction>
-        </rdfs:subClassOf>
-        <rdfs:subClassOf>
-            <owl:Restriction>
-                <owl:onProperty rdf:resource="http://www.semanticweb.org/jaspe/ontologies/2026/0/symbol-ontology/hasReturnType"/>
-                <owl:someValuesFrom rdf:resource="http://www.semanticweb.org/jaspe/ontologies/2026/0/symbol-ontology/DataType"/>
             </owl:Restriction>
         </rdfs:subClassOf>
         <rdfs:subClassOf>
@@ -618,6 +600,12 @@
             <owl:Restriction>
                 <owl:onProperty rdf:resource="http://www.semanticweb.org/jaspe/ontologies/2026/0/symbol-ontology/hasSourceOperand"/>
                 <owl:someValuesFrom rdf:resource="http://www.semanticweb.org/jaspe/ontologies/2026/0/symbol-ontology/Operand"/>
+            </owl:Restriction>
+        </rdfs:subClassOf>
+        <rdfs:subClassOf>
+            <owl:Restriction>
+                <owl:onProperty rdf:resource="http://www.semanticweb.org/jaspe/ontologies/2026/0/symbol-ontology#hasReturnType"/>
+                <owl:someValuesFrom rdf:resource="http://www.w3.org/2001/XMLSchema#string"/>
             </owl:Restriction>
         </rdfs:subClassOf>
         <rdfs:subClassOf>
@@ -782,8 +770,8 @@
     <owl:Class rdf:about="http://www.semanticweb.org/jaspe/ontologies/2026/0/symbol-ontology/Variable">
         <rdfs:subClassOf>
             <owl:Restriction>
-                <owl:onProperty rdf:resource="http://www.semanticweb.org/jaspe/ontologies/2026/0/symbol-ontology/hasDataType"/>
-                <owl:someValuesFrom rdf:resource="http://www.semanticweb.org/jaspe/ontologies/2026/0/symbol-ontology/DataType"/>
+                <owl:onProperty rdf:resource="http://www.semanticweb.org/jaspe/ontologies/2026/0/symbol-ontology#hasDataType"/>
+                <owl:someValuesFrom rdf:resource="http://www.w3.org/2001/XMLSchema#string"/>
             </owl:Restriction>
         </rdfs:subClassOf>
         <rdfs:comment>a type of object that holds data within a function</rdfs:comment>

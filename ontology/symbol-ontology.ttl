@@ -92,15 +92,6 @@
             rdfs:label "hasAddress" .
 
 
-###  http://www.semanticweb.org/jaspe/ontologies/2026/0/symbol-ontology/hasDataType
-:hasDataType rdf:type owl:ObjectProperty ,
-                      owl:FunctionalProperty ;
-             rdfs:domain :Variable ;
-             rdfs:range :DataType ;
-             rdfs:comment "specifies what data type a variable has" ;
-             rdfs:label "hasDataType" .
-
-
 ###  http://www.semanticweb.org/jaspe/ontologies/2026/0/symbol-ontology/hasDestinationAddress
 :hasDestinationAddress rdf:type owl:ObjectProperty ;
                        rdfs:subPropertyOf owl:topObjectProperty ;
@@ -142,16 +133,6 @@
               rdfs:range :Reference ;
               rdfs:comment "specifies a reference that the symbol has" ;
               rdfs:label "hasReference" .
-
-
-###  http://www.semanticweb.org/jaspe/ontologies/2026/0/symbol-ontology/hasReturnType
-:hasReturnType rdf:type owl:ObjectProperty ;
-               rdfs:subPropertyOf owl:topObjectProperty ;
-               rdf:type owl:FunctionalProperty ;
-               rdfs:domain :Function ;
-               rdfs:range :DataType ;
-               rdfs:comment "specifies the return type of a function" ;
-               rdfs:label "hasReturnType" .
 
 
 ###  http://www.semanticweb.org/jaspe/ontologies/2026/0/symbol-ontology/hasSourceAddress
@@ -300,6 +281,16 @@
 #    Data properties
 #################################################################
 
+###  http://www.semanticweb.org/jaspe/ontologies/2026/0/symbol-ontology#hasDataType
+:hasDataType rdf:type owl:DatatypeProperty ;
+             rdfs:domain :Variable .
+
+
+###  http://www.semanticweb.org/jaspe/ontologies/2026/0/symbol-ontology#hasReturnType
+:hasReturnType rdf:type owl:DatatypeProperty ;
+               rdfs:domain :Function .
+
+
 ###  http://www.semanticweb.org/jaspe/ontologies/2026/0/symbol-ontology/hasName
 :hasName rdf:type owl:DatatypeProperty ,
                   owl:FunctionalProperty ;
@@ -410,10 +401,6 @@
                             owl:someValuesFrom :LocalVariable
                           ] ,
                           [ rdf:type owl:Restriction ;
-                            owl:onProperty :hasReturnType ;
-                            owl:someValuesFrom :DataType
-                          ] ,
-                          [ rdf:type owl:Restriction ;
                             owl:onProperty :returns ;
                             owl:someValuesFrom :Parameter
                           ] ,
@@ -442,6 +429,10 @@
                              [ rdf:type owl:Restriction ;
                                owl:onProperty :hasSourceOperand ;
                                owl:someValuesFrom :Operand
+                             ] ,
+                             [ rdf:type owl:Restriction ;
+                               owl:onProperty :hasReturnType ;
+                               owl:someValuesFrom xsd:string
                              ] ,
                              [ rdf:type owl:Restriction ;
                                owl:onProperty :hasOpcode ;
@@ -554,7 +545,7 @@
 :Variable rdf:type owl:Class ;
           rdfs:subClassOf [ rdf:type owl:Restriction ;
                             owl:onProperty :hasDataType ;
-                            owl:someValuesFrom :DataType
+                            owl:someValuesFrom xsd:string
                           ] ;
           rdfs:comment "a type of object that holds data within a function" ;
           rdfs:label "Variable" .
