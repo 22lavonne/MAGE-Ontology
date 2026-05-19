@@ -1,0 +1,9 @@
+NAMESPACE namespace=switchD_000129ea address=NO ADDRESS parent=Global parenttype=NAMESPACE
+NAMESPACE namespace=switchD_000166ca address=NO ADDRESS parent=Global parenttype=NAMESPACE
+NAMESPACE namespace=switchD_00012192 address=NO ADDRESS parent=Global parenttype=NAMESPACE
+NAMESPACE namespace=switchD_00015702 address=NO ADDRESS parent=Global parenttype=NAMESPACE
+NAMESPACE namespace=switchD_000138e2 address=NO ADDRESS parent=Global parenttype=NAMESPACE
+NAMESPACE namespace=switchD_00012e16 address=NO ADDRESS parent=Global parenttype=NAMESPACE
+NAMESPACE namespace=switchD_00013ad6 address=NO ADDRESS parent=Global parenttype=NAMESPACE
+NAMESPACE namespace=switchD_00014192 address=NO ADDRESS parent=Global parenttype=NAMESPACE
+NAMESPACE namespace=switchD_00013e30 address=NO ADDRESS parent=Global parenttype=NAMESPACE

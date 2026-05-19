@@ -5,6 +5,9 @@
 #@toolbar 
 #@runtime PyGhidra
 
+import os
+import sys
+
 from pathlib import Path
 from ghidra.program.model.symbol import SymbolType
 from ghidra.program.model.lang import OperandType
@@ -141,17 +144,46 @@ def get_symbol_type_string(symbol):
     
 
 def main():
-    # gets path of where this script is actually located so any extracted txt files can be put in this directory
+    # gets path of where this script is actually located
     script_dir = Path(getSourceFile().getAbsolutePath()).parent
+    
+    # then ask the user for a name of a directory that they want the output files to go into
+    dir_name = askString("Name", "Enter new directory name:", "default_name")
+    
+    # then establish that directory as the ones the output files will go into
+    new_dir = script_dir / dir_name
+    
+    # boolean that checks if the new directory was created
+    dir_created = False
+    # if the new directory was created, then move forward with the data extraction.
+    # if some exception is found, print what the exception is
+    try:
+        os.mkdir(new_dir)
+        print(f"Directory '{new_dir}' created successfully.")
+        dir_created = True
+    except FileExistsError:
+        print(f"Directory '{new_dir}' already exists.")
+    except PermissionError:
+        print(f"Permission denied: Unable to create '{new_dir}'.")
+    except Exception as e:
+        print(f"An error occurred: {e}")
+    
+    # if a new directory could not be created, the exit the program.
+    if not new_dir:
+        sys.exit
 
     
     # get the path for where these 5 files will be stored in, 
     # will be used in try catch block to print information about all 5 types of objects
-    label_out_path = script_dir / "label-output.txt"
-    func_out_path = script_dir / "function-output.txt"
-    local_var_out_path = script_dir / "local-variable-output.txt"
-    param_out_path = script_dir / "parameter-output.txt"
-    ins_out_path = script_dir / "instruction-output.txt"
+    label_out_path = new_dir / "label-output.txt"
+    func_out_path = new_dir / "function-output.txt"
+    local_var_out_path = new_dir / "local-variable-output.txt"
+    param_out_path = new_dir / "parameter-output.txt"
+    ins_out_path = new_dir / "instruction-output.txt"
+    class_out_path = new_dir / "class-output.txt"
+    dll_out_path = new_dir / "dll-output.txt"
+    namespace_out_path = new_dir / "namespace-output.txt"
+    
     
     # open multiple files here since we will be iterating through all the label and function symbols,
     # and need to get any local variables, parameters, and instructions associated with those (specifically for functions)
@@ -243,7 +275,6 @@ def main():
     # prints all classes in class-output.txt
     # NOTE: all the classes do not have an associated address in the examples I have seen, 
     # which is the case for class and namespace definitions
-    class_out_path = script_dir / "class-output.txt"
     with class_out_path.open("w", encoding="utf-8") as f:
         
         # get a list of all the classes
@@ -264,7 +295,6 @@ def main():
             
 
     # prints all the DLLs in dll-output.txt
-    dll_out_path = script_dir / "dll-output.txt"
     # define the external manager here to make other calls shorter
     ext_manager = currentProgram.getExternalManager()
     
@@ -287,8 +317,6 @@ def main():
             print_references(ref_array, f)
 
     # prints all namespaces into namespace-output.txt
-    namespace_out_path = script_dir / "namespace-output.txt"
-    
     with namespace_out_path.open("w", encoding="utf-8") as f:
         
         namespace_iterator = get_all_namespaces(currentProgram, monitor)

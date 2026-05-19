@@ -1,0 +1,3 @@
+DLL dll=<EXTERNAL> address=NO ADDRESS parent=Global parenttype=NAMESPACE
+DLL dll=libc.so.6 address=NO ADDRESS parent=Global parenttype=NAMESPACE
+DLL dll=ld-linux-armhf.so.3 address=NO ADDRESS parent=Global parenttype=NAMESPACE
