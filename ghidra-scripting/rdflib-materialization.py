@@ -1,8 +1,10 @@
 # modified code from rdflib-starter.py from: https://github.com/kastle-lab/kastle-drawbridge/blob/master/resources/rdflib-starter.py
 # rdflib documentation: https://rdflib.readthedocs.io/en/stable/
 
-from data_parser import *
+import sys
 
+from data_parser import *
+from pathlib import Path
 from urllib.parse import quote
 
 ##### Graph stuff
@@ -106,23 +108,32 @@ graph = init_kg()
 ontology = "ontology/symbol-ontology.ttl"
 with open(ontology, "r") as f:
     graph.parse(f)
+    
+# ask the user from what file name they want to make a knowledge graph for
+dir_name = input("What directory do you want to make a knowledge graph from? (needs to exist in the ghidra-scripting directory): ")
+dir_path = Path("ghidra-scripting/" + dir_name)
+if dir_path.is_dir():
+    print("Directory exists, generating knowledge graph from the files in that directory...")
+else:
+    print("Directory does not exist. Exiting...")
+    sys.exit()
 
-# Data files, and lists of dictionaries containing the data
-parameter_file = "ghidra-scripting/parameter-output.txt"
+# Data files, and lists of dictionaries containing the data based on the directory given
+parameter_file = "ghidra-scripting/" + dir_name + "/parameter-output.txt"
 parameters_list = parse_parameters(parameter_file)
-local_file = "ghidra-scripting/local-variable-output.txt"
+local_file = "ghidra-scripting/" + dir_name + "/local-variable-output.txt"
 local_var_list = parse_local(local_file)
-function_file = "ghidra-scripting/function-output.txt"
+function_file = "ghidra-scripting/" + dir_name + "/function-output.txt"
 function_list = parse_functions(function_file)
-label_file = "ghidra-scripting/label-output.txt"
+label_file = "ghidra-scripting/" + dir_name + "/label-output.txt"
 label_list = parse_labels(label_file)
-class_file = "ghidra-scripting/class-output.txt"
+class_file = "ghidra-scripting/" + dir_name + "/class-output.txt"
 class_list = parse_classes(class_file)
-dll_file = "ghidra-scripting/dll-output.txt"
+dll_file = "ghidra-scripting/" + dir_name + "/dll-output.txt"
 dll_list = parse_dlls(dll_file)
-namespace_file = "ghidra-scripting/namespace-output.txt"
+namespace_file = "ghidra-scripting/" + dir_name + "/namespace-output.txt"
 namespace_list = parse_namespaces(namespace_file)
-instruction_file = "ghidra-scripting/instruction-output.txt"
+instruction_file = "ghidra-scripting/" + dir_name + "/instruction-output.txt"
 instruction_list = parse_instructions(instruction_file)    
 
 # method to add references triples for multiple kinds of objects
@@ -398,5 +409,5 @@ for i in instruction_list:
     graph.add((func, containsInstruction, i_instance))    
 
 # then serialize the graph
-output_file = "ghidra-scripting/output.ttl"
+output_file = "ghidra-scripting/" + dir_name + "/output.ttl"
 temp = graph.serialize(format="turtle", encoding="utf-8", destination=output_file)
