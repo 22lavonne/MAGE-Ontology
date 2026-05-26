@@ -1,6 +1,10 @@
 # modified code from rdflib-starter.py from: https://github.com/kastle-lab/kastle-drawbridge/blob/master/resources/rdflib-starter.py
 # rdflib documentation: https://rdflib.readthedocs.io/en/stable/
 
+# TODO: modify script with changes made to schema and ontology
+    # specifically the defined in relations for namespace, structural namespace symbol, class, function, and label
+    # add the structual namespace object and modify the subclass relations for namespace, class, and dll
+
 import sys
 
 from data_parser import *
