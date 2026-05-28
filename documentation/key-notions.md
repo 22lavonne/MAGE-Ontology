@@ -15,27 +15,33 @@ A symbol is a named entity in an executable file that is associated with a speci
 "Every label is a symbol"
 * `Namespace Symbol subClassOf Symbol` <br/>
 "Every namespace symbol is a symbol"
-* `(4) Label definedIn Namespace Symbol exactly 1 Namespace Symbol` <br/>
-"Every label is defined in exactly one namespace symbol" 
+* `(4) Label definedIn Structural Namespace Symbol exactly 1 Namespace Symbol` <br/>
+"Every label is defined in exactly one structural namespace symbol" 
 
 
 ## Namespace Symbol
 ### Description
-A namespace symbol is a kind of symbol in Ghidra that is used to organize other kinds of symbols. The types of namespace symbols in this schema include functions, classes, DLLs (dynamically linked libraries), and namespaces. Namespace symbols can also be defined in other namespace symbols, like functions defined in namespaces or DLLs, DLLs defined in the global namespace, classes defined in namespaces, etc. Other types of symbols and data like labels are also defined in types of namespace symbols.
+A namespace symbol is a kind of symbol in Ghidra that is used to organize other kinds of symbols. A function is a type of namespace symbol since it holds local variables. A further distinction is made called structural namespace symbols, which can hold more global namespaces and objects, like functions and labels. This means that classes, DLLs, and namespaces can all hold functions and labels. Ghidra does not support nested classes and nested functions within its decompilation, so those aspects are not represented in this schema. Classes and DLLs are also defined within a namespace, where all DLLs will be defined within the global namespace.
 
 ![Namespace Symbol](../schema/schema-diagram-images/namespace-symbol-schema.png)
 
 ### Axioms
-* `Namespace subClassOf Namespace Symbol` <br>
-" Every namespace is a namespace symbol"
+* `Structural Namespace Symbol subClassOf Namespace Symbol` <br>
+"Every structural namespace symbol is a namespace symbol
+* `Namespace subClassOf Structural Namespace Symbol` <br>
+" Every namespace is a structual namespace symbol"
 * `DLL subClassOf Namespace Symbol` <br/>
-"Every dll is a namespace symbol"
-* `Function Symbol subClassOf namespace Symbol` <br/>
+"Every dll is a structural namespace symbol"
+* `Function subClassOf namespace Symbol` <br/>
 "Every function is a namespace symbol"
+* `(5) Function definedIn Structural Namespace Symbol exactly 1 Structural Namespace Symbol` <br>
+"Every function is defined within exactly one structural namespace symbol" (Ghidra only keeps track of one level of parent namespace.)
 * `Class subClassOf Namespace Symbol` <br/>
-"Every class is a namespace symbol"
-* `(5) Class definedIn Namespace Symbol exactly 1 Namespace Symbol` <br>
-"Every class is defined in exactly one namespace symbol"
+"Every class is a structural namespace symbol"
+* `(6) Class definedIn Namespace exactly 1 Namespace` <br>
+"Every class is defined in exactly one namespace"
+* `(7) DLL definedIn Namespace exactly 1 Namespace` <br>
+"Every DLL is defined in exactly one namespace" (In this case, it will always be defined within the global namespace.)
 
 
 ## Reference
@@ -43,13 +49,13 @@ A namespace symbol is a kind of symbol in Ghidra that is used to organize other 
 A reference is where two memory addresses interact with each other in some way, where one address uses another. This is used for things like when a function calls another function or when data is accessed by an instrution. References are 4-tuples, which include the source address, destination address, the type of reference (function call, data being accessed, etc.), and the operand index (which is an int that is either -1, 0, or 1). <br/>
 ![Reference](../schema/schema-diagram-images/reference-schema.png)
 ### Axioms
-* `(6) Reference hasSourceAddress address exactly 1 sourceAddress` <br/>
+* `(8) Reference hasSourceAddress address exactly 1 sourceAddress` <br/>
 "A reference has exactly one source address"
-* `(7) Reference hasDestinationAddress address exactly 1 destinationAddress` <br>
+* `(9) Reference hasDestinationAddress address exactly 1 destinationAddress` <br>
 "A reference has exactly one destination address"
-* `(8) Reference hasType xsd:string exactly 1 type` <br/>
+* `(10) Reference hasType xsd:string exactly 1 type` <br/>
 "A reference has exactly one reference type indicated by a string"
-* `(9) Reference hasOperandIndex xsd:integer exactly 1 index` <br/>
+* `(11) Reference hasOperandIndex xsd:integer exactly 1 index` <br/>
 "A reference has exactly one operand index indicated by an integer"
 
 ## Variable
@@ -59,13 +65,13 @@ Variables in this context are tied to functions, and not a type of symbol itself
 ![Variable](../schema/schema-diagram-images/variable-schema.png)
 
 ### Axioms
-* `(10) Variable hasDataType Data Type exactly 1 data type` <br>
+* `(12) Variable hasDataType Data Type exactly 1 data type` <br>
 " Every variable has exactly 1 data type"
 * `Local Variable subClassOf Variable` <br>
 "Every local variable is a variable"
 * `Parameter subClassOf Variable` <br>
 "Every parameter is a variable"
-* `(11) Parameter passesInto min 0 Function` <br>
+* `(13) Parameter passesInto min 0 Function` <br>
 "A parameter is passed into min 0 functions"
 
 
@@ -74,20 +80,20 @@ Variables in this context are tied to functions, and not a type of symbol itself
 The Function objects keeps track of all the aspects of a function, including any functions it calls or functions called by it, the parameters passed in, the local variables defined in the function, the return type of the function, the return parameter of the function, the instructions the function contains, and what class the function is contained in (if any). <br>
 ![Address](../schema/schema-diagram-images/function-schema.png)
 ### Axioms
-* `(12) Function defines min 0 Local Variables` <br>
+* `(14) Function defines min 0 Local Variables` <br>
 "A fuction can define 0 or more local variables"
-* `(13) Function hasReturnType Data Type min 0 max 1 datatype` <br>
+* `(15) Function hasReturnType Data Type min 0 max 1 datatype` <br>
 "Every function has either no return type (void) or one return type"
-* `(14) Function returns min 0 max 1 Parameter` <br>
+* `(16) Function returns min 0 max 1 Parameter` <br>
 "Every function returns either no parameters or one parameter"
-* `(15) Function calls min 0 Function` <br>
+* `(17) Function calls min 0 Function` <br>
 "A function can call 0 or more other functions"
 (calledBy is the inverse of calls)
-* `(16) Function definedIn Namespace Symbol Exactly 1 Namespace Symbol` <br>
+* `(18) Function definedIn Namespace Symbol Exactly 1 Namespace Symbol` <br>
 "A function is defined in exactly one lexical scope symbol"
-* `(17) Function containsInstruction min 1 Instruction` <br>
+* `(19) Function containsInstruction min 1 Instruction` <br>
 "A function contains one or more instructions"
-* `(18) Function hasName xsd:string exactly 1 name` <br>
+* `(20) Function hasName xsd:string exactly 1 name` <br>
 "A function has exactly one name represented as a string"
 
 
@@ -98,18 +104,18 @@ The instruction object refers to an assembly instruction that will originate fro
 ![Instruction](../schema/schema-diagram-images/instruction-schema.png)
 
 ### Axioms
-* `(19) Instruction hasOpcode xsd:string exactly 1 opcode` <br>
+* `(21) Instruction hasOpcode xsd:string exactly 1 opcode` <br>
 "Every instruction has exactly 1 opcode (represented as a string)"
-* `(20) Instruction hasSourceOperand min 0 Operand` <br>
+* `(22) Instruction hasSourceOperand min 0 Operand` <br>
 "Every instruction has 0 or more source operands"
-* `(21) Instruction hasDestinationOperand min 0 max 1 Operand` <br>
+* `(23) Instruction hasDestinationOperand min 0 max 1 Operand` <br>
 "Every instruction has exactly 0 or 1 destination oeprands"
-* `(22) Instruction atAddress exactly 1 Address` <br>
+* `(24) Instruction atAddress exactly 1 Address` <br>
 "Every instruction is located at exactly 1 (starting) address"
-* `(23) Operand hasType xsd:string exactly 1 type` <br>
+* `(25) Operand hasType xsd:string exactly 1 type` <br>
 "Every operand has exactly one type represented as a string"<br>
 (Specifies the kind of object the operand is)
-* `(24) Operand hasValue xsd:string exactly 1 value` <br>
+* `(26) Operand hasValue xsd:string exactly 1 value` <br>
 "Every operand has exactly one value represented as a string"
 
 
