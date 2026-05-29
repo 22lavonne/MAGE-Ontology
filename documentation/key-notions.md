@@ -53,7 +53,7 @@ A reference is where two memory addresses interact with each other in some way, 
 "A reference has exactly one source address"
 * `(9) Reference hasDestinationAddress address exactly 1 destinationAddress` <br>
 "A reference has exactly one destination address"
-* `(10) Reference hasType xsd:string exactly 1 type` <br/>
+* `(10) Reference hasRefernceType xsd:string exactly 1 type` <br/>
 "A reference has exactly one reference type indicated by a string"
 * `(11) Reference hasOperandIndex xsd:integer exactly 1 index` <br/>
 "A reference has exactly one operand index indicated by an integer"
@@ -65,8 +65,8 @@ Variables in this context are tied to functions, and not a type of symbol itself
 ![Variable](../schema/schema-diagram-images/variable-schema.png)
 
 ### Axioms
-* `(12) Variable hasDataType Data Type exactly 1 data type` <br>
-" Every variable has exactly 1 data type"
+* `(12) Variable hasDataType xsd:string 1 data type` <br>
+" Every variable has exactly 1 data type represented as a string"
 * `Local Variable subClassOf Variable` <br>
 "Every local variable is a variable"
 * `Parameter subClassOf Variable` <br>
@@ -82,8 +82,8 @@ The Function objects keeps track of all the aspects of a function, including any
 ### Axioms
 * `(14) Function defines min 0 Local Variables` <br>
 "A fuction can define 0 or more local variables"
-* `(15) Function hasReturnType Data Type min 0 max 1 datatype` <br>
-"Every function has either no return type (void) or one return type"
+* `(15) Function hasReturnType xsd:string min 0 max 1 datatype` <br>
+"Every function has either no return type (void) or one return type represented as a string"
 * `(16) Function returns min 0 max 1 Parameter` <br>
 "Every function returns either no parameters or one parameter"
 * `(17) Function calls min 0 Function` <br>
@@ -112,10 +112,10 @@ The instruction object refers to an assembly instruction that will originate fro
 "Every instruction has exactly 0 or 1 destination oeprands"
 * `(24) Instruction atAddress exactly 1 Address` <br>
 "Every instruction is located at exactly 1 (starting) address"
-* `(25) Operand hasType xsd:string exactly 1 type` <br>
+* `(25) Operand hasOperandType xsd:string exactly 1 type` <br>
 "Every operand has exactly one type represented as a string"<br>
 (Specifies the kind of object the operand is)
-* `(26) Operand hasValue xsd:string exactly 1 value` <br>
+* `(26) Operand hasOperandValue xsd:string exactly 1 value` <br>
 "Every operand has exactly one value represented as a string"
 
 
