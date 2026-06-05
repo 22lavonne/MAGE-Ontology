@@ -53,10 +53,5 @@ Will just this one github repo with loads of ELF fies be enough?
 ## Existing Resources
 * [Adapting Linguistic Deception Cues for Malware Detection](https://etd.ohiolink.edu/acprod/odb_etd/ws/send_file/send?accession=wright1421025881&disposition=inline)
 
-## References
+<!-- ## References -->
 <!-- References should follow a consistent format. They should appear in order of appearance in the narrative section. Remove this comment. -->
-[0] Reference
-
-[1] Reference
-
-[2] Reference

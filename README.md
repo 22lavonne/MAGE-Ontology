@@ -6,7 +6,6 @@ This knowledge graph is based on the symbol table in Ghidra with the goal of ass
 
 ## Resources:
 * [Documentation](https://github.com/22lavonne/Malware-Behavior-Knowledge-Graph/tree/main/documentation): contains useful documentation of the project like key notions and the list of competency questions along with their associated queries.
-* [Schema](https://github.com/22lavonne/Malware-Behavior-Knowledge-Graph/tree/main/schema): contains a .graphml file of the schema, and images of the individual modules of the schema (used in key-notions)
 * [Ontology](https://github.com/22lavonne/Malware-Behavior-Knowledge-Graph/tree/main/ontology): contains the Turtle file of the ontology.
 * [Ghidra Scripting](https://github.com/22lavonne/Malware-Behavior-Knowledge-Graph/tree/main/ghidra-scripting): contains any scripts used to extract the data for the knowledge graph (writen in Pyghidra).
 * [Queries](https://github.com/22lavonne/Malware-Behavior-Knowledge-Graph/tree/main/queries): contains a SPARQL file containing all the queries used in the project. Also contains CSV files containing the results of these queries when ran on a knowledge graph materialized from data of a malicious executable file.
