@@ -2,62 +2,35 @@
 
 Not including subClassOf relations <br>
 
-| #     | Subject           | Relationship          | Object            |
-| ----- | ----------------- | --------------------- | ----------------- |
-| 1     | Symbol            | hasReference          | Reference         |
-| 2     | Symbol            | hasPrimaryReference   | Reference         |
-| 3     | Symbol            | hasAddress            | Address           |
-| 4     | Label             | definedIn             | Namespace Symbol  |
-| 5     | Class             | definedIn             | Namespace Symbol  |
-| 6     | Reference         | hasSourceAddress      | Address           |
-| 7     | Reference         | hasDestinationAddress | Address           |
-| 8     | Reference         | hasReferenceType      | xsd:string        |
-| 9     | Reference         | hasOperandIndex       | xsd:integer       |
-| 10    | Variable          | hasDataType           | Data Type         |
-| 11    | Parameter         | passesInto            | Function          |
-| 12    | Function          | defines               | Local Variable    |
-| 13    | Function          | hasReturnType         | Data Type         |
-| 14    | Function          | returns               | Parameter         |
-| 15    | Function          | calls                 | Function          |
-| 16    | Function          | definedIn             | Namespace Symbol  |
-| 17    | Function          | containsInstruction   | Instruction       |
-| 18    | Function          | hasName               | xsd:string        |
-| 19    | Instruction       | hasOpcode             | xsd:string        |
-| 20    | Instruction       | hasSourceOperand      | Operand           |
-| 21    | Instruction       | hasDestinationOperand | Operand           |
-| 22    | Instruction       | atAddress             | Address           |
-| 23    | Operand           | hasOperandType        | xsd:string        |
-| 24    | Operand           | hasOperandValue       | xsd:string        |
-
 ## new table
-| #     | Subject           | Relationship          | Object            |
-| ----- | ----------------- | --------------------- | ----------------- |
-| 1     | Symbol            | hasReference          | Reference         | 1
-| 2     | Symbol            | hasPrimaryReference   | Reference         | 2
-| 3     | Symbol            | hasAddress            | Address           | 3
-| 4     | Label             | definedIn             | Namespace Symbol  | 4
-| 5     | Function          | definedIn             | Namespace Symbol  | 
-| 6     | Class             | definedIn             | Namespace         | 5
-| 7     | DLL               | definedIn             | Namespace         | 
-| 8     | Reference         | hasSourceAddress      | Address           | 6
-| 9     | Reference         | hasDestinationAddress | Address           | 7
-| 10    | Reference         | hasReferenceType      | xsd:string        | 8
-| 11    | Reference         | hasOperandIndex       | xsd:integer       | 9
-| 12    | Variable          | hasDataType           | xsd:string        | 10!
-| 13    | Parameter         | passesInto            | Function          | 11
-| 14    | Function          | defines               | Local Variable    | 12
-| 15    | Function          | hasReturnType         | xsd:string        | 13!
-| 16    | Function          | returns               | Parameter         | 14
-| 17    | Function          | calls                 | Function          | 15
-| 18    | Function          | definedIn             | Namespace Symbol  | 16
-| 19    | Function          | containsInstruction   | Instruction       | 17
-| 20    | Function          | hasName               | xsd:string        | 18
-| 21    | Instruction       | hasOpcode             | xsd:string        | 19
-| 22    | Instruction       | hasSourceOperand      | Operand           | 20
-| 23    | Instruction       | hasDestinationOperand | Operand           | 21
-| 24    | Instruction       | atAddress             | Address           | 22
-| 25    | Operand           | hasOperandType        | xsd:string        | 23
-| 26    | Operand           | hasOperandValue       | xsd:string        | 24
+| #     | Subject           | Relationship          | Object            | Symbolic Notation     |
+| ----- | ----------------- | --------------------- | ----------------- | -----------------     |
+| 1     | Symbol            | hasReference          | Reference         |                       |
+| 2     | Symbol            | hasPrimaryReference   | Reference         |                       |
+| 3     | Symbol            | hasAddress            | Address           |                       |
+| 4     | Label             | definedIn             | Namespace Symbol  |                       |
+| 5     | Function          | definedIn             | Namespace Symbol  |                       | 
+| 6     | Class             | definedIn             | Namespace         |                       |
+| 7     | DLL               | definedIn             | Namespace         |                       |
+| 8     | Reference         | hasSourceAddress      | Address           |                       |
+| 9     | Reference         | hasDestinationAddress | Address           |                       |
+| 10    | Reference         | hasReferenceType      | xsd:string        |                       |
+| 11    | Reference         | hasOperandIndex       | xsd:integer       |                       |
+| 12    | Variable          | hasDataType           | xsd:string        |                       |
+| 13    | Parameter         | passesInto            | Function          |                       |
+| 14    | Function          | defines               | Local Variable    |                       |
+| 15    | Function          | hasReturnType         | xsd:string        |                       |
+| 16    | Function          | returns               | Parameter         |                       |
+| 17    | Function          | calls                 | Function          |                       |
+| 18    | Function          | definedIn             | Namespace Symbol  |                       |
+| 19    | Function          | containsInstruction   | Instruction       |                       |
+| 20    | Function          | hasName               | xsd:string        |                       |
+| 21    | Instruction       | hasOpcode             | xsd:string        |                       |
+| 22    | Instruction       | hasSourceOperand      | Operand           |                       |
+| 23    | Instruction       | hasDestinationOperand | Operand           |                       |
+| 24    | Instruction       | atAddress             | Address           |                       |
+| 25    | Operand           | hasOperandType        | xsd:string        |                       |
+| 26    | Operand           | hasOperandValue       | xsd:string        |                       |
 
 
 ## Axiom Selection
