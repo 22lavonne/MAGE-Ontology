@@ -3,34 +3,33 @@
 Not including subClassOf relations <br>
 
 ## new table
-| #     | Subject           | Relationship          | Object            | Symbolic Notation     |
-| ----- | ----------------- | --------------------- | ----------------- | -----------------     |
-| 1     | Symbol            | hasReference          | Reference         |                       |
-| 2     | Symbol            | hasPrimaryReference   | Reference         |                       |
-| 3     | Symbol            | hasAddress            | Address           |                       |
-| 4     | Label             | definedIn             | Namespace Symbol  |                       |
-| 5     | Function          | definedIn             | Namespace Symbol  |                       | 
-| 6     | Class             | definedIn             | Namespace         |                       |
-| 7     | DLL               | definedIn             | Namespace         |                       |
-| 8     | Reference         | hasSourceAddress      | Address           |                       |
-| 9     | Reference         | hasDestinationAddress | Address           |                       |
-| 10    | Reference         | hasReferenceType      | xsd:string        |                       |
-| 11    | Reference         | hasOperandIndex       | xsd:integer       |                       |
-| 12    | Variable          | hasDataType           | xsd:string        |                       |
-| 13    | Parameter         | passesInto            | Function          |                       |
-| 14    | Function          | defines               | Local Variable    |                       |
-| 15    | Function          | hasReturnType         | xsd:string        |                       |
-| 16    | Function          | returns               | Parameter         |                       |
-| 17    | Function          | calls                 | Function          |                       |
-| 18    | Function          | definedIn             | Namespace Symbol  |                       |
-| 19    | Function          | containsInstruction   | Instruction       |                       |
-| 20    | Function          | hasName               | xsd:string        |                       |
-| 21    | Instruction       | hasOpcode             | xsd:string        |                       |
-| 22    | Instruction       | hasSourceOperand      | Operand           |                       |
-| 23    | Instruction       | hasDestinationOperand | Operand           |                       |
-| 24    | Instruction       | atAddress             | Address           |                       |
-| 25    | Operand           | hasOperandType        | xsd:string        |                       |
-| 26    | Operand           | hasOperandValue       | xsd:string        |                       |
+| #     | Subject           | Relationship          | Object            | Description Logic Syntax      |
+| ----- | ----------------- | --------------------- | ----------------- | ----------------------------- |
+| 1     | Symbol            | hasReference          | Reference         | Symbol ⊑ ∀hasReference.Reference |
+| 2     | Symbol            | hasPrimaryReference   | Reference         | Symbol ⊑ ≤1 hasPrimaryReference.Reference |
+| 3     | Symbol            | hasAddress            | Address           | Symbol ⊑ ≤1 hasAddress.Address |
+| 4     | Label             | definedIn             | Structural Namespace Symbol | Label ⊑ ≤1 definedIn.StructuralNamespaceSymbol  |
+| 5     | Class             | definedIn             | Namespace         | Class ⊑ ≤1 definedIn.Namespace |
+| 6     | DLL               | definedIn             | Namespace         | DLL ⊑ ≤1 definedIn.Namespace   |
+| 7     | Reference         | hasSourceAddress      | Address           | Reference ⊑ ≤1 hasSourceAddress.Address |
+| 8     | Reference         | hasDestinationAddress | Address           | Reference ⊑ ≤1 hasDestinationAddress.AddressAddress |
+| 9     | Reference         | hasReferenceType      | xsd:string        | Reference ⊑ ≤1 hasReferenceType.xsd:string |
+| 10    | Reference         | hasOperandIndex       | xsd:integer       | Reference ⊑ ≤1 hasOperandIndex.xsd:integer |
+| 11    | Variable          | hasDataType           | xsd:string        | Variable ⊑ ∀hasDataType.xsd:string |
+| 12    | Parameter         | passesInto            | Function          | Parameter ⊑ ∀passesInto.Function |
+| 13    | Function          | defines               | Local Variable    | Function ⊑ ∀defines.LocalVariable |
+| 14    | Function          | hasReturnType         | xsd:string        | Function ⊑ ≤1 hasReturnType.xsd:string |
+| 15    | Function          | returns               | Parameter         | Function ⊑ ≤1 returns.Parameter |
+| 16    | Function          | calls                 | Function          | Function ⊑ ∀calls.Function    |
+| 17    | Function          | definedIn             | StructuralNamespaceSymbol  | Function ⊑ ≤1 definedIn.StructuralNamespaceSymbol |
+| 18    | Function          | containsInstruction   | Instruction       | Function ⊑ ∀containsInstruction.Instruction|
+| 19    | Function          | hasName               | xsd:string        | Function ⊑ ≤1 hasName.xsd:string |
+| 20    | Instruction       | hasOpcode             | xsd:string        | Instruction ⊑ ≤1 hasOpcode.xsd:string |
+| 21    | Instruction       | hasSourceOperand      | Operand           | Instruction ⊑ ∀hasSourceOperand.Operand |
+| 22    | Instruction       | hasDestinationOperand | Operand           | Instruction ⊑ ≤1 hasDestinationOperand.Operand |
+| 23    | Instruction       | atAddress             | Address           | Instruction ⊑ ≤1 atAddress.Address |
+| 24    | Operand           | hasOperandType        | xsd:string        | Operand ⊑ ≤1 hasOperandType.xsd:string |
+| 25    | Operand           | hasOperandValue       | xsd:string        | Operand ⊑ ≤1 hasOperandValue.xsd:string |
 
 
 ## Axiom Selection
@@ -57,23 +56,22 @@ Not including subClassOf relations <br>
 |  4  |     |     |  x  |     |     |  x  |     |     |     |     |     |     |     |     |     |  x  |     |     |     |
 |  5  |     |     |  x  |     |     |  x  |     |     |     |     |     |     |     |     |     |  x  |     |     |     |
 |  6  |     |     |  x  |     |     |  x  |     |     |     |     |     |     |     |     |     |  x  |     |     |     |
-|  7  |     |     |  x  |     |     |  x  |     |     |     |     |     |     |     |     |     |  x  |     |     |     |
+|  7  |     |  x  |     |  x  |     |  x  |     |     |     |     |  x  |     |     |     |     |  x  |     |     |     |
 |  8  |     |  x  |     |  x  |     |  x  |     |     |     |     |  x  |     |     |     |     |  x  |     |     |     |
-|  9  |     |  x  |     |  x  |     |  x  |     |     |     |     |  x  |     |     |     |     |  x  |     |     |     |
-| 10  |     |  x  |     |     |     |  x  |     |     |     |     |  x  |     |     |     |     |     |     |     |     |
+| 9   |     |  x  |     |     |     |  x  |     |     |     |     |  x  |     |     |     |     |     |     |     |     |
+| 10  |     |  x  |     |  x  |     |  x  |     |     |     |     |  x  |     |     |     |     |     |     |     |     |
 | 11  |     |  x  |     |  x  |     |  x  |     |     |     |     |  x  |     |     |     |     |     |     |     |     |
-| 12  |     |  x  |     |  x  |     |  x  |     |     |     |     |  x  |     |     |     |     |     |     |     |     |
-| 13  |     |  x  |     |  x  |     |     |     |     |     |     |     |     |     |     |     |  x  |     |     |     |
-| 14  |     |     |  x  |     |     |     |     |     |     |     |     |     |     |     |     |  x  |     |     |     |
-| 15  |     |  x  |     |  x  |     |  x  |     |     |     |     |  x  |     |     |     |     |     |     |     |     |
+| 12  |     |  x  |     |  x  |     |     |     |     |     |     |     |     |     |     |     |  x  |     |     |     |
+| 13  |     |     |  x  |     |     |     |     |     |     |     |     |     |     |     |     |  x  |     |     |     |
+| 14  |     |  x  |     |  x  |     |  x  |     |     |     |     |  x  |     |     |     |     |     |     |     |     |
+| 15  |     |  x  |     |  x  |     |     |     |     |     |     |  x  |     |     |     |     |  x  |     |     |     |
 | 16  |     |  x  |     |  x  |     |     |     |     |     |     |  x  |     |     |     |     |  x  |     |     |     |
-| 17  |     |  x  |     |  x  |     |     |     |     |     |     |  x  |     |     |     |     |  x  |     |     |     |
-| 18  |     |     |  x  |     |  x  |     |     |     |     |     |  x  |     |     |     |     |  x  |     |     |     |
-| 19  |     |  x  |     |  x  |     |  x  |     |     |     |     |     |     |     |     |  x  |  x  |     |     |     |
-| 20  |     |  x  |     |     |     |     |     |     |     |     |  x  |     |     |     |     |     |     |     |     |
-| 21  |     |  x  |     |     |     |  x  |  x  |     |     |     |  x  |     |     |     |     |     |     |     |     |
-| 22  |     |  x  |     |  x  |     |     |     |     |     |     |     |     |     |     |     |  x  |     |     |     |
-| 23  |     |  x  |     |  x  |     |     |     |     |     |     |  x  |     |     |     |     |  x  |     |     |     |
-| 24  |     |  x  |     |  x  |     |  x  |     |     |     |     |  x  |     |     |     |     |  x  |     |     |     |
+| 17  |     |     |  x  |     |  x  |     |     |     |     |     |  x  |     |     |     |     |  x  |     |     |     |
+| 18  |     |  x  |     |  x  |     |  x  |     |     |     |     |     |     |     |     |  x  |  x  |     |     |     |
+| 19  |     |  x  |     |     |     |     |     |     |     |     |  x  |     |     |     |     |     |     |     |     |
+| 20  |     |  x  |     |     |     |  x  |  x  |     |     |     |  x  |     |     |     |     |     |     |     |     |
+| 21  |     |  x  |     |  x  |     |     |     |     |     |     |     |     |     |     |     |  x  |     |     |     |
+| 22  |     |  x  |     |  x  |     |     |     |     |     |     |  x  |     |     |     |     |  x  |     |     |     |
+| 23  |     |  x  |     |  x  |     |  x  |     |     |     |     |  x  |     |     |     |     |  x  |     |     |     |
+| 24  |     |  x  |     |     |     |     |     |     |     |     |  x  |     |     |     |     |     |     |     |     |
 | 25  |     |  x  |     |     |     |     |     |     |     |     |  x  |     |     |     |     |     |     |     |     |
-| 26  |     |  x  |     |     |     |     |     |     |     |     |  x  |     |     |     |     |     |     |     |     |
