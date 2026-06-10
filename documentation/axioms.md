@@ -2,7 +2,9 @@
 
 ## Symbol
 ### Description
-A symbol is a named entity in an executable file that is associated with a specific memory address. For this schema, the types of symbols include labels, then a sub class of symbol called namesapce symbol, which includes functions, classes, namespaces, and DLLs (dynamic link libraries). A symbol can have one or more references, but only one reference is designated as the primary reference. Each symbol is also associated with a memory address. <br>
+A symbol is a named entity in an executable file that is associated with a specific memory address. For this schema, the types of symbols include labels, then a sub class of symbol called namespace symbol. The namespace symbol is a type of symbol that can hold other symbols or data and has two subclasses, function and structural namespace symbols.
+
+ which includes functions, classes, namespaces, and DLLs (dynamic link libraries). A symbol can have one or more references, but only one reference is designated as the primary reference. Each symbol is also associated with a memory address. <br>
 ![Symbol](schema/schema-diagram-images/symbol-schema.png)
 ### Axioms
 * `(1) Symbol hasReference min 0 Reference` <br/>
@@ -56,26 +58,10 @@ A reference is where two memory addresses interact with each other in some way, 
 * `(10) Reference hasOperandIndex xsd:integer exactly 1 index` <br/>
 "A reference has exactly one operand index indicated by an integer"
 
-## Variable
-### Description
-Variables in this context are tied to functions, and not a type of symbol itself. There are two types of variables in this schema: parameters, which are passed into and returned from functions, and local variables, which are defined locally within the function itself. Every variable has a data type associated with it.
-
-![Variable](schema/schema-diagram-images/variable-schema.png)
-
-### Axioms
-* `(11) Variable hasDataType xsd:string 1 data type` <br>
-" Every variable has exactly 1 data type represented as a string"
-* `Local Variable subClassOf Variable` <br>
-"Every local variable is a variable"
-* `Parameter subClassOf Variable` <br>
-"Every parameter is a variable"
-* `(12) Parameter passesInto min 0 Function` <br>
-"A parameter is passed into min 0 functions"
-
 
 ## Function
 ### Description
-The Function objects keeps track of all the aspects of a function, including any functions it calls or functions called by it, the parameters passed in, the local variables defined in the function, the return type of the function, the return parameter of the function, the instructions the function contains, and what class the function is contained in (if any). <br>
+The Function objects keeps track of all the aspects of a function, including any functions it calls or functions called by it, the parameters passed in, the local variables defined in the function, the return type of the function, the return parameter of the function, the instructions the function contains, and what class or namespace the function is contained in. <br>
 ![Address](schema/schema-diagram-images/function-schema.png)
 ### Axioms
 * `(13) Function defines min 0 Local Variables` <br>
@@ -94,10 +80,25 @@ The Function objects keeps track of all the aspects of a function, including any
 * `(19) Function hasName xsd:string exactly 1 name` <br>
 "A function has exactly one name represented as a string"
 
+## Variable
+### Description
+Variables in this context are tied directly to functions, and not a type of symbol itself. There are two types of variables in this schema: parameters, which are passed into and returned from functions, and local variables, which are defined locally within the function itself. Every variable has a data type associated with it.
+
+![Variable](schema/schema-diagram-images/variable-schema.png)
+
+### Axioms
+* `(11) Variable hasDataType xsd:string 1 data type` <br>
+" Every variable has exactly 1 data type represented as a string"
+* `Local Variable subClassOf Variable` <br>
+"Every local variable is a variable"
+* `Parameter subClassOf Variable` <br>
+"Every parameter is a variable"
+* `(12) Parameter passesInto min 0 Function` <br>
+"A parameter is passed into min 0 functions"
 
 ## Instruction
 ### Description
-The instruction object refers to an assembly instruction that will originate from the disassembly acquired from Ghidra from a given executable file. An instruction includes one opcode, and zero or more operands, where registers, immediate operands (constant values), addresses, dynamic type objects, and scalars can play the role of an operand. These are assembly instructions that come from Ghidra's disassembly from an executable file. 
+The instruction object refers to an assembly instruction that will originate from the disassembly acquired from Ghidra from a given executable file. An instruction includes one opcode, and zero or more operands. The opcode is represented as a string while the operand is represented as an object with two values; a string representing the operand type and a string representing the operand value.
 
 ![Instruction](schema/schema-diagram-images/instruction-schema.png)
 
