@@ -1,35 +1,49 @@
 ## List of Axioms
 
-Not including subClassOf relations <br>
 
-## new table
-| #     | Subject           | Relationship          | Object            | Description Logic Syntax      |
-| ----- | ----------------- | --------------------- | ----------------- | ----------------------------- |
-| 1     | Symbol            | hasReference          | Reference         | Symbol ⊑ ∀hasReference.Reference |
-| 2     | Symbol            | hasPrimaryReference   | Reference         | Symbol ⊑ ≤1 hasPrimaryReference.Reference |
-| 3     | Symbol            | hasAddress            | Address           | Symbol ⊑ ≤1 hasAddress.Address |
-| 4     | Label             | definedIn             | Structural Namespace Symbol | Label ⊑ ≤1 definedIn.StructuralNamespaceSymbol  |
-| 5     | Class             | definedIn             | Namespace         | Class ⊑ ≤1 definedIn.Namespace |
-| 6     | DLL               | definedIn             | Namespace         | DLL ⊑ ≤1 definedIn.Namespace   |
-| 7     | Reference         | hasSourceAddress      | Address           | Reference ⊑ ≤1 hasSourceAddress.Address |
-| 8     | Reference         | hasDestinationAddress | Address           | Reference ⊑ ≤1 hasDestinationAddress.AddressAddress |
-| 9     | Reference         | hasReferenceType      | xsd:string        | Reference ⊑ ≤1 hasReferenceType.xsd:string |
-| 10    | Reference         | hasOperandIndex       | xsd:integer       | Reference ⊑ ≤1 hasOperandIndex.xsd:integer |
-| 11    | Variable          | hasDataType           | xsd:string        | Variable ⊑ ∀hasDataType.xsd:string |
-| 12    | Parameter         | passesInto            | Function          | Parameter ⊑ ∀passesInto.Function |
-| 13    | Function          | defines               | Local Variable    | Function ⊑ ∀defines.LocalVariable |
-| 14    | Function          | hasReturnType         | xsd:string        | Function ⊑ ≤1 hasReturnType.xsd:string |
-| 15    | Function          | returns               | Parameter         | Function ⊑ ≤1 returns.Parameter |
-| 16    | Function          | calls                 | Function          | Function ⊑ ∀calls.Function    |
-| 17    | Function          | definedIn             | StructuralNamespaceSymbol  | Function ⊑ ≤1 definedIn.StructuralNamespaceSymbol |
-| 18    | Function          | containsInstruction   | Instruction       | Function ⊑ ∀containsInstruction.Instruction|
-| 19    | Function          | hasName               | xsd:string        | Function ⊑ ≤1 hasName.xsd:string |
-| 20    | Instruction       | hasOpcode             | xsd:string        | Instruction ⊑ ≤1 hasOpcode.xsd:string |
-| 21    | Instruction       | hasSourceOperand      | Operand           | Instruction ⊑ ∀hasSourceOperand.Operand |
-| 22    | Instruction       | hasDestinationOperand | Operand           | Instruction ⊑ ≤1 hasDestinationOperand.Operand |
-| 23    | Instruction       | atAddress             | Address           | Instruction ⊑ ≤1 atAddress.Address |
-| 24    | Operand           | hasOperandType        | xsd:string        | Operand ⊑ ≤1 hasOperandType.xsd:string |
-| 25    | Operand           | hasOperandValue       | xsd:string        | Operand ⊑ ≤1 hasOperandValue.xsd:string |
+## Subclass Axioms
+| Subject                   | Object                    | Description Logic Syntax                      |
+| ------------------------- | ------------------------- | --------------------------------------------- |
+| Label                     | Symbol                    |  Label ⊑ Symbol                               |
+| NamespaceSymbol           | Symbol                    |  NamespaceSymbol ⊑ Symbol                     |
+| StructuralNamespaceSymbol | NamespaceSymbol           |  StructuralNamespaceSymbol ⊑ NamespaceSymbol  |
+| Namespace                 | StructuralNamespaceSymbol |  Namespace ⊑ StructuralNamespaceSymbol        |
+| Dll                       | StructuralNamespaceSymbol |  DLL ⊑ StructuralNamespaceSymbol              |
+| Class                     | StructuralNamespaceSymbol |  Class ⊑ StructuralNamespaceSymbol            |
+| Function                  | NamespaceSymbol           |  Function ⊑ NamespaceSymbol                   |
+| Local Variable            | Variable                  |  LocalVariable ⊑ Variable                     |
+| Parameter                 | Variable                  |  Parameter ⊑ Variable                         |
+
+
+
+## Non-subclass Axioms
+| #     | Subject           | Relationship          | Object                    | Description Logic Syntax                              |
+| ----- | ----------------- | --------------------- | -----------------         | -----------------------------                         |
+| 1     | Symbol            | hasReference          | Reference                 | Symbol ⊑ ∀hasReference.Reference                      |
+| 2     | Symbol            | hasPrimaryReference   | Reference                 | Symbol ⊑ ≤1 hasPrimaryReference.Reference             |
+| 3     | Symbol            | hasAddress            | Address                   | Symbol ⊑ ≤1 hasAddress.Address                        |
+| 4     | Label             | definedIn             | StructuralNamespaceSymbol | Label ⊑ ≤1 definedIn.StructuralNamespaceSymbol        |
+| 5     | Class             | definedIn             | Namespace                 | Class ⊑ ≤1 definedIn.Namespace                        |
+| 6     | DLL               | definedIn             | Namespace                 | DLL ⊑ ≤1 definedIn.Namespace                          |
+| 7     | Reference         | hasSourceAddress      | Address                   | Reference ⊑ ≤1 hasSourceAddress.Address               |
+| 8     | Reference         | hasDestinationAddress | Address                   | Reference ⊑ ≤1 hasDestinationAddress.AddressAddress   |
+| 9     | Reference         | hasReferenceType      | xsd:string                | Reference ⊑ ≤1 hasReferenceType.xsd:string            |
+| 10    | Reference         | hasOperandIndex       | xsd:integer               | Reference ⊑ ≤1 hasOperandIndex.xsd:integer            |
+| 11    | Variable          | hasDataType           | xsd:string                | Variable ⊑ ∀hasDataType.xsd:string                    |
+| 12    | Parameter         | passesInto            | Function                  | Parameter ⊑ ∀passesInto.Function                      |
+| 13    | Function          | defines               | Local Variable            | Function ⊑ ∀defines.LocalVariable                     |       
+| 14    | Function          | hasReturnType         | xsd:string                | Function ⊑ ≤1 hasReturnType.xsd:string                |
+| 15    | Function          | returns               | Parameter                 | Function ⊑ ≤1 returns.Parameter                       |
+| 16    | Function          | calls                 | Function                  | Function ⊑ ∀calls.Function                            |
+| 17    | Function          | definedIn             | StructuralNamespaceSymbol | Function ⊑ ≤1 definedIn.StructuralNamespaceSymbol     |
+| 18    | Function          | containsInstruction   | Instruction               | Function ⊑ ∀containsInstruction.Instruction           |  
+| 19    | Function          | hasName               | xsd:string                | Function ⊑ ≤1 hasName.xsd:string                      |
+| 20    | Instruction       | hasOpcode             | xsd:string                | Instruction ⊑ ≤1 hasOpcode.xsd:string                 |
+| 21    | Instruction       | hasSourceOperand      | Operand                   | Instruction ⊑ ∀hasSourceOperand.Operand               |
+| 22    | Instruction       | hasDestinationOperand | Operand                   | Instruction ⊑ ≤1 hasDestinationOperand.Operand        |
+| 23    | Instruction       | atAddress             | Address                   | Instruction ⊑ ≤1 atAddress.Address                    |
+| 24    | Operand           | hasOperandType        | xsd:string                | Operand ⊑ ≤1 hasOperandType.xsd:string                |
+| 25    | Operand           | hasOperandValue       | xsd:string                | Operand ⊑ ≤1 hasOperandValue.xsd:string               |
 
 
 ## Axiom Selection

@@ -30,12 +30,12 @@ A namespace symbol is a kind of symbol in Ghidra that is used to organize other 
 "Every structural namespace symbol is a namespace symbol
 * `Namespace subClassOf Structural Namespace Symbol` <br>
 " Every namespace is a structual namespace symbol"
-* `DLL subClassOf Namespace Symbol` <br/>
+* `DLL subClassOf Structual Namespace Symbol` <br/>
 "Every dll is a structural namespace symbol"
-* `Function subClassOf namespace Symbol` <br/>
-"Every function is a namespace symbol"
-* `Class subClassOf Namespace Symbol` <br/>
+* `Class subClassOf Structrual Namespace Symbol` <br/>
 "Every class is a structural namespace symbol"
+* `Function subClassOf Namespace Symbol` <br/>
+"Every function is a namespace symbol"
 * `(5) Class definedIn Namespace exactly 1 Namespace` <br>
 "Every class is defined in exactly one namespace"
 * `(6) DLL definedIn Namespace exactly 1 Namespace` <br>
