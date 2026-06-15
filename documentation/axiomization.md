@@ -23,15 +23,15 @@
 | 2     | Symbol            | hasPrimaryReference   | Reference                 | Symbol ⊑ ≤1 hasPrimaryReference.Reference             |
 | 3     | Symbol            | hasAddress            | Address                   | Symbol ⊑ ≤1 hasAddress.Address                        |
 | 4     | Label             | definedIn             | StructuralNamespaceSymbol | Label ⊑ ≤1 definedIn.StructuralNamespaceSymbol        |
-| 5     | Class             | definedIn             | Namespace                 | Class ⊑ ≤1 definedIn.Namespace                        |
-| 6     | DLL               | definedIn             | Namespace                 | DLL ⊑ ≤1 definedIn.Namespace                          |
+| 5     | Class             | definedInNamespace    | Namespace                 | Class ⊑ ≤1 definedInNamespace.Namespace               |
+| 6     | DLL               | definedInNamespace    | Namespace                 | DLL ⊑ ≤1 definedInNamespace.Namespace                 |
 | 7     | Reference         | hasSourceAddress      | Address                   | Reference ⊑ ≤1 hasSourceAddress.Address               |
 | 8     | Reference         | hasDestinationAddress | Address                   | Reference ⊑ ≤1 hasDestinationAddress.AddressAddress   |
 | 9     | Reference         | hasReferenceType      | xsd:string                | Reference ⊑ ≤1 hasReferenceType.xsd:string            |
 | 10    | Reference         | hasOperandIndex       | xsd:integer               | Reference ⊑ ≤1 hasOperandIndex.xsd:integer            |
 | 11    | Variable          | hasDataType           | xsd:string                | Variable ⊑ ∀hasDataType.xsd:string                    |
 | 12    | Parameter         | passesInto            | Function                  | Parameter ⊑ ∀passesInto.Function                      |
-| 13    | Function          | defines               | Local Variable            | Function ⊑ ∀defines.LocalVariable                     |       
+| 13    | Function          | definesLocal          | Local Variable            | Function ⊑ ∀definesLocal.LocalVariable                |       
 | 14    | Function          | hasReturnType         | xsd:string                | Function ⊑ ≤1 hasReturnType.xsd:string                |
 | 15    | Function          | returns               | Parameter                 | Function ⊑ ≤1 returns.Parameter                       |
 | 16    | Function          | calls                 | Function                  | Function ⊑ ∀calls.Function                            |

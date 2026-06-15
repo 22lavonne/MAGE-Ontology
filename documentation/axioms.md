@@ -38,9 +38,9 @@ A namespace symbol is a kind of symbol in Ghidra that is used to organize other 
 "Every class is a structural namespace symbol"
 * `Function subClassOf Namespace Symbol` <br/>
 "Every function is a namespace symbol"
-* `(5) Class definedIn Namespace exactly 1 Namespace` <br>
+* `(5) Class definedInNamespace Namespace exactly 1 Namespace` <br>
 "Every class is defined in exactly one namespace"
-* `(6) DLL definedIn Namespace exactly 1 Namespace` <br>
+* `(6) DLL definedInNamespace Namespace exactly 1 Namespace` <br>
 "Every DLL is defined in exactly one namespace" (In this case, it will always be defined within the global namespace.)
 
 
@@ -64,7 +64,7 @@ A reference is where two memory addresses interact with each other in some way, 
 The Function objects keeps track of all the aspects of a function, including any functions it calls or functions called by it, the parameters passed in, the local variables defined in the function, the return type of the function, the return parameter of the function, the instructions the function contains, and what class or namespace the function is contained in. <br>
 ![Address](schema/schema-diagram-images/function-schema.png)
 ### Axioms
-* `(13) Function defines min 0 Local Variables` <br>
+* `(13) Function definesLocal min 0 Local Variables` <br>
 "A fuction can define 0 or more local variables"
 * `(14) Function hasReturnType xsd:string min 0 max 1 datatype` <br>
 "Every function has either no return type (void) or one return type represented as a string"
