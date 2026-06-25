@@ -1,4 +1,4 @@
-# A Knowledge Graph for the Detection of Malware Behavior in Executables
+# MAGE-Ontology: An Ontology for Malware Analysis in Ghidra for Executables
 Departmental Honors Thesis under Dr. Cogan Shimizu based on the intersection between Knowledge Graphs and Cyber Security.
 
 ## About
