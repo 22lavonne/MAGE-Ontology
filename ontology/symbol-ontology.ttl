@@ -6,11 +6,64 @@
 @prefix rdfs: <http://www.w3.org/2000/01/rdf-schema#> .
 @base <http://www.semanticweb.org/jaspe/ontologies/2026/0/symbol-ontology/> .
 
-<http://www.semanticweb.org/jaspe/ontologies/2026/0/symbol-ontology> rdf:type owl:Ontology .
+<http://www.semanticweb.org/jaspe/ontologies/2026/0/symbol-ontology> rdf:type owl:Ontology ;
+                                                                      <http://purl.org/dc/terms/license> "https://creativecommons.org/licenses/by/4.0/" .
+
+#################################################################
+#    Annotation properties
+#################################################################
+
+###  http://purl.org/dc/terms/license
+<http://purl.org/dc/terms/license> rdf:type owl:AnnotationProperty .
+
 
 #################################################################
 #    Object Properties
 #################################################################
+
+###  http://www.semanticweb.org/jaspe/ontologies/2026/0/symbol-ontology#definedInNamespace
+:definedInNamespace rdf:type owl:ObjectProperty ;
+                    owl:inverseOf :namespaceDefines ;
+                    rdf:type owl:FunctionalProperty ;
+                    rdfs:domain [ rdf:type owl:Class ;
+                                  owl:unionOf ( :Class
+                                                :DLL
+                                              )
+                                ] ;
+                    rdfs:range :Namespace ;
+                    rdfs:comment "specifys the objects that can be defined within a given namespace" ;
+                    rdfs:label "definedInNamespace" .
+
+
+###  http://www.semanticweb.org/jaspe/ontologies/2026/0/symbol-ontology#defines
+:defines rdf:type owl:ObjectProperty ;
+         owl:inverseOf :definedIn ;
+         rdfs:domain :StructuralNamespaceSymbol ;
+         rdfs:range [ rdf:type owl:Class ;
+                      owl:unionOf ( :Function
+                                    :Label
+                                  )
+                    ] ;
+         rdfs:comment "specifies a function or label that the given namespace defines (specifically the structural namespace symbol)" ;
+         rdfs:label "defines" .
+
+
+###  http://www.semanticweb.org/jaspe/ontologies/2026/0/symbol-ontology#definesLocal
+:definesLocal rdf:type owl:ObjectProperty ;
+              owl:inverseOf :localDefinedIn ;
+              rdfs:domain :Function ;
+              rdfs:range :LocalVariable ;
+              rdfs:comment "Specifies a local variable that a function defines locally" ;
+              rdfs:label "definesLocal" .
+
+
+###  http://www.semanticweb.org/jaspe/ontologies/2026/0/symbol-ontology#localDefinedIn
+:localDefinedIn rdf:type owl:ObjectProperty ;
+                rdfs:domain :LocalVariable ;
+                rdfs:range :Function ;
+                rdfs:comment "specifies which function an local variable is defined in" ;
+                rdfs:label "localDefinedIn" .
+
 
 ###  http://www.semanticweb.org/jaspe/ontologies/2026/0/symbol-ontology/atAddress
 :atAddress rdf:type owl:ObjectProperty ;
@@ -60,25 +113,15 @@
 ###  http://www.semanticweb.org/jaspe/ontologies/2026/0/symbol-ontology/definedIn
 :definedIn rdf:type owl:ObjectProperty ;
            rdfs:subPropertyOf owl:topObjectProperty ;
-           owl:inverseOf :namespaceDefines ;
+           rdf:type owl:FunctionalProperty ;
            rdfs:domain [ rdf:type owl:Class ;
-                         owl:unionOf ( :Class
-                                       :Function
+                         owl:unionOf ( :Function
                                        :Label
                                      )
                        ] ;
-           rdfs:range :NamespaceSymbol ;
-           rdfs:comment "used for symbols defined in other namespace symbols" ;
+           rdfs:range :StructuralNamespaceSymbol ;
+           rdfs:comment "specifies the namespace symbol that the function is defined in" ;
            rdfs:label "definedIn" .
-
-
-###  http://www.semanticweb.org/jaspe/ontologies/2026/0/symbol-ontology/defines
-:defines rdf:type owl:ObjectProperty ;
-         owl:inverseOf :localDefinedIn ;
-         rdfs:domain :Function ;
-         rdfs:range :LocalVariable ;
-         rdfs:comment "used for when a function defines a local variable" ;
-         rdfs:label "defines" .
 
 
 ###  http://www.semanticweb.org/jaspe/ontologies/2026/0/symbol-ontology/hasAddress
@@ -221,14 +264,6 @@
                     rdfs:label "isSourceOperandFor" .
 
 
-###  http://www.semanticweb.org/jaspe/ontologies/2026/0/symbol-ontology/localDefinedIn
-:localDefinedIn rdf:type owl:ObjectProperty ;
-                rdfs:domain :LocalVariable ;
-                rdfs:range :Function ;
-                rdfs:comment "inverse of defines" ;
-                rdfs:label "localDefinedIn" .
-
-
 ###  http://www.semanticweb.org/jaspe/ontologies/2026/0/symbol-ontology/memoryContainsInstruction
 :memoryContainsInstruction rdf:type owl:ObjectProperty ;
                            rdfs:domain :Address ;
@@ -239,11 +274,10 @@
 
 ###  http://www.semanticweb.org/jaspe/ontologies/2026/0/symbol-ontology/namespaceDefines
 :namespaceDefines rdf:type owl:ObjectProperty ;
-                  rdfs:domain :NamespaceSymbol ;
+                  rdfs:domain :Namespace ;
                   rdfs:range [ rdf:type owl:Class ;
                                owl:unionOf ( :Class
-                                             :Function
-                                             :Label
+                                             :DLL
                                            )
                              ] ;
                   rdfs:comment "inverse of definedIn" ;
@@ -281,14 +315,13 @@
 #    Data properties
 #################################################################
 
-###  http://www.semanticweb.org/jaspe/ontologies/2026/0/symbol-ontology#hasDataType
-:hasDataType rdf:type owl:DatatypeProperty ;
-             rdfs:domain :Variable .
-
-
-###  http://www.semanticweb.org/jaspe/ontologies/2026/0/symbol-ontology#hasReturnType
-:hasReturnType rdf:type owl:DatatypeProperty ;
-               rdfs:domain :Function .
+###  http://www.semanticweb.org/jaspe/ontologies/2026/0/symbol-ontology/hasDataType
+:hasDataType rdf:type owl:DatatypeProperty ,
+                      owl:FunctionalProperty ;
+             rdfs:domain :Variable ;
+             rdfs:range xsd:string ;
+             rdfs:comment "The data type of the given variable expressed as a string" ;
+             rdfs:label "hasDataType" .
 
 
 ###  http://www.semanticweb.org/jaspe/ontologies/2026/0/symbol-ontology/hasName
@@ -346,6 +379,15 @@
                   rdfs:label "hasReferenceType" .
 
 
+###  http://www.semanticweb.org/jaspe/ontologies/2026/0/symbol-ontology/hasReturnType
+:hasReturnType rdf:type owl:DatatypeProperty ,
+                        owl:FunctionalProperty ;
+               rdfs:domain :Function ;
+               rdfs:range xsd:string ;
+               rdfs:comment "The data type of the variable returned by a function expressed as a string" ;
+               rdfs:label "hasReturnType" .
+
+
 #################################################################
 #    Classes
 #################################################################
@@ -359,10 +401,10 @@
 
 ###  http://www.semanticweb.org/jaspe/ontologies/2026/0/symbol-ontology/Class
 :Class rdf:type owl:Class ;
-       rdfs:subClassOf :NamespaceSymbol ,
+       rdfs:subClassOf :StructuralNamespaceSymbol ,
                        [ rdf:type owl:Restriction ;
                          owl:onProperty :definedIn ;
-                         owl:someValuesFrom :NamespaceSymbol
+                         owl:someValuesFrom :Namespace
                        ] ;
        rdfs:comment "represents a class in a program (for object oriented programming)" ;
        rdfs:label "Class" .
@@ -370,20 +412,22 @@
 
 ###  http://www.semanticweb.org/jaspe/ontologies/2026/0/symbol-ontology/DLL
 :DLL rdf:type owl:Class ;
-     rdfs:subClassOf :NamespaceSymbol ;
+     rdfs:subClassOf :StructuralNamespaceSymbol ,
+                     [ rdf:type owl:Restriction ;
+                       owl:onProperty :definedIn ;
+                       owl:someValuesFrom :Namespace
+                     ] ;
      rdfs:comment "Dynamically Linked Library, a library that holds external functions used by the program" ;
      rdfs:label "DLL" .
-
-
-###  http://www.semanticweb.org/jaspe/ontologies/2026/0/symbol-ontology/DataType
-:DataType rdf:type owl:Class ;
-          rdfs:comment "The data type of either a variable or the return type of a function" ;
-          rdfs:label "DataType" .
 
 
 ###  http://www.semanticweb.org/jaspe/ontologies/2026/0/symbol-ontology/Function
 :Function rdf:type owl:Class ;
           rdfs:subClassOf :NamespaceSymbol ,
+                          [ rdf:type owl:Restriction ;
+                            owl:onProperty :definesLocal ;
+                            owl:someValuesFrom :LocalVariable
+                          ] ,
                           [ rdf:type owl:Restriction ;
                             owl:onProperty :calls ;
                             owl:someValuesFrom :Function
@@ -394,11 +438,7 @@
                           ] ,
                           [ rdf:type owl:Restriction ;
                             owl:onProperty :definedIn ;
-                            owl:someValuesFrom :NamespaceSymbol
-                          ] ,
-                          [ rdf:type owl:Restriction ;
-                            owl:onProperty :defines ;
-                            owl:someValuesFrom :LocalVariable
+                            owl:someValuesFrom :StructuralNamespaceSymbol
                           ] ,
                           [ rdf:type owl:Restriction ;
                             owl:onProperty :returns ;
@@ -410,6 +450,10 @@
                           ] ,
                           [ rdf:type owl:Restriction ;
                             owl:onProperty :hasName ;
+                            owl:someValuesFrom xsd:string
+                          ] ,
+                          [ rdf:type owl:Restriction ;
+                            owl:onProperty :hasReturnType ;
                             owl:someValuesFrom xsd:string
                           ] ;
           rdfs:comment "a function defined by the ghidra decompilation" ;
@@ -431,11 +475,11 @@
                                owl:someValuesFrom :Operand
                              ] ,
                              [ rdf:type owl:Restriction ;
-                               owl:onProperty :hasReturnType ;
+                               owl:onProperty :hasOpcode ;
                                owl:someValuesFrom xsd:string
                              ] ,
                              [ rdf:type owl:Restriction ;
-                               owl:onProperty :hasOpcode ;
+                               owl:onProperty :hasReturnType ;
                                owl:someValuesFrom xsd:string
                              ] ;
              rdfs:comment "assembly instruction gotten from the disassembly in ghidra" ;
@@ -447,7 +491,7 @@
        rdfs:subClassOf :Symbol ,
                        [ rdf:type owl:Restriction ;
                          owl:onProperty :definedIn ;
-                         owl:someValuesFrom :NamespaceSymbol
+                         owl:someValuesFrom :StructuralNamespaceSymbol
                        ] ;
        owl:disjointWith :NamespaceSymbol ;
        rdfs:comment "a string name given to a memory address, acts like a global variable in the context of this ontology" ;
@@ -464,7 +508,7 @@
 
 ###  http://www.semanticweb.org/jaspe/ontologies/2026/0/symbol-ontology/Namespace
 :Namespace rdf:type owl:Class ;
-           rdfs:subClassOf :NamespaceSymbol ;
+           rdfs:subClassOf :StructuralNamespaceSymbol ;
            rdfs:comment "a namespace defined by the ghidra decompilation" ;
            rdfs:label "Namespace" .
 
@@ -521,6 +565,13 @@
                            ] ;
            rdfs:comment "This class represents an identifier to a symbol, that uses a source address and destination address to do so." ;
            rdfs:label "Reference" .
+
+
+###  http://www.semanticweb.org/jaspe/ontologies/2026/0/symbol-ontology/StructuralNamespaceSymbol
+:StructuralNamespaceSymbol rdf:type owl:Class ;
+                           rdfs:subClassOf :NamespaceSymbol ;
+                           rdfs:comment "A type of namespace symbol that can define non-local symbols (all namespace symbols that are not functions since they operate differently)" ;
+                           rdfs:label "StructuralNamespaceSymbol" .
 
 
 ###  http://www.semanticweb.org/jaspe/ontologies/2026/0/symbol-ontology/Symbol
