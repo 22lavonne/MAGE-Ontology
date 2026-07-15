@@ -1,4 +1,5 @@
 @prefix : <http://www.semanticweb.org/jaspe/ontologies/2026/0/symbol-ontology/> .
+@prefix dcterms: <http://purl.org/dc/terms/> .
 @prefix mkg: <https://mkg.com/data#> .
 @prefix ont: <http://www.semanticweb.org/jaspe/ontologies/2026/0/symbol-ontology> .
 @prefix owl: <http://www.w3.org/2002/07/owl#> .
@@ -6,7 +7,10 @@
 @prefix rdfs: <http://www.w3.org/2000/01/rdf-schema#> .
 @prefix xsd: <http://www.w3.org/2001/XMLSchema#> .
 
-ont: a owl:Ontology .
+dcterms:license a owl:AnnotationProperty .
+
+ont: a owl:Ontology ;
+    dcterms:license "https://creativecommons.org/licenses/by/4.0/" .
 
 :calledBy a owl:ObjectProperty ;
     rdfs:label "calledBy" ;
@@ -21,6 +25,23 @@ ont: a owl:Ontology .
     rdfs:domain :Instruction ;
     rdfs:range :Function ;
     owl:inverseOf :containsInstruction .
+
+:definedInNamespace a owl:FunctionalProperty,
+        owl:ObjectProperty ;
+    rdfs:label "definedInNamespace" ;
+    rdfs:comment "specifys the objects that can be defined within a given namespace" ;
+    rdfs:domain [ a owl:Class ;
+            owl:unionOf ( :Class :DLL ) ] ;
+    rdfs:range :Namespace ;
+    owl:inverseOf :namespaceDefines .
+
+:defines a owl:ObjectProperty ;
+    rdfs:label "defines" ;
+    rdfs:comment "specifies a function or label that the given namespace defines (specifically the structural namespace symbol)" ;
+    rdfs:domain :StructuralNamespaceSymbol ;
+    rdfs:range [ a owl:Class ;
+            owl:unionOf ( :Function :Label ) ] ;
+    owl:inverseOf :definedIn .
 
 :hasAddress a owl:FunctionalProperty,
         owl:ObjectProperty ;
@@ -182,7 +203,7 @@ mkg:__TMC_END____0002815c a :Label ;
         mkg:ref_Entry%20Point_to_0002815c .
 
 mkg:__advise a :Parameter ;
-    :hasDataType mkg:int ;
+    :hasDataType "int" ;
     :passesInto mkg:posix_fadvise64 .
 
 mkg:__aeabi_ldiv0__00016250 a :Label ;
@@ -207,7 +228,7 @@ mkg:__aeabi_uidivmod a :Function ;
     :definedIn mkg:Global ;
     :hasName "__aeabi_uidivmod" ;
     :hasReference mkg:ref_Entry%20Point_to_00016204 ;
-    :hasReturnType mkg:undefined ;
+    :hasReturnType "undefined" ;
     :returns mkg:_5Bundefined_20_3CRETURN_3E_40_3CUNASSIGNED_3E_5D .
 
 mkg:__bss_end____00028308 a :Label ;
@@ -223,18 +244,18 @@ mkg:__bss_start____0002815c a :Label ;
     :definedIn mkg:Global .
 
 mkg:__c a :Parameter ;
-    :hasDataType mkg:int ;
+    :hasDataType "int" ;
     :passesInto mkg:fputc,
         mkg:memset,
         mkg:strchr,
         mkg:strrchr .
 
 mkg:__category a :Parameter ;
-    :hasDataType mkg:int ;
+    :hasDataType "int" ;
     :passesInto mkg:setlocale .
 
 mkg:__cmd a :Parameter ;
-    :hasDataType mkg:int ;
+    :hasDataType "int" ;
     :passesInto mkg:fcntl .
 
 mkg:__cxa_atexit a :Function ;
@@ -246,7 +267,7 @@ mkg:__cxa_atexit a :Function ;
     :hasReference mkg:ref_00010f44_to_00029064,
         mkg:ref_000280b0_to_00029064,
         mkg:ref_00029064_to_EXTERNAL%3A00000019 ;
-    :hasReturnType mkg:undefined ;
+    :hasReturnType "undefined" ;
     :returns mkg:_5Bundefined_20_3CRETURN_3E_40_3CUNASSIGNED_3E_5D .
 
 mkg:__data_start__000280f8 a :Label ;
@@ -254,7 +275,7 @@ mkg:__data_start__000280f8 a :Label ;
     :definedIn mkg:Global .
 
 mkg:__dest a :Parameter ;
-    :hasDataType mkg:void_20_2A ;
+    :hasDataType "void *" ;
     :passesInto mkg:memcpy .
 
 mkg:__do_global_dtors_aux_fini_array_entry__00027f08 a :Label ;
@@ -277,7 +298,7 @@ mkg:__end____00028308 a :Label ;
     :definedIn mkg:Global .
 
 mkg:__fd a :Parameter ;
-    :hasDataType mkg:int ;
+    :hasDataType "int" ;
     :passesInto mkg:close,
         mkg:fcntl,
         mkg:fdopen,
@@ -285,11 +306,11 @@ mkg:__fd a :Parameter ;
         mkg:posix_fadvise64 .
 
 mkg:__filename a :Parameter ;
-    :hasDataType mkg:char_20_2A ;
+    :hasDataType "char *" ;
     :passesInto mkg:fopen64 .
 
 mkg:__format a :Parameter ;
-    :hasDataType mkg:char_20_2A ;
+    :hasDataType "char *" ;
     :passesInto mkg:fprintf,
         mkg:printf .
 
@@ -304,7 +325,7 @@ mkg:__frame_dummy_init_array_entry__00027f04 a :Label ;
         mkg:ref__elfSectionHeaders%3A%3A000002dc_to_00027f04 .
 
 mkg:__func a :Parameter ;
-    :hasDataType mkg:__func_20_2A ;
+    :hasDataType "__func *" ;
     :passesInto mkg:atexit .
 
 mkg:__init_array_end__00027f08 a :Label ;
@@ -316,11 +337,11 @@ mkg:__init_array_start__00027f04 a :Label ;
     :definedIn mkg:Global .
 
 mkg:__item a :Parameter ;
-    :hasDataType mkg:typedef_20nl_item_20int ;
+    :hasDataType "typedef nl_item int" ;
     :passesInto mkg:nl_langinfo .
 
 mkg:__len a :Parameter ;
-    :hasDataType mkg:typedef_20__off64_t_20__quad_t ;
+    :hasDataType "typedef __off64_t __quad_t" ;
     :passesInto mkg:posix_fadvise64 .
 
 mkg:__libc_csu_fini a :Function ;
@@ -329,7 +350,7 @@ mkg:__libc_csu_fini a :Function ;
     :definedIn mkg:Global ;
     :hasName "__libc_csu_fini" ;
     :hasReference mkg:ref_Entry%20Point_to_000163ac ;
-    :hasReturnType mkg:undefined ;
+    :hasReturnType "undefined" ;
     :returns mkg:_5Bundefined_20_3CRETURN_3E_40_3CUNASSIGNED_3E_5D .
 
 mkg:__libc_csu_init a :Function ;
@@ -362,20 +383,20 @@ mkg:__libc_csu_init a :Function ;
     :definedIn mkg:Global ;
     :hasName "__libc_csu_init" ;
     :hasReference mkg:ref_Entry%20Point_to_00016370 ;
-    :hasReturnType mkg:undefined ;
+    :hasReturnType "undefined" ;
     :returns mkg:_5Bundefined_20_3CRETURN_3E_40_3CUNASSIGNED_3E_5D .
 
 mkg:__locale a :Parameter ;
-    :hasDataType mkg:char_20_2A ;
+    :hasDataType "char *" ;
     :passesInto mkg:setlocale .
 
 mkg:__modes a :Parameter ;
-    :hasDataType mkg:char_20_2A ;
+    :hasDataType "char *" ;
     :passesInto mkg:fdopen,
         mkg:fopen64 .
 
 mkg:__n a :Parameter ;
-    :hasDataType mkg:typedef_20size_t_20ulong ;
+    :hasDataType "typedef size_t ulong" ;
     :passesInto mkg:fwrite,
         mkg:fwrite_unlocked,
         mkg:mbrtowc,
@@ -385,24 +406,24 @@ mkg:__n a :Parameter ;
         mkg:strncmp .
 
 mkg:__name a :Parameter ;
-    :hasDataType mkg:char_20_2A ;
+    :hasDataType "char *" ;
     :passesInto mkg:getenv .
 
 mkg:__nmemb a :Parameter ;
-    :hasDataType mkg:typedef_20size_t_20ulong ;
+    :hasDataType "typedef size_t ulong" ;
     :passesInto mkg:calloc .
 
 mkg:__off a :Parameter ;
-    :hasDataType mkg:typedef_20__off64_t_20__quad_t ;
+    :hasDataType "typedef __off64_t __quad_t" ;
     :passesInto mkg:fseeko64 .
 
 mkg:__offset a :Parameter ;
-    :hasDataType mkg:typedef_20__off64_t_20__quad_t ;
+    :hasDataType "typedef __off64_t __quad_t" ;
     :passesInto mkg:lseek64,
         mkg:posix_fadvise64 .
 
 mkg:__p a :Parameter ;
-    :hasDataType mkg:mbstate_t_20_2A ;
+    :hasDataType "mbstate_t *" ;
     :passesInto mkg:mbrtowc .
 
 mkg:__progname_40_40GLIBC_2_4__00028160 a :Label ;
@@ -422,24 +443,24 @@ mkg:__progname_full__00028170 a :Label ;
     :definedIn mkg:Global .
 
 mkg:__ps a :Parameter ;
-    :hasDataType mkg:mbstate_t_20_2A ;
+    :hasDataType "mbstate_t *" ;
     :passesInto mkg:mbsinit .
 
 mkg:__ptr a :Parameter ;
-    :hasDataType mkg:void_20_2A ;
+    :hasDataType "void *" ;
     :passesInto mkg:free,
         mkg:fwrite,
         mkg:fwrite_unlocked,
         mkg:realloc .
 
 mkg:__pwc a :Parameter ;
-    :hasDataType mkg:wchar_t_20_2A ;
+    :hasDataType "wchar_t *" ;
     :passesInto mkg:mbrtowc .
 
 mkg:__s a :Parameter ;
-    :hasDataType mkg:FILE_20_2A,
-        mkg:char_20_2A,
-        mkg:void_20_2A ;
+    :hasDataType "FILE *",
+        "char *",
+        "void *" ;
     :passesInto mkg:fputs_unlocked,
         mkg:fwrite,
         mkg:mbrtowc,
@@ -449,27 +470,27 @@ mkg:__s a :Parameter ;
         mkg:strrchr .
 
 mkg:__s1 a :Parameter ;
-    :hasDataType mkg:char_20_2A,
-        mkg:void_20_2A ;
+    :hasDataType "char *",
+        "void *" ;
     :passesInto mkg:memcmp,
         mkg:strcmp,
         mkg:strcoll,
         mkg:strncmp .
 
 mkg:__s2 a :Parameter ;
-    :hasDataType mkg:char_20_2A,
-        mkg:void_20_2A ;
+    :hasDataType "char *",
+        "void *" ;
     :passesInto mkg:memcmp,
         mkg:strcmp,
         mkg:strcoll,
         mkg:strncmp .
 
 mkg:__sig a :Parameter ;
-    :hasDataType mkg:int ;
+    :hasDataType "int" ;
     :passesInto mkg:raise .
 
 mkg:__size a :Parameter ;
-    :hasDataType mkg:typedef_20size_t_20ulong ;
+    :hasDataType "typedef size_t ulong" ;
     :passesInto mkg:calloc,
         mkg:fwrite,
         mkg:fwrite_unlocked,
@@ -477,7 +498,7 @@ mkg:__size a :Parameter ;
         mkg:realloc .
 
 mkg:__src a :Parameter ;
-    :hasDataType mkg:void_20_2A ;
+    :hasDataType "void *" ;
     :passesInto mkg:memcpy .
 
 mkg:__stack_chk_guard_40_40GLIBC_2_4__00028168 a :Label ;
@@ -525,12 +546,12 @@ mkg:__stack_chk_guard__00028168 a :Label ;
         mkg:ref_Entry%20Point_to_00028168 .
 
 mkg:__status a :Parameter ;
-    :hasDataType mkg:int ;
+    :hasDataType "int" ;
     :passesInto mkg:_exit,
         mkg:exit .
 
 mkg:__stream a :Parameter ;
-    :hasDataType mkg:FILE_20_2A ;
+    :hasDataType "FILE *" ;
     :passesInto mkg:fclose,
         mkg:feof_unlocked,
         mkg:ferror_unlocked,
@@ -546,11 +567,11 @@ mkg:__stream a :Parameter ;
         mkg:getc_unlocked .
 
 mkg:__wc a :Parameter ;
-    :hasDataType mkg:typedef_20wint_t_20uint ;
+    :hasDataType "typedef wint_t uint" ;
     :passesInto mkg:iswprint .
 
 mkg:__whence a :Parameter ;
-    :hasDataType mkg:int ;
+    :hasDataType "int" ;
     :passesInto mkg:fseeko64,
         mkg:lseek64 .
 
@@ -577,7 +598,7 @@ mkg:_fini a :Function ;
     :hasReference mkg:ref_00027f2c_to_000163cc,
         mkg:ref_Entry%20Point_to_000163cc,
         mkg:ref__elfSectionHeaders%3A%3A0000023c_to_000163cc ;
-    :hasReturnType mkg:undefined ;
+    :hasReturnType "undefined" ;
     :returns mkg:_5Bundefined_20_3CRETURN_3E_40_3CUNASSIGNED_3E_5D .
 
 mkg:_getopt_long_only_r a :Function ;
@@ -619,7 +640,7 @@ mkg:_getopt_long_only_r a :Function ;
         mkg:local_c ;
     :hasName "_getopt_long_only_r" ;
     :hasReference mkg:ref_Entry%20Point_to_000158c4 ;
-    :hasReturnType mkg:undefined ;
+    :hasReturnType "undefined" ;
     :returns mkg:_5Bundefined_20_3CRETURN_3E_40_3CUNASSIGNED_3E_5D .
 
 mkg:_getopt_long_r a :Function ;
@@ -661,7 +682,7 @@ mkg:_getopt_long_r a :Function ;
         mkg:local_c ;
     :hasName "_getopt_long_r" ;
     :hasReference mkg:ref_Entry%20Point_to_00015860 ;
-    :hasReturnType mkg:undefined ;
+    :hasReturnType "undefined" ;
     :returns mkg:_5Bundefined_20_3CRETURN_3E_40_3CUNASSIGNED_3E_5D .
 
 mkg:_start a :Function ;
@@ -685,7 +706,7 @@ mkg:_start a :Function ;
     :hasPrimaryReference mkg:ref__elfSectionHeaders%3A%3A00000214_to_00011000 ;
     :hasReference mkg:ref_Entry%20Point_to_00011000,
         mkg:ref__elfSectionHeaders%3A%3A00000214_to_00011000 ;
-    :hasReturnType mkg:undefined ;
+    :hasReturnType "undefined" ;
     :returns mkg:_5Bundefined_20_3CRETURN_3E_40_3CUNASSIGNED_3E_5D .
 
 mkg:_udivsi3_skip_div0_test__00015fa8 a :Label ;
@@ -731,7 +752,7 @@ mkg:c_isalnum a :Function ;
         mkg:local_c ;
     :hasName "c_isalnum" ;
     :hasReference mkg:ref_Entry%20Point_to_00015c68 ;
-    :hasReturnType mkg:undefined ;
+    :hasReturnType "undefined" ;
     :returns mkg:_5Bundefined_20_3CRETURN_3E_40_3CUNASSIGNED_3E_5D .
 
 mkg:c_isalpha a :Function ;
@@ -761,7 +782,7 @@ mkg:c_isalpha a :Function ;
         mkg:local_c ;
     :hasName "c_isalpha" ;
     :hasReference mkg:ref_Entry%20Point_to_00015c9c ;
-    :hasReturnType mkg:undefined ;
+    :hasReturnType "undefined" ;
     :returns mkg:_5Bundefined_20_3CRETURN_3E_40_3CUNASSIGNED_3E_5D .
 
 mkg:c_isascii a :Function ;
@@ -787,7 +808,7 @@ mkg:c_isascii a :Function ;
         mkg:local_c ;
     :hasName "c_isascii" ;
     :hasReference mkg:ref_Entry%20Point_to_00015cc8 ;
-    :hasReturnType mkg:undefined ;
+    :hasReturnType "undefined" ;
     :returns mkg:_5Bundefined_20_3CRETURN_3E_40_3CUNASSIGNED_3E_5D .
 
 mkg:c_isblank a :Function ;
@@ -817,7 +838,7 @@ mkg:c_isblank a :Function ;
         mkg:local_c ;
     :hasName "c_isblank" ;
     :hasReference mkg:ref_Entry%20Point_to_00015cec ;
-    :hasReturnType mkg:undefined ;
+    :hasReturnType "undefined" ;
     :returns mkg:_5Bundefined_20_3CRETURN_3E_40_3CUNASSIGNED_3E_5D .
 
 mkg:c_iscntrl a :Function ;
@@ -846,7 +867,7 @@ mkg:c_iscntrl a :Function ;
         mkg:local_c ;
     :hasName "c_iscntrl" ;
     :hasReference mkg:ref_Entry%20Point_to_00015d18 ;
-    :hasReturnType mkg:undefined ;
+    :hasReturnType "undefined" ;
     :returns mkg:_5Bundefined_20_3CRETURN_3E_40_3CUNASSIGNED_3E_5D .
 
 mkg:c_isdigit a :Function ;
@@ -872,7 +893,7 @@ mkg:c_isdigit a :Function ;
         mkg:local_c ;
     :hasName "c_isdigit" ;
     :hasReference mkg:ref_Entry%20Point_to_00015d40 ;
-    :hasReturnType mkg:undefined ;
+    :hasReturnType "undefined" ;
     :returns mkg:_5Bundefined_20_3CRETURN_3E_40_3CUNASSIGNED_3E_5D .
 
 mkg:c_isgraph a :Function ;
@@ -898,7 +919,7 @@ mkg:c_isgraph a :Function ;
         mkg:local_c ;
     :hasName "c_isgraph" ;
     :hasReference mkg:ref_Entry%20Point_to_00015d64 ;
-    :hasReturnType mkg:undefined ;
+    :hasReturnType "undefined" ;
     :returns mkg:_5Bundefined_20_3CRETURN_3E_40_3CUNASSIGNED_3E_5D .
 
 mkg:c_islower a :Function ;
@@ -924,7 +945,7 @@ mkg:c_islower a :Function ;
         mkg:local_c ;
     :hasName "c_islower" ;
     :hasReference mkg:ref_Entry%20Point_to_00015d88 ;
-    :hasReturnType mkg:undefined ;
+    :hasReturnType "undefined" ;
     :returns mkg:_5Bundefined_20_3CRETURN_3E_40_3CUNASSIGNED_3E_5D .
 
 mkg:c_isprint a :Function ;
@@ -950,7 +971,7 @@ mkg:c_isprint a :Function ;
         mkg:local_c ;
     :hasName "c_isprint" ;
     :hasReference mkg:ref_Entry%20Point_to_00015dac ;
-    :hasReturnType mkg:undefined ;
+    :hasReturnType "undefined" ;
     :returns mkg:_5Bundefined_20_3CRETURN_3E_40_3CUNASSIGNED_3E_5D .
 
 mkg:c_ispunct a :Function ;
@@ -988,7 +1009,7 @@ mkg:c_ispunct a :Function ;
         mkg:local_c ;
     :hasName "c_ispunct" ;
     :hasReference mkg:ref_Entry%20Point_to_00015dd0 ;
-    :hasReturnType mkg:undefined ;
+    :hasReturnType "undefined" ;
     :returns mkg:_5Bundefined_20_3CRETURN_3E_40_3CUNASSIGNED_3E_5D .
 
 mkg:c_isspace a :Function ;
@@ -1017,7 +1038,7 @@ mkg:c_isspace a :Function ;
         mkg:local_c ;
     :hasName "c_isspace" ;
     :hasReference mkg:ref_Entry%20Point_to_00015e0c ;
-    :hasReturnType mkg:undefined ;
+    :hasReturnType "undefined" ;
     :returns mkg:_5Bundefined_20_3CRETURN_3E_40_3CUNASSIGNED_3E_5D .
 
 mkg:c_isupper a :Function ;
@@ -1043,7 +1064,7 @@ mkg:c_isupper a :Function ;
         mkg:local_c ;
     :hasName "c_isupper" ;
     :hasReference mkg:ref_Entry%20Point_to_00015e34 ;
-    :hasReturnType mkg:undefined ;
+    :hasReturnType "undefined" ;
     :returns mkg:_5Bundefined_20_3CRETURN_3E_40_3CUNASSIGNED_3E_5D .
 
 mkg:c_isxdigit a :Function ;
@@ -1071,7 +1092,7 @@ mkg:c_isxdigit a :Function ;
         mkg:local_c ;
     :hasName "c_isxdigit" ;
     :hasReference mkg:ref_Entry%20Point_to_00015e58 ;
-    :hasReturnType mkg:undefined ;
+    :hasReturnType "undefined" ;
     :returns mkg:_5Bundefined_20_3CRETURN_3E_40_3CUNASSIGNED_3E_5D .
 
 mkg:c_toupper a :Function ;
@@ -1098,7 +1119,7 @@ mkg:c_toupper a :Function ;
         mkg:local_c ;
     :hasName "c_toupper" ;
     :hasReference mkg:ref_Entry%20Point_to_00015f84 ;
-    :hasReturnType mkg:undefined ;
+    :hasReturnType "undefined" ;
     :returns mkg:_5Bundefined_20_3CRETURN_3E_40_3CUNASSIGNED_3E_5D .
 
 mkg:caseD_0__00012b40 a :Label ;
@@ -2276,7 +2297,7 @@ mkg:clone_quoting_options a :Function ;
         mkg:local_c ;
     :hasName "clone_quoting_options" ;
     :hasReference mkg:ref_Entry%20Point_to_000126d8 ;
-    :hasReturnType mkg:undefined ;
+    :hasReturnType "undefined" ;
     :returns mkg:_5Bundefined_20_3CRETURN_3E_40_3CUNASSIGNED_3E_5D .
 
 mkg:close_stdout a :Function ;
@@ -2372,7 +2393,7 @@ mkg:close_stdout a :Function ;
         mkg:local_20 ;
     :hasName "close_stdout" ;
     :hasReference mkg:ref_Entry%20Point_to_00012204 ;
-    :hasReturnType mkg:undefined ;
+    :hasReturnType "undefined" ;
     :returns mkg:_5Bundefined_20_3CRETURN_3E_40_3CUNASSIGNED_3E_5D .
 
 mkg:close_stdout_set_file_name a :Function ;
@@ -2395,7 +2416,7 @@ mkg:close_stdout_set_file_name a :Function ;
         mkg:local_c ;
     :hasName "close_stdout_set_file_name" ;
     :hasReference mkg:ref_Entry%20Point_to_000121c0 ;
-    :hasReturnType mkg:undefined ;
+    :hasReturnType "undefined" ;
     :returns mkg:_5Bundefined_20_3CRETURN_3E_40_3CUNASSIGNED_3E_5D .
 
 mkg:close_stdout_set_ignore_EPIPE a :Function ;
@@ -2419,7 +2440,7 @@ mkg:close_stdout_set_ignore_EPIPE a :Function ;
         mkg:local_9 ;
     :hasName "close_stdout_set_ignore_EPIPE" ;
     :hasReference mkg:ref_Entry%20Point_to_000121e0 ;
-    :hasReturnType mkg:undefined ;
+    :hasReturnType "undefined" ;
     :returns mkg:_5Bundefined_20_3CRETURN_3E_40_3CUNASSIGNED_3E_5D .
 
 mkg:col_sep__00028104 a :Label ;
@@ -2456,7 +2477,7 @@ mkg:completed_9907__00028188 a :Label ;
         mkg:ref_000110b8_to_00028188 .
 
 mkg:ctx a :Parameter ;
-    :hasDataType mkg:EVP_PKEY_CTX_20_2A ;
+    :hasDataType "EVP_PKEY_CTX *" ;
     :passesInto mkg:_init .
 
 mkg:data_start__000280f8 a :Label ;
@@ -2547,7 +2568,7 @@ mkg:emit_bug_reporting_address a :Function ;
     :definedIn mkg:Global ;
     :hasName "emit_bug_reporting_address" ;
     :hasReference mkg:ref_Entry%20Point_to_000144a4 ;
-    :hasReturnType mkg:undefined ;
+    :hasReturnType "undefined" ;
     :returns mkg:_5Bundefined_20_3CRETURN_3E_40_3CUNASSIGNED_3E_5D .
 
 mkg:exit_failure__0002810c a :Label ;
@@ -2589,7 +2610,7 @@ mkg:freebuffer a :Function ;
     :defines mkg:local_c ;
     :hasName "freebuffer" ;
     :hasReference mkg:ref_Entry%20Point_to_000125b4 ;
-    :hasReturnType mkg:undefined ;
+    :hasReturnType "undefined" ;
     :returns mkg:_5Bundefined_20_3CRETURN_3E_40_3CUNASSIGNED_3E_5D .
 
 mkg:get_quoting_style a :Function ;
@@ -2616,7 +2637,7 @@ mkg:get_quoting_style a :Function ;
         mkg:local_c ;
     :hasName "get_quoting_style" ;
     :hasReference mkg:ref_Entry%20Point_to_0001271c ;
-    :hasReturnType mkg:undefined ;
+    :hasReturnType "undefined" ;
     :returns mkg:_5Bundefined_20_3CRETURN_3E_40_3CUNASSIGNED_3E_5D .
 
 mkg:getopt_data__000282e0 a :Label ;
@@ -3024,7 +3045,7 @@ mkg:main a :Function ;
         mkg:local_30 ;
     :hasName "main" ;
     :hasReference mkg:ref_Entry%20Point_to_00011e18 ;
-    :hasReturnType mkg:undefined ;
+    :hasReturnType "undefined" ;
     :returns mkg:_5Bundefined_20_3CRETURN_3E_40_3CUNASSIGNED_3E_5D .
 
 mkg:nslots__00028110 a :Label ;
@@ -3113,7 +3134,7 @@ mkg:quote_mem a :Function ;
         mkg:local_c ;
     :hasName "quote_mem" ;
     :hasReference mkg:ref_Entry%20Point_to_00013fc4 ;
-    :hasReturnType mkg:undefined ;
+    :hasReturnType "undefined" ;
     :returns mkg:_5Bundefined_20_3CRETURN_3E_40_3CUNASSIGNED_3E_5D .
 
 mkg:quote_quoting_options__00028120 a :Label ;
@@ -3143,7 +3164,7 @@ mkg:quotearg a :Function ;
     :defines mkg:local_c ;
     :hasName "quotearg" ;
     :hasReference mkg:ref_Entry%20Point_to_00013c40 ;
-    :hasReturnType mkg:undefined ;
+    :hasReturnType "undefined" ;
     :returns mkg:_5Bundefined_20_3CRETURN_3E_40_3CUNASSIGNED_3E_5D .
 
 mkg:quotearg_alloc a :Function ;
@@ -3171,7 +3192,7 @@ mkg:quotearg_alloc a :Function ;
         mkg:local_c ;
     :hasName "quotearg_alloc" ;
     :hasReference mkg:ref_Entry%20Point_to_000138a8 ;
-    :hasReturnType mkg:undefined ;
+    :hasReturnType "undefined" ;
     :returns mkg:_5Bundefined_20_3CRETURN_3E_40_3CUNASSIGNED_3E_5D .
 
 mkg:quotearg_buffer a :Function ;
@@ -3242,7 +3263,7 @@ mkg:quotearg_buffer a :Function ;
         mkg:local_48 ;
     :hasName "quotearg_buffer" ;
     :hasReference mkg:ref_Entry%20Point_to_0001383c ;
-    :hasReturnType mkg:undefined ;
+    :hasReturnType "undefined" ;
     :returns mkg:_5Bundefined_20_3CRETURN_3E_40_3CUNASSIGNED_3E_5D .
 
 mkg:quotearg_colon_mem a :Function ;
@@ -3267,7 +3288,7 @@ mkg:quotearg_colon_mem a :Function ;
         mkg:local_c ;
     :hasName "quotearg_colon_mem" ;
     :hasReference mkg:ref_Entry%20Point_to_00013e1c ;
-    :hasReturnType mkg:undefined ;
+    :hasReturnType "undefined" ;
     :returns mkg:_5Bundefined_20_3CRETURN_3E_40_3CUNASSIGNED_3E_5D .
 
 mkg:quotearg_custom a :Function ;
@@ -3295,7 +3316,7 @@ mkg:quotearg_custom a :Function ;
         mkg:local_c ;
     :hasName "quotearg_custom" ;
     :hasReference mkg:ref_Entry%20Point_to_00013f50 ;
-    :hasReturnType mkg:undefined ;
+    :hasReturnType "undefined" ;
     :returns mkg:_5Bundefined_20_3CRETURN_3E_40_3CUNASSIGNED_3E_5D .
 
 mkg:quotearg_custom_mem a :Function ;
@@ -3328,7 +3349,7 @@ mkg:quotearg_custom_mem a :Function ;
         mkg:local_c ;
     :hasName "quotearg_custom_mem" ;
     :hasReference mkg:ref_Entry%20Point_to_00013f74 ;
-    :hasReturnType mkg:undefined ;
+    :hasReturnType "undefined" ;
     :returns mkg:_5Bundefined_20_3CRETURN_3E_40_3CUNASSIGNED_3E_5D .
 
 mkg:quotearg_free a :Function ;
@@ -3404,7 +3425,7 @@ mkg:quotearg_free a :Function ;
         mkg:local_c ;
     :hasName "quotearg_free" ;
     :hasReference mkg:ref_Entry%20Point_to_00013990 ;
-    :hasReturnType mkg:undefined ;
+    :hasReturnType "undefined" ;
     :returns mkg:_5Bundefined_20_3CRETURN_3E_40_3CUNASSIGNED_3E_5D .
 
 mkg:quotearg_mem a :Function ;
@@ -3429,7 +3450,7 @@ mkg:quotearg_mem a :Function ;
         mkg:local_c ;
     :hasName "quotearg_mem" ;
     :hasReference mkg:ref_Entry%20Point_to_00013c5c ;
-    :hasReturnType mkg:undefined ;
+    :hasReturnType "undefined" ;
     :returns mkg:_5Bundefined_20_3CRETURN_3E_40_3CUNASSIGNED_3E_5D .
 
 mkg:quotearg_style a :Function ;
@@ -3454,7 +3475,7 @@ mkg:quotearg_style a :Function ;
         mkg:local_c ;
     :hasName "quotearg_style" ;
     :hasReference mkg:ref_Entry%20Point_to_00013d24 ;
-    :hasReturnType mkg:undefined ;
+    :hasReturnType "undefined" ;
     :returns mkg:_5Bundefined_20_3CRETURN_3E_40_3CUNASSIGNED_3E_5D .
 
 mkg:quotearg_style_mem a :Function ;
@@ -3482,7 +3503,7 @@ mkg:quotearg_style_mem a :Function ;
         mkg:local_c ;
     :hasName "quotearg_style_mem" ;
     :hasReference mkg:ref_Entry%20Point_to_00013d44 ;
-    :hasReturnType mkg:undefined ;
+    :hasReturnType "undefined" ;
     :returns mkg:_5Bundefined_20_3CRETURN_3E_40_3CUNASSIGNED_3E_5D .
 
 mkg:quoting_style_args__00016d1c a :Label ;
@@ -3517,7 +3538,7 @@ mkg:readlinebuffer a :Function ;
         mkg:local_c ;
     :hasName "readlinebuffer" ;
     :hasReference mkg:ref_Entry%20Point_to_000124c8 ;
-    :hasReturnType mkg:undefined ;
+    :hasReturnType "undefined" ;
     :returns mkg:_5Bundefined_20_3CRETURN_3E_40_3CUNASSIGNED_3E_5D .
 
 mkg:rpl_getopt a :Function ;
@@ -3554,7 +3575,7 @@ mkg:rpl_getopt a :Function ;
         mkg:local_c ;
     :hasName "rpl_getopt" ;
     :hasReference mkg:ref_Entry%20Point_to_00015800 ;
-    :hasReturnType mkg:undefined ;
+    :hasReturnType "undefined" ;
     :returns mkg:_5Bundefined_20_3CRETURN_3E_40_3CUNASSIGNED_3E_5D .
 
 mkg:rpl_getopt_long_only a :Function ;
@@ -3593,7 +3614,7 @@ mkg:rpl_getopt_long_only a :Function ;
         mkg:local_c ;
     :hasName "rpl_getopt_long_only" ;
     :hasReference mkg:ref_Entry%20Point_to_00015894 ;
-    :hasReturnType mkg:undefined ;
+    :hasReturnType "undefined" ;
     :returns mkg:_5Bundefined_20_3CRETURN_3E_40_3CUNASSIGNED_3E_5D .
 
 mkg:rpl_optarg__00028304 a :Label ;
@@ -3674,7 +3695,7 @@ mkg:set_quoting_flags a :Function ;
         mkg:local_c ;
     :hasName "set_quoting_flags" ;
     :hasReference mkg:ref_Entry%20Point_to_000127e4 ;
-    :hasReturnType mkg:undefined ;
+    :hasReturnType "undefined" ;
     :returns mkg:_5Bundefined_20_3CRETURN_3E_40_3CUNASSIGNED_3E_5D .
 
 mkg:set_quoting_style a :Function ;
@@ -3704,7 +3725,7 @@ mkg:set_quoting_style a :Function ;
         mkg:local_c ;
     :hasName "set_quoting_style" ;
     :hasReference mkg:ref_Entry%20Point_to_00012744 ;
-    :hasReturnType mkg:undefined ;
+    :hasReturnType "undefined" ;
     :returns mkg:_5Bundefined_20_3CRETURN_3E_40_3CUNASSIGNED_3E_5D .
 
 mkg:shift__00000000 a :Label ;
@@ -3937,7 +3958,7 @@ mkg:version_etc_ar a :Function ;
         mkg:local_c ;
     :hasName "version_etc_ar" ;
     :hasReference mkg:ref_Entry%20Point_to_00014380 ;
-    :hasReturnType mkg:undefined ;
+    :hasReturnType "undefined" ;
     :returns mkg:_5Bundefined_20_3CRETURN_3E_40_3CUNASSIGNED_3E_5D .
 
 mkg:version_etc_copyright__000170bc a :Label ;
@@ -4008,7 +4029,7 @@ mkg:xcalloc a :Function ;
         mkg:local_30 ;
     :hasName "xcalloc" ;
     :hasReference mkg:ref_Entry%20Point_to_00014790 ;
-    :hasReturnType mkg:undefined ;
+    :hasReturnType "undefined" ;
     :returns mkg:_5Bundefined_20_3CRETURN_3E_40_3CUNASSIGNED_3E_5D .
 
 mkg:xmemcoll0 a :Function ;
@@ -4060,7 +4081,7 @@ mkg:xmemcoll0 a :Function ;
         mkg:local_c ;
     :hasName "xmemcoll0" ;
     :hasReference mkg:ref_Entry%20Point_to_00014950 ;
-    :hasReturnType mkg:undefined ;
+    :hasReturnType "undefined" ;
     :returns mkg:_5Bundefined_20_3CRETURN_3E_40_3CUNASSIGNED_3E_5D .
 
 mkg:xnmalloc a :Function ;
@@ -4120,7 +4141,7 @@ mkg:xnmalloc a :Function ;
         mkg:local_28 ;
     :hasName "xnmalloc" ;
     :hasReference mkg:ref_Entry%20Point_to_0001450c ;
-    :hasReturnType mkg:undefined ;
+    :hasReturnType "undefined" ;
     :returns mkg:_5Bundefined_20_3CRETURN_3E_40_3CUNASSIGNED_3E_5D .
 
 mkg:xnrealloc a :Function ;
@@ -4183,7 +4204,7 @@ mkg:xnrealloc a :Function ;
         mkg:local_2c ;
     :hasName "xnrealloc" ;
     :hasReference mkg:ref_Entry%20Point_to_0001457c ;
-    :hasReturnType mkg:undefined ;
+    :hasReturnType "undefined" ;
     :returns mkg:_5Bundefined_20_3CRETURN_3E_40_3CUNASSIGNED_3E_5D .
 
 mkg:xstrdup a :Function ;
@@ -4210,7 +4231,7 @@ mkg:xstrdup a :Function ;
     :defines mkg:local_c ;
     :hasName "xstrdup" ;
     :hasReference mkg:ref_Entry%20Point_to_0001482c ;
-    :hasReturnType mkg:undefined ;
+    :hasReturnType "undefined" ;
     :returns mkg:_5Bundefined_20_3CRETURN_3E_40_3CUNASSIGNED_3E_5D .
 
 mkg:xzalloc a :Function ;
@@ -4237,18 +4258,22 @@ mkg:xzalloc a :Function ;
     :defines mkg:local_c ;
     :hasName "xzalloc" ;
     :hasReference mkg:ref_Entry%20Point_to_0001476c ;
-    :hasReturnType mkg:undefined ;
+    :hasReturnType "undefined" ;
     :returns mkg:_5Bundefined_20_3CRETURN_3E_40_3CUNASSIGNED_3E_5D .
 
-:defines a owl:ObjectProperty ;
-    rdfs:label "defines" ;
-    rdfs:comment "used for when a function defines a local variable" ;
+:definesLocal a owl:ObjectProperty ;
+    rdfs:label "definesLocal" ;
+    rdfs:comment "Specifies a local variable that a function defines locally" ;
     rdfs:domain :Function ;
     rdfs:range :LocalVariable ;
     owl:inverseOf :localDefinedIn .
 
-:hasDataType a owl:DatatypeProperty ;
-    rdfs:domain :Variable .
+:hasDataType a owl:DatatypeProperty,
+        owl:FunctionalProperty ;
+    rdfs:label "hasDataType" ;
+    rdfs:comment "The data type of the given variable expressed as a string" ;
+    rdfs:domain :Variable ;
+    rdfs:range xsd:string .
 
 :hasDestinationAddress a owl:FunctionalProperty,
         owl:ObjectProperty ;
@@ -4328,9 +4353,6 @@ mkg:xzalloc a :Function ;
     rdfs:domain :Reference ;
     rdfs:range xsd:string .
 
-:hasReturnType a owl:DatatypeProperty ;
-    rdfs:domain :Function .
-
 :hasSourceAddress a owl:FunctionalProperty,
         owl:ObjectProperty ;
     rdfs:label "hasSourceAddress" ;
@@ -4392,7 +4414,7 @@ mkg:xzalloc a :Function ;
 
 :localDefinedIn a owl:ObjectProperty ;
     rdfs:label "localDefinedIn" ;
-    rdfs:comment "inverse of defines" ;
+    rdfs:comment "specifies which function an local variable is defined in" ;
     rdfs:domain :LocalVariable ;
     rdfs:range :Function .
 
@@ -4405,9 +4427,9 @@ mkg:xzalloc a :Function ;
 :namespaceDefines a owl:ObjectProperty ;
     rdfs:label "namespaceDefines" ;
     rdfs:comment "inverse of definedIn" ;
-    rdfs:domain :NamespaceSymbol ;
+    rdfs:domain :Namespace ;
     rdfs:range [ a owl:Class ;
-            owl:unionOf ( :Class :Function :Label ) ] .
+            owl:unionOf ( :Class :DLL ) ] .
 
 :passesInto a owl:ObjectProperty ;
     rdfs:label "passesInto" ;
@@ -20437,7 +20459,7 @@ mkg:__aeabi_uldivmod a :Function ;
     :hasReference mkg:ref_0001246e_to_00016220,
         mkg:ref_0001248c_to_00016220,
         mkg:ref_Entry%20Point_to_00016220 ;
-    :hasReturnType mkg:undefined ;
+    :hasReturnType "undefined" ;
     :returns mkg:_5Bundefined_20_3CRETURN_3E_40_3CUNASSIGNED_3E_5D .
 
 mkg:__do_global_dtors_aux a :Function ;
@@ -20456,7 +20478,7 @@ mkg:__do_global_dtors_aux a :Function ;
     :hasName "__do_global_dtors_aux" ;
     :hasReference mkg:ref_0001639a_to_000110a4,
         mkg:ref_Entry%20Point_to_000110a4 ;
-    :hasReturnType mkg:undefined ;
+    :hasReturnType "undefined" ;
     :returns mkg:_5Bundefined_20_3CRETURN_3E_40_3CUNASSIGNED_3E_5D .
 
 mkg:__gmon_start__ a :Function ;
@@ -20469,7 +20491,7 @@ mkg:__gmon_start__ a :Function ;
         mkg:ref_0002808c_to_00029000,
         mkg:ref_000280f0_to_00029000,
         mkg:ref_00029000_to_EXTERNAL%3A00000039 ;
-    :hasReturnType mkg:undefined ;
+    :hasReturnType "undefined" ;
     :returns mkg:_5Bundefined_20_3CRETURN_3E_40_3CUNASSIGNED_3E_5D .
 
 mkg:__udivmoddi4 a :Function ;
@@ -20573,7 +20595,7 @@ mkg:__udivmoddi4 a :Function ;
     :hasPrimaryReference mkg:ref_00016240_to_0001625c ;
     :hasReference mkg:ref_00016240_to_0001625c,
         mkg:ref_Entry%20Point_to_0001625c ;
-    :hasReturnType mkg:undefined ;
+    :hasReturnType "undefined" ;
     :returns mkg:_5Bundefined_20_3CRETURN_3E_40_3CUNASSIGNED_3E_5D .
 
 mkg:_comment_3A_3A00000000 a :Address .
@@ -20660,7 +20682,7 @@ mkg:_getopt_initialize a :Function ;
     :hasName "_getopt_initialize" ;
     :hasPrimaryReference mkg:ref_0001529e_to_000151c8 ;
     :hasReference mkg:ref_0001529e_to_000151c8 ;
-    :hasReturnType mkg:undefined ;
+    :hasReturnType "undefined" ;
     :returns mkg:_5Bundefined_20_3CRETURN_3E_40_3CUNASSIGNED_3E_5D .
 
 mkg:c_strcasecmp a :Function ;
@@ -20715,7 +20737,7 @@ mkg:c_strcasecmp a :Function ;
     :hasReference mkg:ref_000128f6_to_000159a0,
         mkg:ref_00012926_to_000159a0,
         mkg:ref_Entry%20Point_to_000159a0 ;
-    :hasReturnType mkg:undefined ;
+    :hasReturnType "undefined" ;
     :returns mkg:_5Bundefined_20_3CRETURN_3E_40_3CUNASSIGNED_3E_5D .
 
 mkg:c_tolower a :Function ;
@@ -20745,7 +20767,7 @@ mkg:c_tolower a :Function ;
     :hasReference mkg:ref_000159ba_to_00015f60,
         mkg:ref_000159c6_to_00015f60,
         mkg:ref_Entry%20Point_to_00015f60 ;
-    :hasReturnType mkg:undefined ;
+    :hasReturnType "undefined" ;
     :returns mkg:_5Bundefined_20_3CRETURN_3E_40_3CUNASSIGNED_3E_5D .
 
 mkg:call_weak_fn a :Function ;
@@ -20765,7 +20787,7 @@ mkg:call_weak_fn a :Function ;
     :hasName "call_weak_fn" ;
     :hasPrimaryReference mkg:ref_00010d30_to_00011030 ;
     :hasReference mkg:ref_00010d30_to_00011030 ;
-    :hasReturnType mkg:undefined ;
+    :hasReturnType "undefined" ;
     :returns mkg:_5Bundefined_20_3CRETURN_3E_40_3CUNASSIGNED_3E_5D .
 
 mkg:check_order a :Function ;
@@ -20873,7 +20895,7 @@ mkg:check_order a :Function ;
     :hasPrimaryReference mkg:ref_00011c4e_to_00011510 ;
     :hasReference mkg:ref_00011bb4_to_00011510,
         mkg:ref_00011c4e_to_00011510 ;
-    :hasReturnType mkg:undefined ;
+    :hasReturnType "undefined" ;
     :returns mkg:_5Bundefined_20_3CRETURN_3E_40_3CUNASSIGNED_3E_5D .
 
 mkg:clear_ungetc_buffer_preserving_position a :Function ;
@@ -20904,7 +20926,7 @@ mkg:clear_ungetc_buffer_preserving_position a :Function ;
     :hasName "clear_ungetc_buffer_preserving_position" ;
     :hasPrimaryReference mkg:ref_00014bce_to_00014b78 ;
     :hasReference mkg:ref_00014bce_to_00014b78 ;
-    :hasReturnType mkg:undefined ;
+    :hasReturnType "undefined" ;
     :returns mkg:_5Bundefined_20_3CRETURN_3E_40_3CUNASSIGNED_3E_5D .
 
 mkg:close_stream a :Function ;
@@ -20981,7 +21003,7 @@ mkg:close_stream a :Function ;
     :hasReference mkg:ref_00012216_to_000159f4,
         mkg:ref_000122c2_to_000159f4,
         mkg:ref_Entry%20Point_to_000159f4 ;
-    :hasReturnType mkg:undefined ;
+    :hasReturnType "undefined" ;
     :returns mkg:_5Bundefined_20_3CRETURN_3E_40_3CUNASSIGNED_3E_5D .
 
 mkg:compare_files a :Function ;
@@ -21766,7 +21788,7 @@ mkg:compare_files a :Function ;
     :hasName "compare_files" ;
     :hasPrimaryReference mkg:ref_00012190_to_000115f0 ;
     :hasReference mkg:ref_00012190_to_000115f0 ;
-    :hasReturnType mkg:undefined ;
+    :hasReturnType "undefined" ;
     :returns mkg:_5Bundefined_20_3CRETURN_3E_40_3CUNASSIGNED_3E_5D .
 
 mkg:deregister_tm_clones a :Function ;
@@ -21786,7 +21808,7 @@ mkg:deregister_tm_clones a :Function ;
     :hasName "deregister_tm_clones" ;
     :hasPrimaryReference mkg:ref_000110b2_to_00011054 ;
     :hasReference mkg:ref_000110b2_to_00011054 ;
-    :hasReturnType mkg:undefined ;
+    :hasReturnType "undefined" ;
     :returns mkg:_5Bundefined_20_3CRETURN_3E_40_3CUNASSIGNED_3E_5D .
 
 mkg:dup_safer a :Function ;
@@ -21811,7 +21833,7 @@ mkg:dup_safer a :Function ;
     :hasPrimaryReference mkg:ref_00012380_to_00014020 ;
     :hasReference mkg:ref_00012380_to_00014020,
         mkg:ref_Entry%20Point_to_00014020 ;
-    :hasReturnType mkg:undefined ;
+    :hasReturnType "undefined" ;
     :returns mkg:_5Bundefined_20_3CRETURN_3E_40_3CUNASSIGNED_3E_5D .
 
 mkg:emit_ancillary_info a :Function ;
@@ -21950,7 +21972,7 @@ mkg:emit_ancillary_info a :Function ;
     :hasName "emit_ancillary_info" ;
     :hasPrimaryReference mkg:ref_00011400_to_000110e0 ;
     :hasReference mkg:ref_00011400_to_000110e0 ;
-    :hasReturnType mkg:undefined ;
+    :hasReturnType "undefined" ;
     :returns mkg:_5Bundefined_20_3CRETURN_3E_40_3CUNASSIGNED_3E_5D .
 
 mkg:exchange a :Function ;
@@ -22126,7 +22148,7 @@ mkg:exchange a :Function ;
     :hasPrimaryReference mkg:ref_000153d6_to_00014c74 ;
     :hasReference mkg:ref_00015328_to_00014c74,
         mkg:ref_000153d6_to_00014c74 ;
-    :hasReturnType mkg:undefined ;
+    :hasReturnType "undefined" ;
     :returns mkg:_5Bundefined_20_3CRETURN_3E_40_3CUNASSIGNED_3E_5D .
 
 mkg:fadvise a :Function ;
@@ -22166,7 +22188,7 @@ mkg:fadvise a :Function ;
     :hasPrimaryReference mkg:ref_000117c6_to_00012310 ;
     :hasReference mkg:ref_000117c6_to_00012310,
         mkg:ref_Entry%20Point_to_00012310 ;
-    :hasReturnType mkg:undefined ;
+    :hasReturnType "undefined" ;
     :returns mkg:_5Bundefined_20_3CRETURN_3E_40_3CUNASSIGNED_3E_5D .
 
 mkg:fdadvise a :Function ;
@@ -22199,7 +22221,7 @@ mkg:fdadvise a :Function ;
     :hasPrimaryReference mkg:ref_00012342_to_000122e4 ;
     :hasReference mkg:ref_00012342_to_000122e4,
         mkg:ref_Entry%20Point_to_000122e4 ;
-    :hasReturnType mkg:undefined ;
+    :hasReturnType "undefined" ;
     :returns mkg:_5Bundefined_20_3CRETURN_3E_40_3CUNASSIGNED_3E_5D .
 
 mkg:fopen_safer a :Function ;
@@ -22291,7 +22313,7 @@ mkg:fopen_safer a :Function ;
     :hasPrimaryReference mkg:ref_0001174e_to_00012350 ;
     :hasReference mkg:ref_0001174e_to_00012350,
         mkg:ref_Entry%20Point_to_00012350 ;
-    :hasReturnType mkg:undefined ;
+    :hasReturnType "undefined" ;
     :returns mkg:_5Bundefined_20_3CRETURN_3E_40_3CUNASSIGNED_3E_5D .
 
 mkg:frame_dummy a :Function ;
@@ -22315,7 +22337,7 @@ mkg:frame_dummy a :Function ;
     :hasPrimaryReference mkg:ref_0001639a_to_000110bc ;
     :hasReference mkg:ref_0001639a_to_000110bc,
         mkg:ref_Entry%20Point_to_000110bc ;
-    :hasReturnType mkg:undefined ;
+    :hasReturnType "undefined" ;
     :returns mkg:_5Bundefined_20_3CRETURN_3E_40_3CUNASSIGNED_3E_5D .
 
 mkg:gettext_quote a :Function ;
@@ -22394,7 +22416,7 @@ mkg:gettext_quote a :Function ;
     :hasPrimaryReference mkg:ref_00012a90_to_000128c8 ;
     :hasReference mkg:ref_00012a80_to_000128c8,
         mkg:ref_00012a90_to_000128c8 ;
-    :hasReturnType mkg:undefined ;
+    :hasReturnType "undefined" ;
     :returns mkg:_5Bundefined_20_3CRETURN_3E_40_3CUNASSIGNED_3E_5D .
 
 mkg:initbuffer a :Function ;
@@ -22418,7 +22440,7 @@ mkg:initbuffer a :Function ;
     :hasPrimaryReference mkg:ref_00011670_to_000124ac ;
     :hasReference mkg:ref_00011670_to_000124ac,
         mkg:ref_Entry%20Point_to_000124ac ;
-    :hasReturnType mkg:undefined ;
+    :hasReturnType "undefined" ;
     :returns mkg:_5Bundefined_20_3CRETURN_3E_40_3CUNASSIGNED_3E_5D .
 
 mkg:ins_00010d2c a :Instruction ;
@@ -72412,130 +72434,128 @@ mkg:ins_000163d0 a :Instruction ;
     :hasOpcode "LDMIA" ;
     :hasSourceOperand mkg:sp_21_2C_7Br3_2Cpc_7D .
 
-mkg:int_20_2A a :DataType .
-
 mkg:local_11 a :LocalVariable ;
-    :hasDataType mkg:undefined1 .
+    :hasDataType "undefined1" .
 
 mkg:local_110 a :LocalVariable ;
-    :hasDataType mkg:undefined4 .
+    :hasDataType "undefined4" .
 
 mkg:local_118 a :LocalVariable ;
-    :hasDataType mkg:undefined4 .
+    :hasDataType "undefined4" .
 
 mkg:local_12 a :LocalVariable ;
-    :hasDataType mkg:undefined1 .
+    :hasDataType "undefined1" .
 
 mkg:local_120 a :LocalVariable ;
-    :hasDataType mkg:undefined4 .
+    :hasDataType "undefined4" .
 
 mkg:local_12c a :LocalVariable ;
-    :hasDataType mkg:undefined4 .
+    :hasDataType "undefined4" .
 
 mkg:local_130 a :LocalVariable ;
-    :hasDataType mkg:undefined4 .
+    :hasDataType "undefined4" .
 
 mkg:local_133 a :LocalVariable ;
-    :hasDataType mkg:undefined1 .
+    :hasDataType "undefined1" .
 
 mkg:local_134 a :LocalVariable ;
-    :hasDataType mkg:undefined1 .
+    :hasDataType "undefined1" .
 
 mkg:local_138 a :LocalVariable ;
-    :hasDataType mkg:undefined4 .
+    :hasDataType "undefined4" .
 
 mkg:local_13c a :LocalVariable ;
-    :hasDataType mkg:undefined4 .
+    :hasDataType "undefined4" .
 
 mkg:local_140 a :LocalVariable ;
-    :hasDataType mkg:undefined4 .
+    :hasDataType "undefined4" .
 
 mkg:local_144 a :LocalVariable ;
-    :hasDataType mkg:undefined4 .
+    :hasDataType "undefined4" .
 
 mkg:local_14c a :LocalVariable ;
-    :hasDataType mkg:undefined4 .
+    :hasDataType "undefined4" .
 
 mkg:local_150 a :LocalVariable ;
-    :hasDataType mkg:undefined4 .
+    :hasDataType "undefined4" .
 
 mkg:local_158 a :LocalVariable ;
-    :hasDataType mkg:undefined4 .
+    :hasDataType "undefined4" .
 
 mkg:local_15c a :LocalVariable ;
-    :hasDataType mkg:undefined4 .
+    :hasDataType "undefined4" .
 
 mkg:local_160 a :LocalVariable ;
-    :hasDataType mkg:undefined4 .
+    :hasDataType "undefined4" .
 
 mkg:local_164 a :LocalVariable ;
-    :hasDataType mkg:undefined4 .
+    :hasDataType "undefined4" .
 
 mkg:local_168 a :LocalVariable ;
-    :hasDataType mkg:undefined4 .
+    :hasDataType "undefined4" .
 
 mkg:local_29 a :LocalVariable ;
-    :hasDataType mkg:undefined1 .
+    :hasDataType "undefined1" .
 
 mkg:local_2d a :LocalVariable ;
-    :hasDataType mkg:undefined1 .
+    :hasDataType "undefined1" .
 
 mkg:local_45 a :LocalVariable ;
-    :hasDataType mkg:undefined1 .
+    :hasDataType "undefined1" .
 
 mkg:local_46 a :LocalVariable ;
-    :hasDataType mkg:undefined1 .
+    :hasDataType "undefined1" .
 
 mkg:local_47 a :LocalVariable ;
-    :hasDataType mkg:undefined1 .
+    :hasDataType "undefined1" .
 
 mkg:local_49 a :LocalVariable ;
-    :hasDataType mkg:undefined1 .
+    :hasDataType "undefined1" .
 
 mkg:local_4a a :LocalVariable ;
-    :hasDataType mkg:undefined1 .
+    :hasDataType "undefined1" .
 
 mkg:local_4b a :LocalVariable ;
-    :hasDataType mkg:undefined1 .
+    :hasDataType "undefined1" .
 
 mkg:local_4d a :LocalVariable ;
-    :hasDataType mkg:undefined1 .
+    :hasDataType "undefined1" .
 
 mkg:local_4e a :LocalVariable ;
-    :hasDataType mkg:undefined1 .
+    :hasDataType "undefined1" .
 
 mkg:local_4f a :LocalVariable ;
-    :hasDataType mkg:undefined1 .
+    :hasDataType "undefined1" .
 
 mkg:local_51 a :LocalVariable ;
-    :hasDataType mkg:undefined1 .
+    :hasDataType "undefined1" .
 
 mkg:local_60 a :LocalVariable ;
-    :hasDataType mkg:undefined4 .
+    :hasDataType "undefined4" .
 
 mkg:local_64 a :LocalVariable ;
-    :hasDataType mkg:undefined4 .
+    :hasDataType "undefined4" .
 
 mkg:local_6c a :LocalVariable ;
-    :hasDataType mkg:undefined4 .
+    :hasDataType "undefined4" .
 
 mkg:local_7c a :LocalVariable ;
-    :hasDataType mkg:undefined4 .
+    :hasDataType "undefined4" .
 
 mkg:local_80 a :LocalVariable ;
-    :hasDataType mkg:undefined4 .
+    :hasDataType "undefined4" .
 
 mkg:local_84 a :LocalVariable ;
-    :hasDataType mkg:undefined4 .
+    :hasDataType "undefined4" .
 
 mkg:local_a a :LocalVariable ;
-    :hasDataType mkg:undefined1 .
+    :hasDataType "undefined1" .
 
 mkg:local_b a :LocalVariable ;
-    :hasDataType mkg:undefined1 .
+    :hasDataType "undefined1" .
 
 mkg:local_e a :LocalVariable ;
-    :hasDataType mkg:undefined1 .
+    :hasDataType "undefined1" .
 
 mkg:locale_charset a :Function ;
     :atAddress mkg:00015a78 ;
@@ -72570,7 +72590,7 @@ mkg:locale_charset a :Function ;
     :hasPrimaryReference mkg:ref_000128e6_to_00015a78 ;
     :hasReference mkg:ref_000128e6_to_00015a78,
         mkg:ref_Entry%20Point_to_00015a78 ;
-    :hasReturnType mkg:undefined ;
+    :hasReturnType "undefined" ;
     :returns mkg:_5Bundefined_20_3CRETURN_3E_40_3CUNASSIGNED_3E_5D .
 
 mkg:memcmp2 a :Function ;
@@ -72624,7 +72644,7 @@ mkg:memcmp2 a :Function ;
     :hasPrimaryReference mkg:ref_0001159c_to_000125d0 ;
     :hasReference mkg:ref_0001159c_to_000125d0,
         mkg:ref_Entry%20Point_to_000125d0 ;
-    :hasReturnType mkg:undefined ;
+    :hasReturnType "undefined" ;
     :returns mkg:_5Bundefined_20_3CRETURN_3E_40_3CUNASSIGNED_3E_5D .
 
 mkg:memcoll a :Function ;
@@ -72712,7 +72732,7 @@ mkg:memcoll a :Function ;
     :hasPrimaryReference mkg:ref_0001491e_to_00015b58 ;
     :hasReference mkg:ref_0001491e_to_00015b58,
         mkg:ref_Entry%20Point_to_00015b58 ;
-    :hasReturnType mkg:undefined ;
+    :hasReturnType "undefined" ;
     :returns mkg:_5Bundefined_20_3CRETURN_3E_40_3CUNASSIGNED_3E_5D .
 
 mkg:memcoll0 a :Function ;
@@ -72763,7 +72783,7 @@ mkg:memcoll0 a :Function ;
     :hasPrimaryReference mkg:ref_00014966_to_00015be8 ;
     :hasReference mkg:ref_00014966_to_00015be8,
         mkg:ref_Entry%20Point_to_00015be8 ;
-    :hasReturnType mkg:undefined ;
+    :hasReturnType "undefined" ;
     :returns mkg:_5Bundefined_20_3CRETURN_3E_40_3CUNASSIGNED_3E_5D .
 
 mkg:process_long_option a :Function ;
@@ -73269,7 +73289,7 @@ mkg:process_long_option a :Function ;
     :hasReference mkg:ref_000154bc_to_00014dac,
         mkg:ref_00015530_to_00014dac,
         mkg:ref_00015684_to_00014dac ;
-    :hasReturnType mkg:undefined ;
+    :hasReturnType "undefined" ;
     :returns mkg:_5Bundefined_20_3CRETURN_3E_40_3CUNASSIGNED_3E_5D .
 
 mkg:quote a :Function ;
@@ -73294,7 +73314,7 @@ mkg:quote a :Function ;
     :hasReference mkg:ref_0001211c_to_00014004,
         mkg:ref_00012168_to_00014004,
         mkg:ref_Entry%20Point_to_00014004 ;
-    :hasReturnType mkg:undefined ;
+    :hasReturnType "undefined" ;
     :returns mkg:_5Bundefined_20_3CRETURN_3E_40_3CUNASSIGNED_3E_5D .
 
 mkg:quote_n a :Function ;
@@ -73321,7 +73341,7 @@ mkg:quote_n a :Function ;
     :hasPrimaryReference mkg:ref_00014010_to_00013fe4 ;
     :hasReference mkg:ref_00014010_to_00013fe4,
         mkg:ref_Entry%20Point_to_00013fe4 ;
-    :hasReturnType mkg:undefined ;
+    :hasReturnType "undefined" ;
     :returns mkg:_5Bundefined_20_3CRETURN_3E_40_3CUNASSIGNED_3E_5D .
 
 mkg:quotearg_alloc_mem a :Function ;
@@ -73438,7 +73458,7 @@ mkg:quotearg_alloc_mem a :Function ;
     :hasPrimaryReference mkg:ref_000138bc_to_000138cc ;
     :hasReference mkg:ref_000138bc_to_000138cc,
         mkg:ref_Entry%20Point_to_000138cc ;
-    :hasReturnType mkg:undefined ;
+    :hasReturnType "undefined" ;
     :returns mkg:_5Bundefined_20_3CRETURN_3E_40_3CUNASSIGNED_3E_5D .
 
 mkg:quotearg_char a :Function ;
@@ -73467,7 +73487,7 @@ mkg:quotearg_char a :Function ;
     :hasPrimaryReference mkg:ref_00013e0c_to_00013ddc ;
     :hasReference mkg:ref_00013e0c_to_00013ddc,
         mkg:ref_Entry%20Point_to_00013ddc ;
-    :hasReturnType mkg:undefined ;
+    :hasReturnType "undefined" ;
     :returns mkg:_5Bundefined_20_3CRETURN_3E_40_3CUNASSIGNED_3E_5D .
 
 mkg:quotearg_colon a :Function ;
@@ -73491,7 +73511,7 @@ mkg:quotearg_colon a :Function ;
     :hasPrimaryReference mkg:ref_00012270_to_00013e00 ;
     :hasReference mkg:ref_00012270_to_00013e00,
         mkg:ref_Entry%20Point_to_00013e00 ;
-    :hasReturnType mkg:undefined ;
+    :hasReturnType "undefined" ;
     :returns mkg:_5Bundefined_20_3CRETURN_3E_40_3CUNASSIGNED_3E_5D .
 
 mkg:quotearg_n a :Function ;
@@ -73520,7 +73540,7 @@ mkg:quotearg_n a :Function ;
     :hasPrimaryReference mkg:ref_00013c4c_to_00013bf0 ;
     :hasReference mkg:ref_00013c4c_to_00013bf0,
         mkg:ref_Entry%20Point_to_00013bf0 ;
-    :hasReturnType mkg:undefined ;
+    :hasReturnType "undefined" ;
     :returns mkg:_5Bundefined_20_3CRETURN_3E_40_3CUNASSIGNED_3E_5D .
 
 mkg:quotearg_n_custom a :Function ;
@@ -73555,7 +73575,7 @@ mkg:quotearg_n_custom a :Function ;
     :hasPrimaryReference mkg:ref_00013f64_to_00013eb0 ;
     :hasReference mkg:ref_00013f64_to_00013eb0,
         mkg:ref_Entry%20Point_to_00013eb0 ;
-    :hasReturnType mkg:undefined ;
+    :hasReturnType "undefined" ;
     :returns mkg:_5Bundefined_20_3CRETURN_3E_40_3CUNASSIGNED_3E_5D .
 
 mkg:quotearg_n_mem a :Function ;
@@ -73586,7 +73606,7 @@ mkg:quotearg_n_mem a :Function ;
     :hasPrimaryReference mkg:ref_00013c6c_to_00013c18 ;
     :hasReference mkg:ref_00013c6c_to_00013c18,
         mkg:ref_Entry%20Point_to_00013c18 ;
-    :hasReturnType mkg:undefined ;
+    :hasReturnType "undefined" ;
     :returns mkg:_5Bundefined_20_3CRETURN_3E_40_3CUNASSIGNED_3E_5D .
 
 mkg:quotearg_n_style a :Function ;
@@ -73634,7 +73654,7 @@ mkg:quotearg_n_style a :Function ;
     :hasPrimaryReference mkg:ref_00013d34_to_00013c7c ;
     :hasReference mkg:ref_00013d34_to_00013c7c,
         mkg:ref_Entry%20Point_to_00013c7c ;
-    :hasReturnType mkg:undefined ;
+    :hasReturnType "undefined" ;
     :returns mkg:_5Bundefined_20_3CRETURN_3E_40_3CUNASSIGNED_3E_5D .
 
 mkg:quotearg_n_style_colon a :Function ;
@@ -73705,7 +73725,7 @@ mkg:quotearg_n_style_colon a :Function ;
         mkg:ref_00011c8a_to_00013e3c,
         mkg:ref_00011d24_to_00013e3c,
         mkg:ref_Entry%20Point_to_00013e3c ;
-    :hasReturnType mkg:undefined ;
+    :hasReturnType "undefined" ;
     :returns mkg:_5Bundefined_20_3CRETURN_3E_40_3CUNASSIGNED_3E_5D .
 
 mkg:r11 a :Operand ;
@@ -78780,7 +78800,7 @@ mkg:register_tm_clones a :Function ;
     :hasName "register_tm_clones" ;
     :hasPrimaryReference mkg:ref_000110ce_to_00011078 ;
     :hasReference mkg:ref_000110ce_to_00011078 ;
-    :hasReturnType mkg:undefined ;
+    :hasReturnType "undefined" ;
     :returns mkg:_5Bundefined_20_3CRETURN_3E_40_3CUNASSIGNED_3E_5D .
 
 mkg:rpl_fflush a :Function ;
@@ -78819,7 +78839,7 @@ mkg:rpl_fflush a :Function ;
     :hasPrimaryReference mkg:ref_000149fc_to_00014ba8 ;
     :hasReference mkg:ref_000149fc_to_00014ba8,
         mkg:ref_Entry%20Point_to_00014ba8 ;
-    :hasReturnType mkg:undefined ;
+    :hasReturnType "undefined" ;
     :returns mkg:_5Bundefined_20_3CRETURN_3E_40_3CUNASSIGNED_3E_5D .
 
 mkg:rpl_fseeko a :Function ;
@@ -78893,7 +78913,7 @@ mkg:rpl_fseeko a :Function ;
     :hasPrimaryReference mkg:ref_00014b9a_to_00014be4 ;
     :hasReference mkg:ref_00014b9a_to_00014be4,
         mkg:ref_Entry%20Point_to_00014be4 ;
-    :hasReturnType mkg:undefined ;
+    :hasReturnType "undefined" ;
     :returns mkg:_5Bundefined_20_3CRETURN_3E_40_3CUNASSIGNED_3E_5D .
 
 mkg:rpl_getopt_long a :Function ;
@@ -78934,7 +78954,7 @@ mkg:rpl_getopt_long a :Function ;
     :hasPrimaryReference mkg:ref_00012096_to_00015830 ;
     :hasReference mkg:ref_00012096_to_00015830,
         mkg:ref_Entry%20Point_to_00015830 ;
-    :hasReturnType mkg:undefined ;
+    :hasReturnType "undefined" ;
     :returns mkg:_5Bundefined_20_3CRETURN_3E_40_3CUNASSIGNED_3E_5D .
 
 mkg:rpl_mbrtowc a :Function ;
@@ -79025,7 +79045,7 @@ mkg:rpl_mbrtowc a :Function ;
     :hasPrimaryReference mkg:ref_0001321a_to_000158f8 ;
     :hasReference mkg:ref_0001321a_to_000158f8,
         mkg:ref_Entry%20Point_to_000158f8 ;
-    :hasReturnType mkg:undefined ;
+    :hasReturnType "undefined" ;
     :returns mkg:_5Bundefined_20_3CRETURN_3E_40_3CUNASSIGNED_3E_5D .
 
 mkg:rpl_nl_langinfo a :Function ;
@@ -79059,7 +79079,7 @@ mkg:rpl_nl_langinfo a :Function ;
     :hasPrimaryReference mkg:ref_00015a80_to_00015c34 ;
     :hasReference mkg:ref_00015a80_to_00015c34,
         mkg:ref_Entry%20Point_to_00015c34 ;
-    :hasReturnType mkg:undefined ;
+    :hasReturnType "undefined" ;
     :returns mkg:_5Bundefined_20_3CRETURN_3E_40_3CUNASSIGNED_3E_5D .
 
 mkg:set_custom_quoting a :Function ;
@@ -79105,7 +79125,7 @@ mkg:set_custom_quoting a :Function ;
     :hasPrimaryReference mkg:ref_00013f1e_to_00012818 ;
     :hasReference mkg:ref_00013f1e_to_00012818,
         mkg:ref_Entry%20Point_to_00012818 ;
-    :hasReturnType mkg:undefined ;
+    :hasReturnType "undefined" ;
     :returns mkg:_5Bundefined_20_3CRETURN_3E_40_3CUNASSIGNED_3E_5D .
 
 mkg:set_program_name a :Function ;
@@ -79194,7 +79214,7 @@ mkg:set_program_name a :Function ;
     :hasPrimaryReference mkg:ref_00011e28_to_00012620 ;
     :hasReference mkg:ref_00011e28_to_00012620,
         mkg:ref_Entry%20Point_to_00012620 ;
-    :hasReturnType mkg:undefined ;
+    :hasReturnType "undefined" ;
     :returns mkg:_5Bundefined_20_3CRETURN_3E_40_3CUNASSIGNED_3E_5D .
 
 mkg:sp_2C_230x20 a :Operand ;
@@ -79254,7 +79274,7 @@ mkg:umaxtostr a :Function ;
         mkg:ref_00011d90_to_00012444,
         mkg:ref_00011db0_to_00012444,
         mkg:ref_Entry%20Point_to_00012444 ;
-    :hasReturnType mkg:undefined ;
+    :hasReturnType "undefined" ;
     :returns mkg:_5Bundefined_20_3CRETURN_3E_40_3CUNASSIGNED_3E_5D .
 
 mkg:usage a :Function ;
@@ -79431,10 +79451,8 @@ mkg:usage a :Function ;
         mkg:ref_0001212e_to_00011218,
         mkg:ref_0001217a_to_00011218,
         mkg:ref_Entry%20Point_to_00011218 ;
-    :hasReturnType mkg:undefined ;
+    :hasReturnType "undefined" ;
     :returns mkg:_5Bundefined_20_3CRETURN_3E_40_3CUNASSIGNED_3E_5D .
-
-mkg:ushort_20_2A_20_2A a :DataType .
 
 mkg:version_etc a :Function ;
     :atAddress mkg:0001444c ;
@@ -79489,7 +79507,7 @@ mkg:version_etc a :Function ;
     :hasPrimaryReference mkg:ref_0001206e_to_0001444c ;
     :hasReference mkg:ref_0001206e_to_0001444c,
         mkg:ref_Entry%20Point_to_0001444c ;
-    :hasReturnType mkg:undefined ;
+    :hasReturnType "undefined" ;
     :returns mkg:_5Bundefined_20_3CRETURN_3E_40_3CUNASSIGNED_3E_5D .
 
 mkg:version_etc_va a :Function ;
@@ -79565,7 +79583,7 @@ mkg:version_etc_va a :Function ;
     :hasPrimaryReference mkg:ref_0001447c_to_000143c4 ;
     :hasReference mkg:ref_0001447c_to_000143c4,
         mkg:ref_Entry%20Point_to_000143c4 ;
-    :hasReturnType mkg:undefined ;
+    :hasReturnType "undefined" ;
     :returns mkg:_5Bundefined_20_3CRETURN_3E_40_3CUNASSIGNED_3E_5D .
 
 mkg:writeline a :Function ;
@@ -79678,7 +79696,7 @@ mkg:writeline a :Function ;
     :hasReference mkg:ref_000119be_to_0001140c,
         mkg:ref_00011a04_to_0001140c,
         mkg:ref_00011a34_to_0001140c ;
-    :hasReturnType mkg:undefined ;
+    :hasReturnType "undefined" ;
     :returns mkg:_5Bundefined_20_3CRETURN_3E_40_3CUNASSIGNED_3E_5D .
 
 mkg:x2nrealloc a :Function ;
@@ -79788,7 +79806,7 @@ mkg:x2nrealloc a :Function ;
     :hasPrimaryReference mkg:ref_0001475c_to_000145f0 ;
     :hasReference mkg:ref_0001475c_to_000145f0,
         mkg:ref_Entry%20Point_to_000145f0 ;
-    :hasReturnType mkg:undefined ;
+    :hasReturnType "undefined" ;
     :returns mkg:_5Bundefined_20_3CRETURN_3E_40_3CUNASSIGNED_3E_5D .
 
 mkg:x2realloc a :Function ;
@@ -79815,7 +79833,7 @@ mkg:x2realloc a :Function ;
     :hasPrimaryReference mkg:ref_00012568_to_0001474c ;
     :hasReference mkg:ref_00012568_to_0001474c,
         mkg:ref_Entry%20Point_to_0001474c ;
-    :hasReturnType mkg:undefined ;
+    :hasReturnType "undefined" ;
     :returns mkg:_5Bundefined_20_3CRETURN_3E_40_3CUNASSIGNED_3E_5D .
 
 :atAddress a owl:FunctionalProperty,
@@ -79838,6 +79856,13 @@ mkg:x2realloc a :Function ;
     rdfs:comment "specifies the instructions contained in a specific function" ;
     rdfs:domain :Function ;
     rdfs:range :Instruction .
+
+:hasReturnType a owl:DatatypeProperty,
+        owl:FunctionalProperty ;
+    rdfs:label "hasReturnType" ;
+    rdfs:comment "The data type of the variable returned by a function expressed as a string" ;
+    rdfs:domain :Function ;
+    rdfs:range xsd:string .
 
 mkg:00010d30 a :Address .
 
@@ -83402,7 +83427,7 @@ mkg:__aeabi_idiv0 a :Function ;
     :hasReference mkg:ref_00016200_to_00016250,
         mkg:ref_00016234_to_00016250,
         mkg:ref_Entry%20Point_to_00016250 ;
-    :hasReturnType mkg:undefined ;
+    :hasReturnType "undefined" ;
     :returns mkg:_5Bundefined_20_3CRETURN_3E_40_3CUNASSIGNED_3E_5D .
 
 mkg:__ctype_b_loc a :Function ;
@@ -83422,7 +83447,7 @@ mkg:__ctype_b_loc a :Function ;
         mkg:ref_000131b2_to_00010ed8,
         mkg:ref_00028090_to_000290bc,
         mkg:ref_000290bc_to_EXTERNAL%3A0000002f ;
-    :hasReturnType mkg:ushort_20_2A_20_2A ;
+    :hasReturnType "ushort * *" ;
     :returns mkg:_5Bushort_20_2A_20_2A_20_3CRETURN_3E_40r0_3A4_5D .
 
 mkg:__ctype_get_mb_cur_max a :Function ;
@@ -83442,7 +83467,7 @@ mkg:__ctype_get_mb_cur_max a :Function ;
         mkg:ref_000129aa_to_00010e54,
         mkg:ref_00028064_to_00029034,
         mkg:ref_00029034_to_EXTERNAL%3A0000000d ;
-    :hasReturnType mkg:typedef_20size_t_20ulong ;
+    :hasReturnType "typedef size_t ulong" ;
     :returns mkg:_5Bsize_t_20_3CRETURN_3E_40r0_3A4_5D .
 
 mkg:__fpending a :Function ;
@@ -83462,7 +83487,7 @@ mkg:__fpending a :Function ;
         mkg:ref_000159fe_to_00010e60,
         mkg:ref_00028068_to_00029074,
         mkg:ref_00029074_to_EXTERNAL%3A0000001d ;
-    :hasReturnType mkg:undefined ;
+    :hasReturnType "undefined" ;
     :returns mkg:_5Bundefined_20_3CRETURN_3E_40_3CUNASSIGNED_3E_5D .
 
 mkg:__libc_start_main a :Function ;
@@ -83482,7 +83507,7 @@ mkg:__libc_start_main a :Function ;
         mkg:ref_0001101c_to_00010eb4,
         mkg:ref_00028084_to_0002902c,
         mkg:ref_0002902c_to_EXTERNAL%3A0000000b ;
-    :hasReturnType mkg:undefined ;
+    :hasReturnType "undefined" ;
     :returns mkg:_5Bundefined_20_3CRETURN_3E_40_3CUNASSIGNED_3E_5D .
 
 mkg:__udivsi3 a :Function ;
@@ -83522,7 +83547,7 @@ mkg:__udivsi3 a :Function ;
         mkg:ref_00014670_to_00015fa8,
         mkg:ref_0001620c_to_00015fa8,
         mkg:ref_Entry%20Point_to_00015fa8 ;
-    :hasReturnType mkg:undefined ;
+    :hasReturnType "undefined" ;
     :returns mkg:_5Bundefined_20_3CRETURN_3E_40_3CUNASSIGNED_3E_5D .
 
 mkg:_init a :Function ;
@@ -83538,7 +83563,7 @@ mkg:_init a :Function ;
         mkg:ref_00027f24_to_00010d2c,
         mkg:ref_Entry%20Point_to_00010d2c,
         mkg:ref__elfSectionHeaders%3A%3A000001c4_to_00010d2c ;
-    :hasReturnType mkg:int ;
+    :hasReturnType "int" ;
     :returns mkg:_5Bint_20_3CRETURN_3E_40r0_3A4_5D .
 
 mkg:atexit a :Function ;
@@ -83557,7 +83582,7 @@ mkg:atexit a :Function ;
     :hasPrimaryReference mkg:ref_00011e76_to_000163b0 ;
     :hasReference mkg:ref_00011e76_to_000163b0,
         mkg:ref_Entry%20Point_to_000163b0 ;
-    :hasReturnType mkg:int ;
+    :hasReturnType "int" ;
     :returns mkg:_5Bint_20_3CRETURN_3E_40r0_3A4_5D .
 
 mkg:bindtextdomain a :Function ;
@@ -83577,7 +83602,7 @@ mkg:bindtextdomain a :Function ;
         mkg:ref_00011e4a_to_00010fc0,
         mkg:ref_000280dc_to_000290b4,
         mkg:ref_000290b4_to_EXTERNAL%3A0000002d ;
-    :hasReturnType mkg:undefined ;
+    :hasReturnType "undefined" ;
     :returns mkg:_5Bundefined_20_3CRETURN_3E_40_3CUNASSIGNED_3E_5D .
 
 mkg:collate_error a :Function ;
@@ -83647,7 +83672,7 @@ mkg:collate_error a :Function ;
     :hasPrimaryReference mkg:ref_0001498c_to_00014880 ;
     :hasReference mkg:ref_00014940_to_00014880,
         mkg:ref_0001498c_to_00014880 ;
-    :hasReturnType mkg:undefined ;
+    :hasReturnType "undefined" ;
     :returns mkg:_5Bundefined_20_3CRETURN_3E_40_3CUNASSIGNED_3E_5D .
 
 mkg:hard_locale a :Function ;
@@ -83697,32 +83722,32 @@ mkg:hard_locale a :Function ;
     :hasReference mkg:ref_00011e5c_to_000123f0,
         mkg:ref_00015960_to_000123f0,
         mkg:ref_Entry%20Point_to_000123f0 ;
-    :hasReturnType mkg:undefined ;
+    :hasReturnType "undefined" ;
     :returns mkg:_5Bundefined_20_3CRETURN_3E_40_3CUNASSIGNED_3E_5D .
 
 mkg:local_15 a :LocalVariable ;
-    :hasDataType mkg:undefined1 .
+    :hasDataType "undefined1" .
 
 mkg:local_1d a :LocalVariable ;
-    :hasDataType mkg:undefined1 .
+    :hasDataType "undefined1" .
 
 mkg:local_5c a :LocalVariable ;
-    :hasDataType mkg:undefined4 .
+    :hasDataType "undefined4" .
 
 mkg:local_68 a :LocalVariable ;
-    :hasDataType mkg:undefined4 .
+    :hasDataType "undefined4" .
 
 mkg:local_78 a :LocalVariable ;
-    :hasDataType mkg:undefined4 .
+    :hasDataType "undefined4" .
 
 mkg:local_8 a :LocalVariable ;
-    :hasDataType mkg:undefined4 .
+    :hasDataType "undefined4" .
 
 mkg:local_88 a :LocalVariable ;
-    :hasDataType mkg:undefined4 .
+    :hasDataType "undefined4" .
 
 mkg:local_9 a :LocalVariable ;
-    :hasDataType mkg:undefined1 .
+    :hasDataType "undefined1" .
 
 mkg:quote_n_mem a :Function ;
     :atAddress mkg:00013f9c ;
@@ -83753,7 +83778,7 @@ mkg:quote_n_mem a :Function ;
     :hasReference mkg:ref_00013fd4_to_00013f9c,
         mkg:ref_00013ff6_to_00013f9c,
         mkg:ref_Entry%20Point_to_00013f9c ;
-    :hasReturnType mkg:undefined ;
+    :hasReturnType "undefined" ;
     :returns mkg:_5Bundefined_20_3CRETURN_3E_40_3CUNASSIGNED_3E_5D .
 
 mkg:quotearg_char_mem a :Function ;
@@ -83817,7 +83842,7 @@ mkg:quotearg_char_mem a :Function ;
     :hasReference mkg:ref_00013df2_to_00013d68,
         mkg:ref_00013e2c_to_00013d68,
         mkg:ref_Entry%20Point_to_00013d68 ;
-    :hasReturnType mkg:undefined ;
+    :hasReturnType "undefined" ;
     :returns mkg:_5Bundefined_20_3CRETURN_3E_40_3CUNASSIGNED_3E_5D .
 
 mkg:quotearg_n_custom_mem a :Function ;
@@ -83882,7 +83907,7 @@ mkg:quotearg_n_custom_mem a :Function ;
     :hasReference mkg:ref_00013ecc_to_00013edc,
         mkg:ref_00013f8e_to_00013edc,
         mkg:ref_Entry%20Point_to_00013edc ;
-    :hasReturnType mkg:undefined ;
+    :hasReturnType "undefined" ;
     :returns mkg:_5Bundefined_20_3CRETURN_3E_40_3CUNASSIGNED_3E_5D .
 
 mkg:quotearg_n_style_mem a :Function ;
@@ -83934,7 +83959,7 @@ mkg:quotearg_n_style_mem a :Function ;
         mkg:ref_000148de_to_00013cd0,
         mkg:ref_000148ec_to_00013cd0,
         mkg:ref_Entry%20Point_to_00013cd0 ;
-    :hasReturnType mkg:undefined ;
+    :hasReturnType "undefined" ;
     :returns mkg:_5Bundefined_20_3CRETURN_3E_40_3CUNASSIGNED_3E_5D .
 
 mkg:r10 a :Operand ;
@@ -84059,7 +84084,7 @@ mkg:readlinebuffer_delim a :Function ;
         mkg:ref_00011b4a_to_000124e8,
         mkg:ref_000124d8_to_000124e8,
         mkg:ref_Entry%20Point_to_000124e8 ;
-    :hasReturnType mkg:undefined ;
+    :hasReturnType "undefined" ;
     :returns mkg:_5Bundefined_20_3CRETURN_3E_40_3CUNASSIGNED_3E_5D .
 
 mkg:ref_00010d30_to_00011030 a :Reference ;
@@ -85805,7 +85830,7 @@ mkg:rpl_fcntl a :Function ;
         mkg:ref_00014aae_to_00014a38,
         mkg:ref_00014ad0_to_00014a38,
         mkg:ref_Entry%20Point_to_00014a38 ;
-    :hasReturnType mkg:undefined ;
+    :hasReturnType "undefined" ;
     :returns mkg:_5Bundefined_20_3CRETURN_3E_40_3CUNASSIGNED_3E_5D .
 
 mkg:set_char_quoting a :Function ;
@@ -85873,7 +85898,7 @@ mkg:set_char_quoting a :Function ;
     :hasReference mkg:ref_00013daa_to_00012770,
         mkg:ref_00013e7e_to_00012770,
         mkg:ref_Entry%20Point_to_00012770 ;
-    :hasReturnType mkg:undefined ;
+    :hasReturnType "undefined" ;
     :returns mkg:_5Bundefined_20_3CRETURN_3E_40_3CUNASSIGNED_3E_5D .
 
 mkg:strcoll_loop a :Function ;
@@ -85969,7 +85994,7 @@ mkg:strcoll_loop a :Function ;
     :hasPrimaryReference mkg:ref_00015c24_to_00015ab4 ;
     :hasReference mkg:ref_00015bc2_to_00015ab4,
         mkg:ref_00015c24_to_00015ab4 ;
-    :hasReturnType mkg:undefined ;
+    :hasReturnType "undefined" ;
     :returns mkg:_5Bundefined_20_3CRETURN_3E_40_3CUNASSIGNED_3E_5D .
 
 mkg:textdomain a :Function ;
@@ -85989,7 +86014,7 @@ mkg:textdomain a :Function ;
         mkg:ref_00011e56_to_00010e18,
         mkg:ref_00028050_to_00029030,
         mkg:ref_00029030_to_EXTERNAL%3A0000000c ;
-    :hasReturnType mkg:undefined ;
+    :hasReturnType "undefined" ;
     :returns mkg:_5Bundefined_20_3CRETURN_3E_40_3CUNASSIGNED_3E_5D .
 
 mkg:version_etc_arn a :Function ;
@@ -86353,7 +86378,7 @@ mkg:version_etc_arn a :Function ;
     :hasReference mkg:ref_000143b8_to_0001403c,
         mkg:ref_0001442a_to_0001403c,
         mkg:ref_Entry%20Point_to_0001403c ;
-    :hasReturnType mkg:undefined ;
+    :hasReturnType "undefined" ;
     :returns mkg:_5Bundefined_20_3CRETURN_3E_40_3CUNASSIGNED_3E_5D .
 
 mkg:xcharalloc a :Function ;
@@ -86377,7 +86402,7 @@ mkg:xcharalloc a :Function ;
     :hasReference mkg:ref_0001393c_to_000146c4,
         mkg:ref_00013ba8_to_000146c4,
         mkg:ref_Entry%20Point_to_000146c4 ;
-    :hasReturnType mkg:undefined ;
+    :hasReturnType "undefined" ;
     :returns mkg:_5Bundefined_20_3CRETURN_3E_40_3CUNASSIGNED_3E_5D .
 
 mkg:xmemcoll a :Function ;
@@ -86430,7 +86455,7 @@ mkg:xmemcoll a :Function ;
     :hasReference mkg:ref_00011580_to_00014908,
         mkg:ref_000118fe_to_00014908,
         mkg:ref_Entry%20Point_to_00014908 ;
-    :hasReturnType mkg:undefined ;
+    :hasReturnType "undefined" ;
     :returns mkg:_5Bundefined_20_3CRETURN_3E_40_3CUNASSIGNED_3E_5D .
 
 mkg:xmemdup a :Function ;
@@ -86462,7 +86487,7 @@ mkg:xmemdup a :Function ;
     :hasReference mkg:ref_00012700_to_00014804,
         mkg:ref_00014842_to_00014804,
         mkg:ref_Entry%20Point_to_00014804 ;
-    :hasReturnType mkg:undefined ;
+    :hasReturnType "undefined" ;
     :returns mkg:_5Bundefined_20_3CRETURN_3E_40_3CUNASSIGNED_3E_5D .
 
 :Class a owl:Class ;
@@ -86470,17 +86495,13 @@ mkg:xmemdup a :Function ;
     rdfs:comment "represents a class in a program (for object oriented programming)" ;
     rdfs:subClassOf [ a owl:Restriction ;
             owl:onProperty :definedIn ;
-            owl:someValuesFrom :NamespaceSymbol ],
-        :NamespaceSymbol .
+            owl:someValuesFrom :Namespace ],
+        :StructuralNamespaceSymbol .
 
-:definedIn a owl:ObjectProperty ;
-    rdfs:label "definedIn" ;
-    rdfs:comment "used for symbols defined in other namespace symbols" ;
-    rdfs:domain [ a owl:Class ;
-            owl:unionOf ( :Class :Function :Label ) ] ;
-    rdfs:range :NamespaceSymbol ;
-    rdfs:subPropertyOf owl:topObjectProperty ;
-    owl:inverseOf :namespaceDefines .
+:NamespaceSymbol a owl:Class ;
+    rdfs:label "NamespaceSymbol" ;
+    rdfs:comment "a type of symbol that can hold other kinds of symbols" ;
+    rdfs:subClassOf :Symbol .
 
 :returns a owl:FunctionalProperty,
         owl:ObjectProperty ;
@@ -86790,7 +86811,7 @@ mkg:__freading a :Function ;
         mkg:ref_00014bb8_to_00010ec0,
         mkg:ref_00028088_to_000290b8,
         mkg:ref_000290b8_to_EXTERNAL%3A0000002e ;
-    :hasReturnType mkg:undefined ;
+    :hasReturnType "undefined" ;
     :returns mkg:_5Bundefined_20_3CRETURN_3E_40_3CUNASSIGNED_3E_5D .
 
 mkg:_exit a :Function ;
@@ -86811,7 +86832,7 @@ mkg:_exit a :Function ;
         mkg:ref_000122d8_to_00010db8,
         mkg:ref_00028030_to_00029024,
         mkg:ref_00029024_to_EXTERNAL%3A00000009 ;
-    :hasReturnType mkg:void ;
+    :hasReturnType "void" ;
     :returns mkg:_5Bvoid_20_3CRETURN_3E_40_3CVOID_3E_5D .
 
 mkg:_getopt_internal_r a :Function ;
@@ -87444,7 +87465,7 @@ mkg:_getopt_internal_r a :Function ;
         mkg:ref_00015886_to_0001525c,
         mkg:ref_000158ea_to_0001525c,
         mkg:ref_Entry%20Point_to_0001525c ;
-    :hasReturnType mkg:undefined ;
+    :hasReturnType "undefined" ;
     :returns mkg:_5Bundefined_20_3CRETURN_3E_40_3CUNASSIGNED_3E_5D .
 
 mkg:fclose a :Function ;
@@ -87465,7 +87486,7 @@ mkg:fclose a :Function ;
         mkg:ref_00014a12_to_00010f60,
         mkg:ref_000280bc_to_000290a4,
         mkg:ref_000290a4_to_EXTERNAL%3A00000029 ;
-    :hasReturnType mkg:int ;
+    :hasReturnType "int" ;
     :returns mkg:_5Bint_20_3CRETURN_3E_40r0_3A4_5D .
 
 mkg:feof_unlocked a :Function ;
@@ -87485,7 +87506,7 @@ mkg:feof_unlocked a :Function ;
         mkg:ref_0001250e_to_00010fe4,
         mkg:ref_000280e8_to_000290dc,
         mkg:ref_000290dc_to_EXTERNAL%3A00000037 ;
-    :hasReturnType mkg:int ;
+    :hasReturnType "int" ;
     :returns mkg:_5Bint_20_3CRETURN_3E_40r0_3A4_5D .
 
 mkg:fflush a :Function ;
@@ -87506,7 +87527,7 @@ mkg:fflush a :Function ;
         mkg:ref_00014bd4_to_00010da0,
         mkg:ref_00028028_to_00029010,
         mkg:ref_00029010_to_EXTERNAL%3A00000004 ;
-    :hasReturnType mkg:int ;
+    :hasReturnType "int" ;
     :returns mkg:_5Bint_20_3CRETURN_3E_40r0_3A4_5D .
 
 mkg:flockfile a :Function ;
@@ -87526,7 +87547,7 @@ mkg:flockfile a :Function ;
         mkg:ref_00014f70_to_00010fa8,
         mkg:ref_000280d4_to_000290cc,
         mkg:ref_000290cc_to_EXTERNAL%3A00000033 ;
-    :hasReturnType mkg:void ;
+    :hasReturnType "void" ;
     :returns mkg:_5Bvoid_20_3CRETURN_3E_40_3CVOID_3E_5D .
 
 mkg:funlockfile a :Function ;
@@ -87546,7 +87567,7 @@ mkg:funlockfile a :Function ;
         mkg:ref_00014ffe_to_00010e24,
         mkg:ref_00028054_to_000290b0,
         mkg:ref_000290b0_to_EXTERNAL%3A0000002c ;
-    :hasReturnType mkg:void ;
+    :hasReturnType "void" ;
     :returns mkg:_5Bvoid_20_3CRETURN_3E_40_3CVOID_3E_5D .
 
 mkg:getc_unlocked a :Function ;
@@ -87566,7 +87587,7 @@ mkg:getc_unlocked a :Function ;
         mkg:ref_0001251e_to_00010df4,
         mkg:ref_00028044_to_000290d0,
         mkg:ref_000290d0_to_EXTERNAL%3A00000034 ;
-    :hasReturnType mkg:int ;
+    :hasReturnType "int" ;
     :returns mkg:_5Bint_20_3CRETURN_3E_40r0_3A4_5D .
 
 mkg:getenv a :Function ;
@@ -87586,7 +87607,7 @@ mkg:getenv a :Function ;
         mkg:ref_00015234_to_00010e9c,
         mkg:ref_0002807c_to_0002909c,
         mkg:ref_0002909c_to_EXTERNAL%3A00000027 ;
-    :hasReturnType mkg:char_20_2A ;
+    :hasReturnType "char *" ;
     :returns mkg:_5Bchar_20_2A_20_3CRETURN_3E_40r0_3A4_5D .
 
 mkg:iswprint a :Function ;
@@ -87606,11 +87627,11 @@ mkg:iswprint a :Function ;
         mkg:ref_0001333c_to_00010e30,
         mkg:ref_00028058_to_00029090,
         mkg:ref_00029090_to_EXTERNAL%3A00000024 ;
-    :hasReturnType mkg:int ;
+    :hasReturnType "int" ;
     :returns mkg:_5Bint_20_3CRETURN_3E_40r0_3A4_5D .
 
 mkg:local_d a :LocalVariable ;
-    :hasDataType mkg:undefined1 .
+    :hasDataType "undefined1" .
 
 mkg:mbsinit a :Function ;
     :atAddress mkg:00010dd0,
@@ -87629,7 +87650,7 @@ mkg:mbsinit a :Function ;
         mkg:ref_0001335a_to_00010dd0,
         mkg:ref_00028038_to_000290c0,
         mkg:ref_000290c0_to_EXTERNAL%3A00000030 ;
-    :hasReturnType mkg:int ;
+    :hasReturnType "int" ;
     :returns mkg:_5Bint_20_3CRETURN_3E_40r0_3A4_5D .
 
 mkg:nl_langinfo a :Function ;
@@ -87649,7 +87670,7 @@ mkg:nl_langinfo a :Function ;
         mkg:ref_00015c58_to_00010f90,
         mkg:ref_000280cc_to_00029080,
         mkg:ref_00029080_to_EXTERNAL%3A00000020 ;
-    :hasReturnType mkg:char_20_2A ;
+    :hasReturnType "char *" ;
     :returns mkg:_5Bchar_20_2A_20_3CRETURN_3E_40r0_3A4_5D .
 
 mkg:quoting_options_from_style a :Function ;
@@ -87709,7 +87730,7 @@ mkg:quoting_options_from_style a :Function ;
     :hasReference mkg:ref_00013c9c_to_00012860,
         mkg:ref_00013cf2_to_00012860,
         mkg:ref_00013e5a_to_00012860 ;
-    :hasReturnType mkg:undefined ;
+    :hasReturnType "undefined" ;
     :returns mkg:_5Bundefined_20_3CRETURN_3E_40_3CUNASSIGNED_3E_5D .
 
 mkg:raise a :Function ;
@@ -87729,7 +87750,7 @@ mkg:raise a :Function ;
         mkg:ref_00016256_to_00010d70,
         mkg:ref_00028018_to_00029088,
         mkg:ref_00029088_to_EXTERNAL%3A00000022 ;
-    :hasReturnType mkg:int ;
+    :hasReturnType "int" ;
     :returns mkg:_5Bint_20_3CRETURN_3E_40r0_3A4_5D .
 
 mkg:rpl_fclose a :Function ;
@@ -87817,7 +87838,7 @@ mkg:rpl_fclose a :Function ;
         mkg:ref_000123ac_to_0001499c,
         mkg:ref_00015a22_to_0001499c,
         mkg:ref_Entry%20Point_to_0001499c ;
-    :hasReturnType mkg:undefined ;
+    :hasReturnType "undefined" ;
     :returns mkg:_5Bundefined_20_3CRETURN_3E_40_3CUNASSIGNED_3E_5D .
 
 mkg:rpl_getopt_internal a :Function ;
@@ -87896,7 +87917,7 @@ mkg:rpl_getopt_internal a :Function ;
         mkg:ref_00015852_to_00015760,
         mkg:ref_000158b6_to_00015760,
         mkg:ref_Entry%20Point_to_00015760 ;
-    :hasReturnType mkg:undefined ;
+    :hasReturnType "undefined" ;
     :returns mkg:_5Bundefined_20_3CRETURN_3E_40_3CUNASSIGNED_3E_5D .
 
 mkg:xrealloc a :Function ;
@@ -87944,13 +87965,8 @@ mkg:xrealloc a :Function ;
         mkg:ref_000145cc_to_00014708,
         mkg:ref_000146a0_to_00014708,
         mkg:ref_Entry%20Point_to_00014708 ;
-    :hasReturnType mkg:undefined ;
+    :hasReturnType "undefined" ;
     :returns mkg:_5Bundefined_20_3CRETURN_3E_40_3CUNASSIGNED_3E_5D .
-
-:DLL a owl:Class ;
-    rdfs:label "DLL" ;
-    rdfs:comment "Dynamically Linked Library, a library that holds external functions used by the program" ;
-    rdfs:subClassOf :NamespaceSymbol .
 
 :Variable a owl:Class ;
     rdfs:label "Variable" ;
@@ -88523,8 +88539,6 @@ mkg:0x00016356 a :Operand ;
     :hasOperandType "ADDRESS" ;
     :hasOperandValue "0x00016356" .
 
-mkg:FILE_20_2A a :DataType .
-
 mkg:_230x21 a :Operand ;
     :hasOperandType "REGISTER" ;
     :hasOperandValue "#0x21" .
@@ -88618,7 +88632,7 @@ mkg:calloc a :Function ;
         mkg:ref_000147d2_to_00010d58,
         mkg:ref_00028010_to_000290d8,
         mkg:ref_000290d8_to_EXTERNAL%3A00000036 ;
-    :hasReturnType mkg:void_20_2A ;
+    :hasReturnType "void *" ;
     :returns mkg:_5Bvoid_20_2A_20_3CRETURN_3E_40r0_3A4_5D .
 
 mkg:cc a :Operand ;
@@ -88643,7 +88657,7 @@ mkg:close a :Function ;
         mkg:ref_00014b20_to_00010ff0,
         mkg:ref_000280ec_to_0002905c,
         mkg:ref_0002905c_to_EXTERNAL%3A00000017 ;
-    :hasReturnType mkg:int ;
+    :hasReturnType "int" ;
     :returns mkg:_5Bint_20_3CRETURN_3E_40r0_3A4_5D .
 
 mkg:cs a :Operand ;
@@ -88668,7 +88682,7 @@ mkg:exit a :Function ;
         mkg:ref_00012074_to_00010ee4,
         mkg:ref_00028094_to_0002906c,
         mkg:ref_0002906c_to_EXTERNAL%3A0000001b ;
-    :hasReturnType mkg:void ;
+    :hasReturnType "void" ;
     :returns mkg:_5Bvoid_20_3CRETURN_3E_40_3CVOID_3E_5D .
 
 mkg:fcntl a :Function ;
@@ -88691,7 +88705,7 @@ mkg:fcntl a :Function ;
         mkg:ref_00014b46_to_00010f20,
         mkg:ref_000280a8_to_0002904c,
         mkg:ref_0002904c_to_EXTERNAL%3A00000013 ;
-    :hasReturnType mkg:int ;
+    :hasReturnType "int" ;
     :returns mkg:_5Bint_20_3CRETURN_3E_40r0_3A4_5D .
 
 mkg:fdopen a :Function ;
@@ -88711,7 +88725,7 @@ mkg:fdopen a :Function ;
         mkg:ref_000123ba_to_00010d4c,
         mkg:ref_0002800c_to_00029084,
         mkg:ref_00029084_to_EXTERNAL%3A00000021 ;
-    :hasReturnType mkg:FILE_20_2A ;
+    :hasReturnType "FILE *" ;
     :returns mkg:_5BFILE_20_2A_20_3CRETURN_3E_40r0_3A4_5D .
 
 mkg:fopen64 a :Function ;
@@ -88731,7 +88745,7 @@ mkg:fopen64 a :Function ;
         mkg:ref_0001235e_to_00010fb4,
         mkg:ref_000280d8_to_00029068,
         mkg:ref_00029068_to_EXTERNAL%3A0000001a ;
-    :hasReturnType mkg:FILE_20_2A ;
+    :hasReturnType "FILE *" ;
     :returns mkg:_5BFILE_20_2A_20_3CRETURN_3E_40r0_3A4_5D .
 
 mkg:fputc a :Function ;
@@ -88751,11 +88765,11 @@ mkg:fputc a :Function ;
         mkg:ref_00014fee_to_00010f9c,
         mkg:ref_000280d0_to_00029098,
         mkg:ref_00029098_to_EXTERNAL%3A00000026 ;
-    :hasReturnType mkg:int ;
+    :hasReturnType "int" ;
     :returns mkg:_5Bint_20_3CRETURN_3E_40r0_3A4_5D .
 
 mkg:local_58 a :LocalVariable ;
-    :hasDataType mkg:undefined4 .
+    :hasDataType "undefined4" .
 
 mkg:malloc a :Function ;
     :atAddress mkg:00010ea8,
@@ -88775,7 +88789,7 @@ mkg:malloc a :Function ;
         mkg:ref_00014ec6_to_00010ea8,
         mkg:ref_00028080_to_00029004,
         mkg:ref_00029004_to_EXTERNAL%3A00000001 ;
-    :hasReturnType mkg:void_20_2A ;
+    :hasReturnType "void *" ;
     :returns mkg:_5Bvoid_20_2A_20_3CRETURN_3E_40r0_3A4_5D .
 
 mkg:quotearg_buffer_restyled a :Function ;
@@ -90116,7 +90130,7 @@ mkg:quotearg_buffer_restyled a :Function ;
         mkg:ref_00013968_to_0001296c,
         mkg:ref_00013b6a_to_0001296c,
         mkg:ref_00013bd8_to_0001296c ;
-    :hasReturnType mkg:undefined ;
+    :hasReturnType "undefined" ;
     :returns mkg:_5Bundefined_20_3CRETURN_3E_40_3CUNASSIGNED_3E_5D .
 
 mkg:realloc a :Function ;
@@ -90136,7 +90150,7 @@ mkg:realloc a :Function ;
         mkg:ref_0001472c_to_00010e0c,
         mkg:ref_0002804c_to_00029028,
         mkg:ref_00029028_to_EXTERNAL%3A0000000a ;
-    :hasReturnType mkg:void_20_2A ;
+    :hasReturnType "void *" ;
     :returns mkg:_5Bvoid_20_2A_20_3CRETURN_3E_40r0_3A4_5D .
 
 mkg:sp_21_2C_7Br3_2Clr_7D a :Operand ;
@@ -90164,7 +90178,7 @@ mkg:strcoll a :Function ;
         mkg:ref_00015b2a_to_00010e90,
         mkg:ref_00028078_to_000290c8,
         mkg:ref_000290c8_to_EXTERNAL%3A00000032 ;
-    :hasReturnType mkg:int ;
+    :hasReturnType "int" ;
     :returns mkg:_5Bint_20_3CRETURN_3E_40r0_3A4_5D .
 
 mkg:strrchr a :Function ;
@@ -90184,10 +90198,8 @@ mkg:strrchr a :Function ;
         mkg:ref_00012650_to_00010f84,
         mkg:ref_000280c8_to_0002903c,
         mkg:ref_0002903c_to_EXTERNAL%3A0000000f ;
-    :hasReturnType mkg:char_20_2A ;
+    :hasReturnType "char *" ;
     :returns mkg:_5Bchar_20_2A_20_3CRETURN_3E_40r0_3A4_5D .
-
-mkg:typedef_20__off64_t_20__quad_t a :DataType .
 
 mkg:xmalloc a :Function ;
     :atAddress mkg:000146dc ;
@@ -90223,8 +90235,17 @@ mkg:xmalloc a :Function ;
         mkg:ref_00014776_to_000146dc,
         mkg:ref_00014810_to_000146dc,
         mkg:ref_Entry%20Point_to_000146dc ;
-    :hasReturnType mkg:undefined ;
+    :hasReturnType "undefined" ;
     :returns mkg:_5Bundefined_20_3CRETURN_3E_40_3CUNASSIGNED_3E_5D .
+
+:definedIn a owl:FunctionalProperty,
+        owl:ObjectProperty ;
+    rdfs:label "definedIn" ;
+    rdfs:comment "specifies the namespace symbol that the function is defined in" ;
+    rdfs:domain [ a owl:Class ;
+            owl:unionOf ( :Function :Label ) ] ;
+    rdfs:range :StructuralNamespaceSymbol ;
+    rdfs:subPropertyOf owl:topObjectProperty .
 
 mkg:00010da0 a :Address .
 
@@ -90484,7 +90505,7 @@ mkg:ferror_unlocked a :Function ;
         mkg:ref_00015a10_to_00010e6c,
         mkg:ref_0002806c_to_00029058,
         mkg:ref_00029058_to_EXTERNAL%3A00000016 ;
-    :hasReturnType mkg:int ;
+    :hasReturnType "int" ;
     :returns mkg:_5Bint_20_3CRETURN_3E_40r0_3A4_5D .
 
 mkg:fseeko64 a :Function ;
@@ -90504,11 +90525,11 @@ mkg:fseeko64 a :Function ;
         mkg:ref_00014c64_to_00010f6c,
         mkg:ref_000280c0_to_000290c4,
         mkg:ref_000290c4_to_EXTERNAL%3A00000031 ;
-    :hasReturnType mkg:int ;
+    :hasReturnType "int" ;
     :returns mkg:_5Bint_20_3CRETURN_3E_40r0_3A4_5D .
 
 mkg:local_54 a :LocalVariable ;
-    :hasDataType mkg:undefined4 .
+    :hasDataType "undefined4" .
 
 mkg:memcpy a :Function ;
     :atAddress mkg:00010dc4,
@@ -90527,7 +90548,7 @@ mkg:memcpy a :Function ;
         mkg:ref_0001481c_to_00010dc4,
         mkg:ref_00028034_to_0002907c,
         mkg:ref_0002907c_to_EXTERNAL%3A0000001f ;
-    :hasReturnType mkg:void_20_2A ;
+    :hasReturnType "void *" ;
     :returns mkg:_5Bvoid_20_2A_20_3CRETURN_3E_40r0_3A4_5D .
 
 mkg:strchr a :Function ;
@@ -90549,8 +90570,16 @@ mkg:strchr a :Function ;
         mkg:ref_00015568_to_00010f08,
         mkg:ref_000280a0_to_00029038,
         mkg:ref_00029038_to_EXTERNAL%3A0000000e ;
-    :hasReturnType mkg:char_20_2A ;
+    :hasReturnType "char *" ;
     :returns mkg:_5Bchar_20_2A_20_3CRETURN_3E_40r0_3A4_5D .
+
+:DLL a owl:Class ;
+    rdfs:label "DLL" ;
+    rdfs:comment "Dynamically Linked Library, a library that holds external functions used by the program" ;
+    rdfs:subClassOf [ a owl:Restriction ;
+            owl:onProperty :definedIn ;
+            owl:someValuesFrom :Namespace ],
+        :StructuralNamespaceSymbol .
 
 mkg:00010f08 a :Address .
 
@@ -90765,7 +90794,7 @@ mkg:fileno a :Function ;
         mkg:ref_00014c12_to_00010f54,
         mkg:ref_000280b8_to_000290a0,
         mkg:ref_000290a0_to_EXTERNAL%3A00000028 ;
-    :hasReturnType mkg:int ;
+    :hasReturnType "int" ;
     :returns mkg:_5Bint_20_3CRETURN_3E_40r0_3A4_5D .
 
 mkg:fputs_unlocked a :Function ;
@@ -90797,7 +90826,7 @@ mkg:fputs_unlocked a :Function ;
         mkg:ref_00014504_to_00010d64,
         mkg:ref_00028014_to_00029070,
         mkg:ref_00029070_to_EXTERNAL%3A0000001c ;
-    :hasReturnType mkg:int ;
+    :hasReturnType "int" ;
     :returns mkg:_5Bint_20_3CRETURN_3E_40r0_3A4_5D .
 
 mkg:fwrite a :Function ;
@@ -90817,7 +90846,7 @@ mkg:fwrite a :Function ;
         mkg:ref_00012644_to_00010e3c,
         mkg:ref_0002805c_to_000290e0,
         mkg:ref_000290e0_to_EXTERNAL%3A00000038 ;
-    :hasReturnType mkg:typedef_20size_t_20ulong ;
+    :hasReturnType "typedef size_t ulong" ;
     :returns mkg:_5Bsize_t_20_3CRETURN_3E_40r0_3A4_5D .
 
 mkg:fwrite_unlocked a :Function ;
@@ -90840,7 +90869,7 @@ mkg:fwrite_unlocked a :Function ;
         mkg:ref_000114fc_to_00010ddc,
         mkg:ref_0002803c_to_00029014,
         mkg:ref_00029014_to_EXTERNAL%3A00000005 ;
-    :hasReturnType mkg:typedef_20size_t_20ulong ;
+    :hasReturnType "typedef size_t ulong" ;
     :returns mkg:_5Bsize_t_20_3CRETURN_3E_40r0_3A4_5D .
 
 mkg:lseek64 a :Function ;
@@ -90861,7 +90890,7 @@ mkg:lseek64 a :Function ;
         mkg:ref_00014c22_to_00010e48,
         mkg:ref_00028060_to_00029018,
         mkg:ref_00029018_to_EXTERNAL%3A00000006 ;
-    :hasReturnType mkg:typedef_20__off64_t_20__quad_t ;
+    :hasReturnType "typedef __off64_t __quad_t" ;
     :returns mkg:_5B__off64_t_20_3CRETURN_3E_40r1_3A4_2Cr0_3A4_5D .
 
 mkg:mbrtowc a :Function ;
@@ -90881,7 +90910,7 @@ mkg:mbrtowc a :Function ;
         mkg:ref_0001594a_to_00010e78,
         mkg:ref_00028070_to_00029040,
         mkg:ref_00029040_to_EXTERNAL%3A00000010 ;
-    :hasReturnType mkg:typedef_20size_t_20ulong ;
+    :hasReturnType "typedef size_t ulong" ;
     :returns mkg:_5Bsize_t_20_3CRETURN_3E_40r0_3A4_5D .
 
 mkg:posix_fadvise64 a :Function ;
@@ -90901,7 +90930,7 @@ mkg:posix_fadvise64 a :Function ;
         mkg:ref_00012302_to_00010d88,
         mkg:ref_00028020_to_00029054,
         mkg:ref_00029054_to_EXTERNAL%3A00000015 ;
-    :hasReturnType mkg:int ;
+    :hasReturnType "int" ;
     :returns mkg:_5Bint_20_3CRETURN_3E_40r0_3A4_5D .
 
 mkg:printf a :Function ;
@@ -90929,7 +90958,7 @@ mkg:printf a :Function ;
         mkg:ref_000144e4_to_00010d94,
         mkg:ref_00028024_to_0002901c,
         mkg:ref_0002901c_to_EXTERNAL%3A00000007 ;
-    :hasReturnType mkg:int ;
+    :hasReturnType "int" ;
     :returns mkg:_5Bint_20_3CRETURN_3E_40r0_3A4_5D .
 
 mkg:setlocale a :Function ;
@@ -90951,14 +90980,17 @@ mkg:setlocale a :Function ;
         mkg:ref_00012400_to_00010f78,
         mkg:ref_000280c4_to_00029008,
         mkg:ref_00029008_to_EXTERNAL%3A00000002 ;
-    :hasReturnType mkg:char_20_2A ;
+    :hasReturnType "char *" ;
     :returns mkg:_5Bchar_20_2A_20_3CRETURN_3E_40r0_3A4_5D .
 
 mkg:sp_2C_230x18 a :Operand ;
     :hasOperandType "REGISTER" ;
     :hasOperandValue "sp,#0x18" .
 
-mkg:void a :DataType .
+:StructuralNamespaceSymbol a owl:Class ;
+    rdfs:label "StructuralNamespaceSymbol" ;
+    rdfs:comment "A type of namespace symbol that can define non-local symbols (all namespace symbols that are not functions since they operate differently)" ;
+    rdfs:subClassOf :NamespaceSymbol .
 
 mkg:00010d2c a :Address .
 
@@ -91055,7 +91087,7 @@ mkg:error a :Function ;
         mkg:ref_000148fc_to_00010e84,
         mkg:ref_00028074_to_000290d4,
         mkg:ref_000290d4_to_EXTERNAL%3A00000035 ;
-    :hasReturnType mkg:undefined ;
+    :hasReturnType "undefined" ;
     :returns mkg:_5Bundefined_20_3CRETURN_3E_40_3CUNASSIGNED_3E_5D .
 
 mkg:fprintf a :Function ;
@@ -91097,7 +91129,7 @@ mkg:fprintf a :Function ;
         mkg:ref_0001571a_to_00010f14,
         mkg:ref_000280a4_to_00029048,
         mkg:ref_00029048_to_EXTERNAL%3A00000012 ;
-    :hasReturnType mkg:int ;
+    :hasReturnType "int" ;
     :returns mkg:_5Bint_20_3CRETURN_3E_40r0_3A4_5D .
 
 mkg:free a :Function ;
@@ -91123,7 +91155,7 @@ mkg:free a :Function ;
         mkg:ref_0001500a_to_00010dac,
         mkg:ref_0002802c_to_00029020,
         mkg:ref_00029020_to_EXTERNAL%3A00000008 ;
-    :hasReturnType mkg:void ;
+    :hasReturnType "void" ;
     :returns mkg:_5Bvoid_20_3CRETURN_3E_40_3CVOID_3E_5D .
 
 mkg:strlen a :Function ;
@@ -91151,7 +91183,7 @@ mkg:strlen a :Function ;
         mkg:ref_00015ad2_to_00010efc,
         mkg:ref_0002809c_to_00029060,
         mkg:ref_00029060_to_EXTERNAL%3A00000018 ;
-    :hasReturnType mkg:typedef_20size_t_20ulong ;
+    :hasReturnType "typedef size_t ulong" ;
     :returns mkg:_5Bsize_t_20_3CRETURN_3E_40r0_3A4_5D .
 
 mkg:strncmp a :Function ;
@@ -91175,7 +91207,7 @@ mkg:strncmp a :Function ;
         mkg:ref_00014e66_to_00010fcc,
         mkg:ref_000280e0_to_00029094,
         mkg:ref_00029094_to_EXTERNAL%3A00000025 ;
-    :hasReturnType mkg:int ;
+    :hasReturnType "int" ;
     :returns mkg:_5Bint_20_3CRETURN_3E_40r0_3A4_5D .
 
 mkg:xalloc_die a :Function ;
@@ -91210,13 +91242,8 @@ mkg:xalloc_die a :Function ;
         mkg:ref_0001473e_to_00014850,
         mkg:ref_000147e0_to_00014850,
         mkg:ref_Entry%20Point_to_00014850 ;
-    :hasReturnType mkg:undefined ;
+    :hasReturnType "undefined" ;
     :returns mkg:_5Bundefined_20_3CRETURN_3E_40_3CUNASSIGNED_3E_5D .
-
-:Namespace a owl:Class ;
-    rdfs:label "Namespace" ;
-    rdfs:comment "a namespace defined by the ghidra decompilation" ;
-    rdfs:subClassOf :NamespaceSymbol .
 
 :Symbol a owl:Class ;
     rdfs:label "Symbol" ;
@@ -91338,7 +91365,7 @@ mkg:_5Br7_2C_230x7_5D a :Operand ;
     :hasOperandValue "[r7,#0x7]" .
 
 mkg:local_40 a :LocalVariable ;
-    :hasDataType mkg:undefined4 .
+    :hasDataType "undefined4" .
 
 mkg:quotearg_n_options a :Function ;
     :atAddress mkg:00013a44 ;
@@ -91559,7 +91586,7 @@ mkg:quotearg_n_options a :Function ;
         mkg:ref_00013e8e_to_00013a44,
         mkg:ref_00013f2c_to_00013a44,
         mkg:ref_00013fb6_to_00013a44 ;
-    :hasReturnType mkg:undefined ;
+    :hasReturnType "undefined" ;
     :returns mkg:_5Bundefined_20_3CRETURN_3E_40_3CUNASSIGNED_3E_5D .
 
 mkg:r8 a :Operand ;
@@ -91588,10 +91615,8 @@ mkg:strcmp a :Function ;
         mkg:ref_000153a6_to_00010d7c,
         mkg:ref_0002801c_to_000290a8,
         mkg:ref_000290a8_to_EXTERNAL%3A0000002a ;
-    :hasReturnType mkg:int ;
+    :hasReturnType "int" ;
     :returns mkg:_5Bint_20_3CRETURN_3E_40r0_3A4_5D .
-
-mkg:typedef_20size_t_20ulong a :DataType .
 
 mkg:00010d7c a :Address .
 
@@ -91645,14 +91670,14 @@ mkg:abort a :Function ;
         mkg:ref_0001487c_to_00010fd8,
         mkg:ref_000280e4_to_00029050,
         mkg:ref_00029050_to_EXTERNAL%3A00000014 ;
-    :hasReturnType mkg:void ;
+    :hasReturnType "void" ;
     :returns mkg:_5Bvoid_20_3CRETURN_3E_40_3CVOID_3E_5D .
 
 mkg:local_34 a :LocalVariable ;
-    :hasDataType mkg:undefined4 .
+    :hasDataType "undefined4" .
 
 mkg:local_38 a :LocalVariable ;
-    :hasDataType mkg:undefined4 .
+    :hasDataType "undefined4" .
 
 mkg:memcmp a :Function ;
     :atAddress mkg:00010de8,
@@ -91675,17 +91700,12 @@ mkg:memcmp a :Function ;
         mkg:ref_00015c04_to_00010de8,
         mkg:ref_00028040_to_0002908c,
         mkg:ref_0002908c_to_EXTERNAL%3A00000023 ;
-    :hasReturnType mkg:int ;
+    :hasReturnType "int" ;
     :returns mkg:_5Bint_20_3CRETURN_3E_40r0_3A4_5D .
 
 mkg:sp_2C_230x10 a :Operand ;
     :hasOperandType "REGISTER" ;
     :hasOperandValue "sp,#0x10" .
-
-:NamespaceSymbol a owl:Class ;
-    rdfs:label "NamespaceSymbol" ;
-    rdfs:comment "a type of symbol that can hold other kinds of symbols" ;
-    rdfs:subClassOf :Symbol .
 
 mkg:00010dac a :Address .
 
@@ -91742,7 +91762,7 @@ mkg:_5Br7_2C_230x4c_5D a :Operand ;
     :hasOperandValue "[r7,#0x4c]" .
 
 mkg:local_3c a :LocalVariable ;
-    :hasDataType mkg:undefined4 .
+    :hasDataType "undefined4" .
 
 mkg:memset a :Function ;
     :atAddress mkg:00010f48,
@@ -91766,7 +91786,7 @@ mkg:memset a :Function ;
         mkg:ref_00014eec_to_00010f48,
         mkg:ref_000280b4_to_00029078,
         mkg:ref_00029078_to_EXTERNAL%3A0000001e ;
-    :hasReturnType mkg:void_20_2A ;
+    :hasReturnType "void *" ;
     :returns mkg:_5Bvoid_20_2A_20_3CRETURN_3E_40r0_3A4_5D .
 
 mkg:r9 a :Operand ;
@@ -91780,16 +91800,16 @@ mkg:00012fb4 a :Address .
 mkg:00014850 a :Address .
 
 mkg:local_48 a :LocalVariable ;
-    :hasDataType mkg:undefined1,
-        mkg:undefined4 .
+    :hasDataType "undefined1",
+        "undefined4" .
 
 mkg:local_4c a :LocalVariable ;
-    :hasDataType mkg:undefined1,
-        mkg:undefined4 .
+    :hasDataType "undefined1",
+        "undefined4" .
 
 mkg:local_50 a :LocalVariable ;
-    :hasDataType mkg:undefined1,
-        mkg:undefined4 .
+    :hasDataType "undefined1",
+        "undefined4" .
 
 mkg:r4_21 a :Operand ;
     :hasOperandType "REGISTER" ;
@@ -91799,11 +91819,10 @@ mkg:r5_21 a :Operand ;
     :hasOperandType "REGISTER" ;
     :hasOperandValue "r5!" .
 
-mkg:void_20_2A a :DataType .
-
-:DataType a owl:Class ;
-    rdfs:label "DataType" ;
-    rdfs:comment "The data type of either a variable or the return type of a function" .
+:Namespace a owl:Class ;
+    rdfs:label "Namespace" ;
+    rdfs:comment "a namespace defined by the ghidra decompilation" ;
+    rdfs:subClassOf :StructuralNamespaceSymbol .
 
 mkg:00010d94 a :Address .
 
@@ -91867,10 +91886,8 @@ mkg:_5Br3_2C_230x1c_5D a :Operand ;
     :hasOperandType "REGISTER" ;
     :hasOperandValue "[r3,#0x1c]" .
 
-mkg:char_20_2A a :DataType .
-
 mkg:local_44 a :LocalVariable ;
-    :hasDataType mkg:undefined4 .
+    :hasDataType "undefined4" .
 
 mkg:sp_2C_230x8 a :Operand ;
     :hasOperandType "REGISTER" ;
@@ -91964,7 +91981,7 @@ mkg:gettext a :Function ;
         mkg:ref_0001570c_to_00010ef0,
         mkg:ref_00028098_to_00029044,
         mkg:ref_00029044_to_EXTERNAL%3A00000011 ;
-    :hasReturnType mkg:undefined ;
+    :hasReturnType "undefined" ;
     :returns mkg:_5Bundefined_20_3CRETURN_3E_40_3CUNASSIGNED_3E_5D .
 
 mkg:switchD_000129ea a :Namespace ;
@@ -91979,7 +91996,7 @@ mkg:_5Bsp_2C_230x10_5D a :Operand ;
     :hasOperandValue "[sp,#0x10]" .
 
 mkg:local_2c a :LocalVariable ;
-    :hasDataType mkg:undefined4 .
+    :hasDataType "undefined4" .
 
 mkg:00010d64 a :Address .
 
@@ -92053,7 +92070,7 @@ mkg:__errno_location a :Function ;
         mkg:ref_00015c0e_to_00010f2c,
         mkg:ref_000280ac_to_0002900c,
         mkg:ref_0002900c_to_EXTERNAL%3A00000003 ;
-    :hasReturnType mkg:int_20_2A ;
+    :hasReturnType "int *" ;
     :returns mkg:_5Bint_20_2A_20_3CRETURN_3E_40r0_3A4_5D .
 
 mkg:00013108 a :Address .
@@ -92071,7 +92088,7 @@ mkg:_5Br7_2C_230x28_5D a :Operand ;
     :hasOperandValue "[r7,#0x28]" .
 
 mkg:local_30 a :LocalVariable ;
-    :hasDataType mkg:undefined4 .
+    :hasDataType "undefined4" .
 
 mkg:00010e84 a :Address .
 
@@ -92136,7 +92153,7 @@ mkg:__stack_chk_fail a :Function ;
         mkg:ref_00015994_to_00010e00,
         mkg:ref_00028048_to_000290ac,
         mkg:ref_000290ac_to_EXTERNAL%3A0000002b ;
-    :hasReturnType mkg:undefined ;
+    :hasReturnType "undefined" ;
     :returns mkg:_5Bundefined_20_3CRETURN_3E_40_3CUNASSIGNED_3E_5D .
 
 mkg:_5Bsp_2C_230xc_5D a :Operand ;
@@ -92180,7 +92197,7 @@ mkg:_5Br7_2C_230x70_5D a :Operand ;
     :hasOperandValue "[r7,#0x70]" .
 
 mkg:local_4 a :LocalVariable ;
-    :hasDataType mkg:undefined4 .
+    :hasDataType "undefined4" .
 
 mkg:00013034 a :Address .
 
@@ -92224,8 +92241,6 @@ mkg:eq a :Operand ;
     :hasOperandType "DYNAMIC" ;
     :hasOperandValue "eq" .
 
-mkg:undefined1 a :DataType .
-
 mkg:00028178 a :Address .
 
 mkg:_5Bsp_2C_230x8_5D a :Operand ;
@@ -92247,7 +92262,7 @@ mkg:_5Br3_2C_230x8_5D a :Operand ;
     :hasOperandValue "[r3,#0x8]" .
 
 mkg:local_18 a :LocalVariable ;
-    :hasDataType mkg:undefined4 .
+    :hasDataType "undefined4" .
 
 mkg:0x00010e84 a :Operand ;
     :hasOperandType "ADDRESS" ;
@@ -92262,13 +92277,11 @@ mkg:_7Br0_2Cr1_2Cr2_2Cr3_7D a :Operand ;
     :hasOperandValue "{r0,r1,r2,r3}" .
 
 mkg:local_28 a :LocalVariable ;
-    :hasDataType mkg:undefined4 .
+    :hasDataType "undefined4" .
 
 mkg:_5Br7_2C_230x50_5D a :Operand ;
     :hasOperandType "REGISTER" ;
     :hasOperandValue "[r7,#0x50]" .
-
-mkg:int a :DataType .
 
 mkg:00013328 a :Address .
 
@@ -92276,7 +92289,7 @@ mkg:switchD_00012f38 a :Namespace ;
     :definedIn mkg:Global .
 
 mkg:local_20 a :LocalVariable ;
-    :hasDataType mkg:undefined4 .
+    :hasDataType "undefined4" .
 
 mkg:0x00010e00 a :Operand ;
     :hasOperandType "ADDRESS" ;
@@ -92291,12 +92304,12 @@ mkg:_5Br7_2C_230x24_5D a :Operand ;
     :hasOperandValue "[r7,#0x24]" .
 
 mkg:local_1c a :LocalVariable ;
-    :hasDataType mkg:undefined4 .
+    :hasDataType "undefined4" .
 
 mkg:00010f2c a :Address .
 
 mkg:local_24 a :LocalVariable ;
-    :hasDataType mkg:undefined4 .
+    :hasDataType "undefined4" .
 
 mkg:00015f50 a :Address .
 
@@ -92314,7 +92327,7 @@ mkg:_230xffffffff a :Operand ;
     :hasOperandValue "#0xffffffff" .
 
 mkg:local_10 a :LocalVariable ;
-    :hasDataType mkg:undefined4 .
+    :hasDataType "undefined4" .
 
 mkg:_5Br3_2C_230x4_5D a :Operand ;
     :hasOperandType "REGISTER" ;
@@ -92335,8 +92348,6 @@ mkg:0x00010f14 a :Operand ;
 mkg:_5Br7_2C_230x20_5D a :Operand ;
     :hasOperandType "REGISTER" ;
     :hasOperandValue "[r7,#0x20]" .
-
-mkg:undefined4 a :DataType .
 
 :Parameter a owl:Class ;
     rdfs:label "Parameter" ;
@@ -92365,7 +92376,7 @@ mkg:_5Br2_2C_230x0_5D a :Operand ;
     :hasOperandValue "[r2,#0x0]" .
 
 mkg:local_14 a :LocalVariable ;
-    :hasDataType mkg:undefined4 .
+    :hasDataType "undefined4" .
 
 mkg:_230x10 a :Operand ;
     :hasOperandType "REGISTER" ;
@@ -92408,7 +92419,7 @@ mkg:_5Br7_2C_230x10_5D a :Operand ;
     :hasOperandValue "[r7,#0x10]" .
 
 mkg:local_c a :LocalVariable ;
-    :hasDataType mkg:undefined4 .
+    :hasDataType "undefined4" .
 
 mkg:_5Br7_2C_230x1c_5D a :Operand ;
     :hasOperandType "REGISTER" ;
@@ -92460,8 +92471,6 @@ mkg:_7Br7_2Clr_7D a :Operand ;
 
 mkg:_5Bundefined_20_3CRETURN_3E_40_3CUNASSIGNED_3E_5D a :Parameter .
 
-mkg:undefined a :DataType .
-
 mkg:_5Br7_2C_230x14_5D a :Operand ;
     :hasOperandType "REGISTER" ;
     :hasOperandValue "[r7,#0x14]" .
@@ -92486,6 +92495,9 @@ mkg:_5Br7_2C_230x8_5D a :Operand ;
     rdfs:label "Function" ;
     rdfs:comment "a function defined by the ghidra decompilation" ;
     rdfs:subClassOf [ a owl:Restriction ;
+            owl:onProperty :definesLocal ;
+            owl:someValuesFrom :LocalVariable ],
+        [ a owl:Restriction ;
             owl:onProperty :calls ;
             owl:someValuesFrom :Function ],
         [ a owl:Restriction ;
@@ -92493,10 +92505,7 @@ mkg:_5Br7_2C_230x8_5D a :Operand ;
             owl:someValuesFrom :Instruction ],
         [ a owl:Restriction ;
             owl:onProperty :definedIn ;
-            owl:someValuesFrom :NamespaceSymbol ],
-        [ a owl:Restriction ;
-            owl:onProperty :defines ;
-            owl:someValuesFrom :LocalVariable ],
+            owl:someValuesFrom :StructuralNamespaceSymbol ],
         [ a owl:Restriction ;
             owl:onProperty :returns ;
             owl:someValuesFrom :Parameter ],
@@ -92505,6 +92514,9 @@ mkg:_5Br7_2C_230x8_5D a :Operand ;
             owl:someValuesFrom :Variable ],
         [ a owl:Restriction ;
             owl:onProperty :hasName ;
+            owl:someValuesFrom xsd:string ],
+        [ a owl:Restriction ;
+            owl:onProperty :hasReturnType ;
             owl:someValuesFrom xsd:string ],
         :NamespaceSymbol .
 
@@ -92531,7 +92543,7 @@ mkg:_5Br7_2C_230x4_5D a :Operand ;
     rdfs:comment "a string name given to a memory address, acts like a global variable in the context of this ontology" ;
     rdfs:subClassOf [ a owl:Restriction ;
             owl:onProperty :definedIn ;
-            owl:someValuesFrom :NamespaceSymbol ],
+            owl:someValuesFrom :StructuralNamespaceSymbol ],
         :Symbol ;
     owl:disjointWith :NamespaceSymbol .
 
@@ -92607,10 +92619,10 @@ mkg:r3 a :Operand ;
             owl:onProperty :hasSourceOperand ;
             owl:someValuesFrom :Operand ],
         [ a owl:Restriction ;
-            owl:onProperty :hasReturnType ;
+            owl:onProperty :hasOpcode ;
             owl:someValuesFrom xsd:string ],
         [ a owl:Restriction ;
-            owl:onProperty :hasOpcode ;
+            owl:onProperty :hasReturnType ;
             owl:someValuesFrom xsd:string ] .
 
 :Address a owl:Class ;

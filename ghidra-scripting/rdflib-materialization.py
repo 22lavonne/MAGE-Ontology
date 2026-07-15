@@ -35,11 +35,9 @@ a = pfs["rdf"]["type"]
 definedIn = URIRef("http://www.semanticweb.org/jaspe/ontologies/2026/0/symbol-ontology/definedIn")
 calls = URIRef("http://www.semanticweb.org/jaspe/ontologies/2026/0/symbol-ontology/calls")
 hasParameter = URIRef("http://www.semanticweb.org/jaspe/ontologies/2026/0/symbol-ontology/hasParameter")
-hasReturnType = URIRef("http://www.semanticweb.org/jaspe/ontologies/2026/0/symbol-ontology/hasReturnType")
 passesInto = URIRef("http://www.semanticweb.org/jaspe/ontologies/2026/0/symbol-ontology/passesInto")
 returns = URIRef("http://www.semanticweb.org/jaspe/ontologies/2026/0/symbol-ontology/returns")
 containsInstruction = URIRef("http://www.semanticweb.org/jaspe/ontologies/2026/0/symbol-ontology/containsInstruction")
-hasDataType = URIRef("http://www.semanticweb.org/jaspe/ontologies/2026/0/symbol-ontology/hasDataType")
 atAddress = URIRef("http://www.semanticweb.org/jaspe/ontologies/2026/0/symbol-ontology/atAddress")
 hasSourceAddress = URIRef("http://www.semanticweb.org/jaspe/ontologies/2026/0/symbol-ontology/hasSourceAddress")
 hasDestinationAddress = URIRef("http://www.semanticweb.org/jaspe/ontologies/2026/0/symbol-ontology/hasDestinationAddress")
@@ -56,6 +54,8 @@ hasOpcode = URIRef("http://www.semanticweb.org/jaspe/ontologies/2026/0/symbol-on
 hasOperandType = URIRef("http://www.semanticweb.org/jaspe/ontologies/2026/0/symbol-ontology/hasOperandType")
 hasOperandValue = URIRef("http://www.semanticweb.org/jaspe/ontologies/2026/0/symbol-ontology/hasOperandValue")
 hasName = URIRef("http://www.semanticweb.org/jaspe/ontologies/2026/0/symbol-ontology/hasName")
+hasDataType = URIRef("http://www.semanticweb.org/jaspe/ontologies/2026/0/symbol-ontology/hasDataType")
+hasReturnType = URIRef("http://www.semanticweb.org/jaspe/ontologies/2026/0/symbol-ontology/hasReturnType")
 
 # Classes
 SYMBOL = URIRef("http://www.semanticweb.org/jaspe/ontologies/2026/0/symbol-ontology/Symbol")
@@ -69,15 +69,10 @@ FUNCTION = URIRef("http://www.semanticweb.org/jaspe/ontologies/2026/0/symbol-ont
 VARIABLE = URIRef("http://www.semanticweb.org/jaspe/ontologies/2026/0/symbol-ontology/Variable")
 LOCAL_VARIABLE = URIRef("http://www.semanticweb.org/jaspe/ontologies/2026/0/symbol-ontology/LocalVariable")
 PARAMETER = URIRef("http://www.semanticweb.org/jaspe/ontologies/2026/0/symbol-ontology/Parameter")
-DATA_TYPE = URIRef("http://www.semanticweb.org/jaspe/ontologies/2026/0/symbol-ontology/DataType")
 ADDRESS = URIRef("http://www.semanticweb.org/jaspe/ontologies/2026/0/symbol-ontology/Address")
 REFERENCE = URIRef("http://www.semanticweb.org/jaspe/ontologies/2026/0/symbol-ontology/Reference")
 INSTRUCTION = URIRef("http://www.semanticweb.org/jaspe/ontologies/2026/0/symbol-ontology/Instruction")
-IMMEDIATE_OPERAND = URIRef("http://www.semanticweb.org/jaspe/ontologies/2026/0/symbol-ontology/ImmediateOperand")
-REGISTER = URIRef("http://www.semanticweb.org/jaspe/ontologies/2026/0/symbol-ontology/Register")
 OPERAND = URIRef("http://www.semanticweb.org/jaspe/ontologies/2026/0/symbol-ontology/Operand")
-DYNAMIC = URIRef("http://www.semanticweb.org/jaspe/ontologies/2026/0/symbol-ontology/Dynamic")
-SCALAR = URIRef("http://www.semanticweb.org/jaspe/ontologies/2026/0/symbol-ontology/Scalar")
 
 # used to map the string version of a symbol name to the URIRef variable for that object
 class_dict = {
@@ -92,15 +87,10 @@ class_dict = {
     "VARIABLE": VARIABLE,
     "LOCAL_VARIABLE": LOCAL_VARIABLE,
     "PARAMETER": PARAMETER,
-    "DATA_TYPE": DATA_TYPE,
     "ADDRESS": ADDRESS,
     "REFERENCE": REFERENCE,
     "INSTRUCTION": INSTRUCTION,
-    "IMMEDIATE_OPERAND": IMMEDIATE_OPERAND,
-    "REGISTER": REGISTER,
     "OPERAND": OPERAND,
-    "DYNAMIC": DYNAMIC,
-    "SCALAR": SCALAR
 }
 
 # Initialize an empty graph
@@ -176,24 +166,21 @@ def quote_for_turtle(obj_string):
 for l in local_var_list:
     
     local_var = pfs["mkg"][quote_for_turtle(l['var'])]
-    data_type = pfs["mkg"][quote_for_turtle(l['datatype'])]
     parent_func = pfs["mkg"][quote_for_turtle(l['parent'])]
     
     graph.add((local_var, a, LOCAL_VARIABLE))
-    graph.add((data_type, a, DATA_TYPE))
     graph.add((parent_func, a, FUNCTION))
     # get the name of the function and add that relation
     graph.add((parent_func, hasName, Literal(str(l['parent']))))
     
     graph.add((parent_func, defines, local_var))
-    graph.add((local_var, hasDataType, data_type))
+    graph.add((local_var, hasDataType, Literal(str(l['datatype']))))
     
     
 # Parameter format example:
 # {'var': 'hModule', 'datatype': 'typedef HMODULE HINSTANCE', 'parent': 'GetProcAddress'}
 for p in parameters_list:
     param = pfs["mkg"][quote_for_turtle(p['var'])]
-    data_type = pfs["mkg"][quote_for_turtle(p['datatype'])]
     parent_func = pfs["mkg"][quote_for_turtle(p['parent'])]
     
     graph.add((param, a, PARAMETER))
@@ -201,7 +188,7 @@ for p in parameters_list:
     graph.add((parent_func, hasName, Literal(str(p['parent']))))
     
     graph.add((param, passesInto, parent_func))
-    graph.add((param, hasDataType, data_type))
+    graph.add((param, hasDataType, Literal(str(p['datatype']))))
 
 
 # Namespace format example:
@@ -323,9 +310,7 @@ for f in function_list:
             graph.add((f_instance, calls, func_called))
             
     # return type
-    f_return_type = pfs["mkg"][quote_for_turtle(f['returntype'])]
-    graph.add((f_return_type, a, DATA_TYPE))
-    graph.add((f_instance, hasReturnType, f_return_type))
+    graph.add((f_instance, hasReturnType, Literal(str(f['returntype']))))
     
     # return value (as a parameter)
     f_return_value = pfs["mkg"][quote_for_turtle(f['returnvalue'])]
